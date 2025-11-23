@@ -45,10 +45,10 @@ const floatAnimation = keyframes`
 
 const glowPulse = keyframes`
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 231, 255, 0.2);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
   }
   50% {
-    box-shadow: 0 0 40px rgba(0, 231, 255, 0.4), 0 0 60px rgba(0, 231, 255, 0.2);
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.4), 0 0 60px rgba(236, 72, 153, 0.3);
   }
 `;
 
@@ -102,8 +102,8 @@ const AuthCard = styled(Box)(({ theme }) => {
     backdropFilter: 'blur(20px) saturate(180%)',
     WebkitBackdropFilter: 'blur(20px) saturate(180%)',
     boxShadow: theme.palette.mode === 'dark'
-      ? '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 231, 255, 0.1)'
-      : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 40px rgba(0, 231, 255, 0.2)',
+      ? '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.15)'
+      : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 40px rgba(139, 92, 246, 0.2), 0 0 20px rgba(236, 72, 153, 0.1)',
     animation: `${glowPulse} 4s ease-in-out infinite`,
     position: 'relative',
     zIndex: 1,
@@ -549,23 +549,45 @@ const AuthForm = ({
             <Fade in={true} timeout={!isLogin ? 1800 : 1400}>
               <Button
                 type="submit"
-                variant="outlined"
-                color="primary"
+                variant="contained"
                 size="large"
                 fullWidth
                 disabled={loading}
-                endIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+                endIcon={loading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : null}
                 sx={{
                   mt: 2,
                   py: 1.5,
                   fontSize: '1rem',
                   fontWeight: 600,
-                  borderWidth: 2,
-                  transition: 'all 0.3s ease',
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                  color: 'white',
+                  boxShadow: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? '0 4px 14px rgba(139, 92, 246, 0.4)'
+                      : '0 4px 14px rgba(139, 92, 246, 0.3)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
+                    background: (theme) =>
+                      `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                     transform: 'translateY(-2px)',
                     boxShadow: (theme) =>
-                      `0 6px 20px ${theme.palette.primary.main}33, 0 0 20px ${theme.palette.primary.main}22`,
+                      theme.palette.mode === 'dark'
+                        ? '0 8px 24px rgba(139, 92, 246, 0.5), 0 0 20px rgba(236, 72, 153, 0.3)'
+                        : '0 8px 24px rgba(139, 92, 246, 0.4), 0 0 20px rgba(236, 72, 153, 0.2)',
+                  },
+                  '&:active': {
+                    transform: 'translateY(0)',
+                  },
+                  '&.Mui-disabled': {
+                    background: (theme) =>
+                      theme.palette.mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.12)'
+                        : 'rgba(0, 0, 0, 0.12)',
+                    color: (theme) =>
+                      theme.palette.mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.3)'
+                        : 'rgba(0, 0, 0, 0.26)',
                   },
                 }}
               >
@@ -583,19 +605,28 @@ const AuthForm = ({
                 sx={(theme) => ({
                   fontWeight: 600,
                   textDecoration: 'none',
-                  // Use solid color for better visibility in both themes
-                  color: theme.palette.mode === 'dark' 
-                    ? theme.palette.primary.main 
-                    : theme.palette.primary.dark, // #00B8CC - darker cyan for light theme
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
                   transition: 'all 0.3s ease',
                   display: 'inline-block',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: -2,
+                    left: 0,
+                    width: '0%',
+                    height: '2px',
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                    transition: 'width 0.3s ease',
+                  },
                   '&:hover': {
-                    color: theme.palette.primary.main,
                     transform: 'translateY(-1px)',
-                    textDecoration: 'underline',
-                    textDecorationColor: theme.palette.mode === 'dark' 
-                      ? theme.palette.primary.main 
-                      : theme.palette.primary.dark,
+                    '&::after': {
+                      width: '100%',
+                    },
                   },
                 })}
               >
