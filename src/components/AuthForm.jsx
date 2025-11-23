@@ -442,8 +442,14 @@ const AuthForm = ({
                     vertical: 'top',
                     horizontal: 'left',
                   }}
+                  disableScrollLock={true}
+                  disableRestoreFocus={true}
                   sx={{
                     mt: 1,
+                    pointerEvents: 'none',
+                    '& .MuiPaper-root': {
+                      pointerEvents: 'auto',
+                    },
                   }}
                 >
                   {!isLogin && requirements && (
