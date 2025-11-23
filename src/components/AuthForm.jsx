@@ -6,13 +6,10 @@ import {
   TextField,
   Typography,
   InputAdornment,
-  Container,
   Button,
   CircularProgress,
   IconButton,
   Fade,
-  Slide,
-  keyframes,
   styled,
   Alert,
   Chip,
@@ -33,109 +30,96 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 
-// Animations
-const floatAnimation = keyframes`
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-`;
-
-const glowPulse = keyframes`
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.4), 0 0 60px rgba(236, 72, 153, 0.3);
-  }
-`;
-
-const networkPulse = keyframes`
-  0%, 100% {
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-`;
-
-const dataFlow = keyframes`
-  0% {
-    transform: translateX(-100%) translateY(0);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateX(100vw) translateY(-50px);
-    opacity: 0;
-  }
-`;
-
 // Styled components
-const AuthContainer = styled(Container)(({ theme }) => ({
+const AuthContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'stretch',
   justifyContent: 'center',
-  padding: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'column',
+  },
 }));
 
-const AuthCard = styled(Box)(({ theme }) => {
-  const darkBg = theme.palette.mode === 'dark' 
-    ? theme.palette.background.paper 
-    : 'rgba(255, 255, 255, 0.95)';
-  
-  return {
-    padding: theme.spacing(5),
-    maxWidth: '500px',
-    width: '100%',
-    borderRadius: '24px',
-    background: `linear-gradient(${darkBg}, ${darkBg}) padding-box, linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%) border-box`,
-    border: '2px solid transparent',
-    backdropFilter: 'blur(20px) saturate(180%)',
-    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.15)'
-      : '0 20px 60px rgba(0, 0, 0, 0.1), 0 0 40px rgba(139, 92, 246, 0.2), 0 0 20px rgba(236, 72, 153, 0.1)',
-    animation: `${glowPulse} 4s ease-in-out infinite`,
-    position: 'relative',
-    zIndex: 1,
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3),
-      borderRadius: '20px',
-    },
-  };
-});
+// Left Panel - Branding & Features
+const BrandPanel = styled(Box)(({ theme }) => ({
+  flex: '0 0 42%',
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 50%, ${theme.palette.info.main} 100%)`,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: theme.spacing(6),
+  position: 'relative',
+  overflow: 'hidden',
+  color: 'white',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)',
+    pointerEvents: 'none',
+  },
+  [theme.breakpoints.down('md')]: {
+    flex: '0 0 auto',
+    minHeight: '180px',
+    padding: theme.spacing(4, 3),
+  },
+}));
+
+// Right Panel - Form
+const FormPanel = styled(Box)(({ theme }) => ({
+  flex: '0 0 58%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: theme.spacing(4),
+  backgroundColor: theme.palette.background.default,
+  overflowY: 'auto',
+  [theme.breakpoints.down('md')]: {
+    flex: 1,
+    padding: theme.spacing(3, 2),
+  },
+}));
+
+const AuthCard = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3.5),
+  maxWidth: '420px',
+  width: '100%',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2.5),
+    maxWidth: '100%',
+  },
+}));
 
 const LogoText = styled(Typography)(({ theme }) => ({
-  fontSize: '2.5rem',
+  fontSize: 'clamp(2rem, 4vw, 3rem)',
   fontWeight: 900,
-  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
+  color: 'white',
   textAlign: 'center',
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(2),
   letterSpacing: '0.05em',
-  animation: `${floatAnimation} 3s ease-in-out infinite`,
+  textShadow: '0 2px 20px rgba(0, 0, 0, 0.2)',
+  position: 'relative',
+  zIndex: 1,
 }));
 
-const BackgroundAnimation = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  overflow: 'hidden',
-  zIndex: 0,
-  pointerEvents: 'none',
+const FeatureItem = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1.5),
+  marginBottom: theme.spacing(2),
+  position: 'relative',
+  zIndex: 1,
+  [theme.breakpoints.down('md')]: {
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 /**
@@ -230,136 +214,93 @@ const AuthForm = ({
   });
 
   return (
-    <AuthContainer maxWidth={false}>
-      {/* Advanced Background Animation */}
-      <BackgroundAnimation>
-        {/* Base Aurora Gradients */}
-        <Box
-          sx={{
-            position: 'absolute',
-            borderRadius: '50%',
-            opacity: 0.15,
-            filter: 'blur(100px)',
-            mixBlendMode: 'screen',
-            width: '400px',
-            height: '400px',
-            top: '-150px',
-            left: '-150px',
-            background: (theme) =>
-              `radial-gradient(circle, ${theme.palette.primary.main} 0%, transparent 70%)`,
-            animation: `${floatAnimation} 20s ease-in-out infinite`,
-          }}
-        />
-        <Box
-          sx={{
-            position: 'absolute',
-            borderRadius: '50%',
-            opacity: 0.15,
-            filter: 'blur(100px)',
-            mixBlendMode: 'screen',
-            width: '350px',
-            height: '350px',
-            bottom: '-100px',
-            right: '-100px',
-            background: (theme) =>
-              `radial-gradient(circle, ${theme.palette.secondary.main} 0%, transparent 70%)`,
-            animation: `${floatAnimation} 18s ease-in-out infinite reverse`,
-          }}
-        />
+    <AuthContainer>
+      {/* Left Panel - Branding */}
+      <BrandPanel>
+        <Fade in={true} timeout={600}>
+          <Box sx={{ textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+            <Link to="/" style={{ textDecoration: 'none', display: 'block' }}>
+              <LogoText variant="h2" component="div">
+                D.E.M.N
+              </LogoText>
+            </Link>
 
-        {/* Network Grid */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            opacity: 0.1,
-            backgroundImage: (theme) => `
-              linear-gradient(${theme.palette.primary.main}22 1px, transparent 1px),
-              linear-gradient(90deg, ${theme.palette.primary.main}22 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-            animation: `${networkPulse} 4s ease-in-out infinite`,
-          }}
-        />
+            <Typography
+              variant="h6"
+              sx={{
+                mb: { xs: 2, md: 4 },
+                fontWeight: 500,
+                opacity: 0.95,
+                fontSize: { xs: '1rem', md: '1.125rem' },
+              }}
+            >
+              AI-Powered Social Media Platform
+            </Typography>
 
-        {/* Data Flow Streams */}
-        {[...Array(2)].map((_, i) => (
-          <Box
-            key={`dataflow-${i}`}
-            sx={{
-              position: 'absolute',
-              width: '2px',
-              height: '150px',
-              background: (theme) =>
-                `linear-gradient(180deg, transparent, ${theme.palette.primary.main}44, transparent)`,
-              left: `${30 + i * 40}%`,
-              top: '-150px',
-              animation: `${dataFlow} ${10 + i * 2}s linear infinite`,
-              animationDelay: `${i * 3}s`,
-              filter: 'blur(1px)',
-            }}
-          />
-        ))}
-      </BackgroundAnimation>
-
-      <Slide direction="up" in={true} timeout={600}>
-        <AuthCard>
-          <Link to="/" style={{ textDecoration: 'none', display: 'block' }}>
-            <LogoText variant="h4" component="div">
-              D.E.M.N
-            </LogoText>
-          </Link>
-
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Fade in={true} timeout={800}>
-              <Box>
-                <Typography 
-                  variant="h4" 
-                  fontWeight={700} 
-                  gutterBottom 
-                  sx={{
-                    background: (theme) =>
-                      `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                  }}
-                >
-                  {title}
+            {/* Features - Hide on mobile for cleaner look */}
+            <Box sx={{ display: { xs: 'none', md: 'block' }, mt: 4 }}>
+              <FeatureItem>
+                <VerifiedIcon sx={{ fontSize: 24 }} />
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  Real-time fact verification
                 </Typography>
-                <Typography 
-                  variant="body1" 
-                  color="text.secondary" 
-                  sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    gap: 1,
-                    mt: 1 
-                  }}
-                >
-                  {isLogin ? (
-                    <>
-                      <SecurityIcon sx={{ fontSize: 18, color: 'primary.main' }} />
-                      {subtitle}
-                    </>
-                  ) : (
-                    <>
-                      <VerifiedIcon sx={{ fontSize: 18, color: 'success.main' }} />
-                      {subtitle}
-                    </>
-                  )}
+              </FeatureItem>
+              <FeatureItem>
+                <SecurityIcon sx={{ fontSize: 24 }} />
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  AI content moderation
                 </Typography>
-              </Box>
-            </Fade>
+              </FeatureItem>
+              <FeatureItem>
+                <InfoIcon sx={{ fontSize: 24 }} />
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  Truth-verified community
+                </Typography>
+              </FeatureItem>
+            </Box>
           </Box>
+        </Fade>
+      </BrandPanel>
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            {/* Username Input */}
-            <Fade in={true} timeout={1000}>
+      {/* Right Panel - Form */}
+      <FormPanel>
+        <Fade in={true} timeout={800}>
+          <AuthCard>
+            <Box sx={{ mb: 3 }}>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                gutterBottom
+                sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
+              >
+                {title}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.75,
+                  fontSize: { xs: '0.875rem', sm: '0.9375rem' },
+                }}
+              >
+                {isLogin ? (
+                  <>
+                    <SecurityIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+                    {subtitle}
+                  </>
+                ) : (
+                  <>
+                    <VerifiedIcon sx={{ fontSize: 18, color: 'success.main' }} />
+                    {subtitle}
+                  </>
+                )}
+              </Typography>
+            </Box>
+
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.25 }}>
+              {/* Username Input */}
               <TextField
                 fullWidth
                 name="username"
@@ -381,11 +322,9 @@ const AuthForm = ({
                   },
                 }}
               />
-            </Fade>
 
-            {/* Email Input (Register only) */}
-            {!isLogin && (
-              <Fade in={true} timeout={1200}>
+              {/* Email Input (Register only) */}
+              {!isLogin && (
                 <TextField
                   fullWidth
                   type="email"
@@ -408,12 +347,10 @@ const AuthForm = ({
                     },
                   }}
                 />
-              </Fade>
-            )}
+              )}
 
-            {/* Full Name Input (Register only) */}
-            {!isLogin && (
-              <Fade in={true} timeout={1400}>
+              {/* Full Name Input (Register only) */}
+              {!isLogin && (
                 <TextField
                   fullWidth
                   name="full_name"
@@ -435,11 +372,9 @@ const AuthForm = ({
                     },
                   }}
                 />
-              </Fade>
-            )}
+              )}
 
-            {/* Password Input */}
-            <Fade in={true} timeout={!isLogin ? 1600 : 1200}>
+              {/* Password Input */}
               <Box>
                 <TextField
                   fullWidth
@@ -544,9 +479,7 @@ const AuthForm = ({
                   </Alert>
                 )}
               </Box>
-            </Fade>
 
-            <Fade in={true} timeout={!isLogin ? 1800 : 1400}>
               <Button
                 type="submit"
                 variant="contained"
@@ -593,11 +526,9 @@ const AuthForm = ({
               >
                 {loading ? submitLoadingLabel : submitLabel}
               </Button>
-            </Fade>
-          </Box>
+            </Box>
 
-          <Fade in={true} timeout={2000}>
-            <Typography variant="body2" color="text.secondary" textAlign="center" mt={3}>
+            <Typography variant="body2" color="text.secondary" textAlign="center" mt={2.5} fontSize={{ xs: '0.8125rem', sm: '0.875rem' }}>
               {linkText}{' '}
               <Box
                 component={Link}
@@ -633,9 +564,9 @@ const AuthForm = ({
                 {linkLabel}
               </Box>
             </Typography>
-          </Fade>
-        </AuthCard>
-      </Slide>
+          </AuthCard>
+        </Fade>
+      </FormPanel>
     </AuthContainer>
   );
 };
