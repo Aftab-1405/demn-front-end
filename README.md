@@ -2,46 +2,63 @@
 
 A modern, AI-powered social media platform built with **Vite**, **React 19**, and **Material-UI (MUI) v7**.
 
+> **Migration Status:** This project has been fully migrated to MUI v7 with 100% CSS-in-JS. All legacy CSS files have been removed and replaced with MUI components and theme-based styling.
+
 ## 🚀 Tech Stack
 
 - **Build Tool**: [Vite 6](https://vitejs.dev/) - Lightning-fast build tool
-- **Framework**: [React 19](https://react.dev/) - Latest React with modern features
+- **Framework**: [React 19](https://react.dev/) - Latest React with modern features (.jsx files)
 - **UI Library**: [Material-UI (MUI) v7](https://mui.com/) - Complete component library
+  - `@mui/material` v7.3.5 - Core components
+  - `@mui/icons-material` v7.3.5 - Icon components
+  - `@mui/x-charts` v8.18.0 - Advanced charting
+  - `@emotion/react` & `@emotion/styled` - CSS-in-JS engine
 - **Routing**: [React Router v6](https://reactrouter.com/) - Client-side routing
-- **State Management**: [TanStack Query (React Query)](https://tanstack.com/query) - Server state management
-- **Styling**: MUI `sx` prop, `styled()` API, and theme tokens
+- **State Management**: [TanStack Query v5](https://tanstack.com/query) - Server state management
+- **Styling**: **100% CSS-in-JS** with MUI `sx` prop, `styled()` API, and theme tokens
 - **Animations**: [Framer Motion](https://www.framer.com/motion/) - Production-ready motion library
+- **Forms**: [React Hook Form](https://react-hook-form.com/) - Performant form validation
+- **Notifications**: [React Hot Toast](https://react-hot-toast.com/) - Toast notifications
 - **PWA**: [Vite PWA Plugin](https://vite-pwa-org.netlify.app/) - Progressive Web App support
 
 ## 📦 Project Structure
 
 ```
-frontend/
-├── public/                 # Static assets (icons, manifest, etc.)
+demn-front-end/
+├── public/                 # Static assets (icons, manifest, service-worker)
 ├── src/
 │   ├── components/         # Reusable UI components (all MUI-based)
+│   │   └── PostCard/       # Post card component with modals
 │   ├── context/            # React Context providers (Auth, Theme, Notifications)
 │   ├── hooks/              # Custom React hooks
 │   ├── pages/              # Page components (routes)
 │   ├── services/           # API services and utilities
-│   ├── theme/              # MUI theme configuration
-│   ├── styles/             # Global styles (App.css)
-│   └── utils/              # Utility functions
+│   ├── theme/              # MUI theme configuration (muiTheme.js)
+│   ├── utils/              # Utility functions
+│   ├── App.jsx             # Main app component with routing
+│   └── index.jsx           # React entry point
+├── scripts/                # Build scripts (icon generation)
 ├── index.html              # HTML entry point
-├── vite.config.js         # Vite configuration
+├── vite.config.js          # Vite configuration with PWA
 └── package.json            # Dependencies and scripts
 ```
 
 ## 🎨 MUI Theme Setup
 
-The project uses a custom MUI theme with:
-- **Light & Dark Mode** support
-- **Indian Tricolor** inspired color palette (Saffron, Green, Navy Blue)
-- **Responsive typography** with clamp() for fluid scaling
-- **Custom component overrides** for consistent styling
-- **Theme tokens** for dark mode compatibility
+The project uses a **custom MUI theme** (`src/theme/muiTheme.js`) with:
+- **Light & Dark Mode** support with smooth transitions
+- **Modern AI-inspired color palette**: Cyan (#00E7FF) → Blue (#009dff) → Saffron (#FF7A00)
+- **Responsive typography** with `clamp()` for fluid scaling across all devices
+- **Custom component overrides** for consistent styling (Buttons, Cards, TextFields, etc.)
+- **Theme tokens** for automatic dark mode compatibility
+- **Zero hardcoded colors** - All colors use theme palette references
 
-Theme configuration: `src/theme/muiTheme.js`
+**Key Features:**
+- Primary: Cyan (#00E7FF) - Tech/AI vibe
+- Secondary: Saffron/Orange (#FF7A00) - Energy/Social
+- Info: Deep Blue (#009dff) - Neural/Tech
+- All components styled using MUI's `sx` prop and `styled()` API
+- No CSS files - 100% CSS-in-JS implementation
 
 ## 🛠️ Installation
 
@@ -85,21 +102,31 @@ Theme configuration: `src/theme/muiTheme.js`
 ### MUI Theme
 
 The theme is configured in `src/theme/muiTheme.js` and provides:
-- Light and dark mode variants
-- Custom color palette
-- Responsive typography
-- Component style overrides
-- Smooth transitions
+- Light and dark mode variants with automatic switching
+- Custom AI-inspired color palette (Cyan, Blue, Saffron)
+- Responsive typography using `clamp()` for fluid scaling
+- Component style overrides (Button, Card, TextField, etc.)
+- Smooth transitions and animations
+- Custom spacing and border radius scales
+
+**Usage in components:**
+```jsx
+import { useTheme } from '@mui/material/styles';
+
+const theme = useTheme();
+// Access theme values: theme.palette.primary.main, theme.spacing(2), etc.
+```
 
 ## 🎯 Key Features
 
-- ✅ **100% MUI Components** - All components use MUI v7 with `sx` props and `styled()` API
-- ✅ **No External CSS** - All styling uses MUI theme tokens and system props
-- ✅ **Dark Mode Ready** - Full dark mode support with theme tokens
-- ✅ **Responsive Design** - Mobile-first approach with MUI breakpoints
-- ✅ **PWA Support** - Installable Progressive Web App
-- ✅ **TypeScript Ready** - Type definitions included for better DX
-- ✅ **Code Splitting** - Optimized bundle sizes with manual chunks
+- ✅ **100% MUI Components** - All UI components use MUI v7 (`Box`, `Typography`, `Card`, `Button`, etc.)
+- ✅ **Zero CSS Files** - 100% CSS-in-JS using MUI's `sx` prop and `styled()` API
+- ✅ **Theme-First Styling** - All colors, spacing, and styles use MUI theme tokens
+- ✅ **Dark Mode Ready** - Full dark mode support with automatic theme token switching
+- ✅ **Responsive Design** - Mobile-first approach with MUI breakpoints (`xs`, `sm`, `md`, `lg`, `xl`)
+- ✅ **PWA Support** - Installable Progressive Web App with offline capabilities
+- ✅ **React 19** - Latest React features with modern JSX (.jsx files)
+- ✅ **Code Splitting** - Optimized bundle sizes with manual chunks (React, MUI, TanStack Query)
 
 ## 🔧 Development Guidelines
 
@@ -114,32 +141,65 @@ Always use MUI components instead of raw HTML:
 
 ### Styling Guidelines
 
+**Important:** This project uses **100% CSS-in-JS**. Never create `.css` files. All styling is done through MUI.
+
 1. **Use `sx` prop** for component-level styling:
    ```jsx
-   <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
+   <Box sx={{
+     p: 2,
+     bgcolor: 'background.paper',
+     borderRadius: 2,
+     boxShadow: 1
+   }}>
    ```
 
 2. **Use `styled()` API** for reusable styled components:
    ```jsx
+   import { styled } from '@mui/material/styles';
+
    const StyledCard = styled(Card)(({ theme }) => ({
-     // styles
+     padding: theme.spacing(2),
+     backgroundColor: theme.palette.background.paper,
+     borderRadius: theme.shape.borderRadius,
+     transition: theme.transitions.create(['transform', 'box-shadow']),
+     '&:hover': {
+       transform: 'translateY(-2px)',
+       boxShadow: theme.shadows[4],
+     },
    }));
    ```
 
-3. **Use theme tokens** instead of hardcoded colors:
+3. **ALWAYS use theme tokens** instead of hardcoded values:
    ```jsx
-   // ✅ Good
-   color: 'text.primary'
-   bgcolor: 'background.paper'
-   
-   // ❌ Bad
-   color: '#ffffff'
-   bgcolor: '#000000'
+   // ✅ Good - Uses theme tokens
+   sx={{
+     color: 'text.primary',
+     bgcolor: 'background.paper',
+     borderRadius: 2,  // theme.shape.borderRadius * 2
+     p: 2,             // theme.spacing(2)
+   }}
+
+   // ❌ Bad - Hardcoded values break dark mode
+   sx={{
+     color: '#ffffff',
+     bgcolor: '#000000',
+     borderRadius: '8px',
+     padding: '16px',
+   }}
    ```
 
 4. **Use system props** for common CSS properties:
    ```jsx
-   <Box p={2} m={1} display="flex" gap={2}>
+   <Box p={2} m={1} display="flex" gap={2} alignItems="center">
+   ```
+
+5. **Responsive styling** with MUI breakpoints:
+   ```jsx
+   <Box sx={{
+     width: { xs: '100%', md: '50%' },
+     p: { xs: 2, md: 3 },
+     display: { xs: 'block', lg: 'flex' }
+   }}>
    ```
 
 ## 📱 PWA Features
