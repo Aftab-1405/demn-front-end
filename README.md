@@ -18,7 +18,7 @@ A modern, AI-powered social media platform built with **Vite**, **React 19**, an
 - **Styling**: **100% CSS-in-JS** with MUI `sx` prop, `styled()` API, and theme tokens
 - **Animations**: [Framer Motion](https://www.framer.com/motion/) - Production-ready motion library
 - **Forms**: [React Hook Form](https://react-hook-form.com/) - Performant form validation
-- **Notifications**: [React Hot Toast](https://react-hot-toast.com/) - Toast notifications
+- **Notifications**: MUI Snackbar & Alert - Custom notification system with queuing
 - **PWA**: [Vite PWA Plugin](https://vite-pwa-org.netlify.app/) - Progressive Web App support
 
 ## 📦 Project Structure
