@@ -13,7 +13,8 @@ import {
   styled,
   Alert,
   Chip,
-  Collapse,
+  Popover,
+  Paper,
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -89,11 +90,11 @@ const FormPanel = styled(Box)(({ theme }) => ({
 }));
 
 const AuthCard = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3.5),
+  padding: theme.spacing(2.5),
   maxWidth: '420px',
   width: '100%',
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2.5),
+    padding: theme.spacing(2),
     maxWidth: '100%',
   },
 }));
@@ -139,8 +140,8 @@ const AuthForm = ({
   const { formData, loading, fieldErrors, handleChange, handleSubmit } = hookResult;
   const isLogin = mode === 'login';
   const [showPassword, setShowPassword] = useState(false);
-  const [showRequirements, setShowRequirements] = useState(false);
   const [requirements, setRequirements] = useState(null);
+  const [passwordAnchorEl, setPasswordAnchorEl] = useState(null);
 
   // Fetch password requirements on mount for register mode
   useEffect(() => {
@@ -266,12 +267,11 @@ const AuthForm = ({
       <FormPanel>
         <Fade in={true} timeout={800}>
           <AuthCard>
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2 }}>
               <Typography
                 variant="h5"
                 fontWeight={700}
                 gutterBottom
-                sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
               >
                 {title}
               </Typography>
@@ -282,7 +282,6 @@ const AuthForm = ({
                   display: 'flex',
                   alignItems: 'center',
                   gap: 0.75,
-                  fontSize: { xs: '0.875rem', sm: '0.9375rem' },
                 }}
               >
                 {isLogin ? (
@@ -299,10 +298,11 @@ const AuthForm = ({
               </Typography>
             </Box>
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.25 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 1.75 }}>
               {/* Username Input */}
               <TextField
                 fullWidth
+                size="small"
                 name="username"
                 label="Username"
                 placeholder="Enter your username"
@@ -327,6 +327,7 @@ const AuthForm = ({
               {!isLogin && (
                 <TextField
                   fullWidth
+                  size="small"
                   type="email"
                   name="email"
                   label="Email"
@@ -353,6 +354,7 @@ const AuthForm = ({
               {!isLogin && (
                 <TextField
                   fullWidth
+                  size="small"
                   name="full_name"
                   label="Full Name"
                   placeholder="Enter your full name"
@@ -378,16 +380,25 @@ const AuthForm = ({
               <Box>
                 <TextField
                   fullWidth
+                  size="small"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   label="Password"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
-                  onFocus={() => !isLogin && setShowRequirements(true)}
+                  onFocus={(e) => {
+                    if (!isLogin && requirements) {
+                      setPasswordAnchorEl(e.currentTarget);
+                    }
+                  }}
+                  onBlur={() => {
+                    // Delay closing to allow clicking inside popover
+                    setTimeout(() => setPasswordAnchorEl(null), 150);
+                  }}
                   disabled={loading}
                   error={!!fieldErrors.password}
-                  helperText={fieldErrors.password || (isLogin ? '' : (!requirements ? 'Loading requirements...' : 'Click to see password requirements'))}
+                  helperText={fieldErrors.password || (isLogin ? '' : (!requirements ? 'Loading requirements...' : ''))}
                   InputProps={{
                     ...getInputAdornment(isPasswordValid, !!fieldErrors.password, <LockIcon />),
                     endAdornment: (
@@ -418,10 +429,25 @@ const AuthForm = ({
                   }}
                 />
 
-                {/* Password Requirements Checklist (Register only) */}
-                {!isLogin && requirements && (
-                  <Collapse in={showRequirements || formData.password.length > 0}>
-                    <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                {/* Password Requirements Popover (Register only) */}
+                <Popover
+                  open={Boolean(passwordAnchorEl)}
+                  anchorEl={passwordAnchorEl}
+                  onClose={() => setPasswordAnchorEl(null)}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  sx={{
+                    mt: 1,
+                  }}
+                >
+                  {!isLogin && requirements && (
+                    <Paper sx={{ p: 2, maxWidth: 320, boxShadow: 3 }}>
                       <Typography variant="body2" fontWeight={600} color="text.secondary" sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 0.5 }}>
                         <InfoIcon fontSize="small" />
                         Password Requirements:
@@ -468,16 +494,9 @@ const AuthForm = ({
                           sx={{ justifyContent: 'flex-start' }}
                         />
                       </Box>
-                    </Box>
-                  </Collapse>
-                )}
-
-                {/* Username Requirements Info (Register only) */}
-                {!isLogin && requirements && formData.username.length > 0 && formData.username.length < 3 && (
-                  <Alert severity="info" sx={{ mt: 2 }}>
-                    Username must be 3-30 characters and contain only letters, numbers, and underscores.
-                  </Alert>
-                )}
+                    </Paper>
+                  )}
+                </Popover>
               </Box>
 
               <Button
@@ -488,7 +507,7 @@ const AuthForm = ({
                 disabled={loading}
                 endIcon={loading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : null}
                 sx={{
-                  mt: 2,
+                  mt: 1.5,
                   py: 1.5,
                   fontSize: '1rem',
                   fontWeight: 600,
