@@ -1,66 +1,70 @@
 // MUI Theme Configuration - AI-Powered Social Media
-// Modern color palette inspired by icon design (Cyan, Blue, Saffron)
+// Modern color palette for AI + Social Media (Purple, Pink, Blue)
+// Inspired by modern AI platforms: Claude, ChatGPT, Gemini
 // Uses MUI's color system for industry-standard design
 
 import { createTheme } from '@mui/material/styles';
-import { 
-  cyan, 
-  blue, 
-  orange, 
-  green, 
-  red, 
+import {
+  purple,
+  pink,
+  blue,
+  green,
+  red,
   amber,
-  grey 
+  grey
 } from '@mui/material/colors';
 
 // AI-Powered Social Media Color Palette
-// Based on icon gradient: Cyan (#00E7FF) → Blue (#009dff) → Saffron (#FF7A00)
+// Modern gradient: Deep Purple (AI/Intelligence) → Vibrant Pink (Social/Energy) → Electric Blue (Tech/Trust)
 const colors = {
-  // Primary: Cyan (AI/Tech vibe) - from icon
+  // Primary: Deep Purple (AI/Intelligence/Innovation)
+  // Aligns with modern AI branding (Claude, OpenAI, Anthropic)
   primary: {
-    main: '#00E7FF',      // Bright cyan - tech/AI primary
-    light: '#33EDFF',     // Lighter cyan
-    dark: '#00B8CC',       // Darker cyan
-    contrastText: '#000000', // Black text on cyan for readability
+    main: '#8B5CF6',      // Deep purple - AI/intelligence
+    light: '#A78BFA',     // Lighter purple - accessible
+    dark: '#7C3AED',      // Darker purple - rich
+    contrastText: '#FFFFFF', // White text for readability
   },
-  
-  // Secondary: Saffron/Orange (Energy/Social) - from icon
+
+  // Secondary: Vibrant Pink (Social/Energy/Engagement)
+  // Modern social media aesthetic - engaging and friendly
   secondary: {
-    main: '#FF7A00',      // Saffron orange - energy/social
-    light: '#FF9933',     // Lighter orange
-    dark: '#CC6200',      // Darker orange
-    contrastText: '#FFFFFF', // White text on orange
+    main: '#EC4899',      // Vibrant pink - social/energy
+    light: '#F472B6',     // Lighter pink - playful
+    dark: '#DB2777',      // Darker pink - bold
+    contrastText: '#FFFFFF', // White text on pink
   },
-  
-  // Info: Deep Blue (Neural/Tech) - from icon
+
+  // Info: Electric Blue (Tech/Trust/Reliability)
+  // Professional yet modern - tech credibility
   info: {
-    main: '#009dff',      // Deep neural blue
-    light: '#33B3FF',     // Lighter blue
-    dark: '#007ECC',      // Darker blue
+    main: '#3B82F6',      // Electric blue - tech/trust
+    light: '#60A5FA',     // Lighter blue - approachable
+    dark: '#2563EB',      // Darker blue - professional
     contrastText: '#FFFFFF',
   },
-  
-  // Success: Modern green (verified/trust)
+
+  // Success: Emerald (Verified/Positive/Growth)
   success: {
-    main: green[600],    // MUI green[600]
-    light: green[400],
-    dark: green[800],
+    main: '#10B981',      // Emerald green - modern success
+    light: '#34D399',     // Lighter emerald
+    dark: '#059669',      // Darker emerald
     contrastText: '#FFFFFF',
   },
-  
-  // Warning: Amber (pending/caution)
+
+  // Warning: Amber (Pending/Caution/Review)
   warning: {
-    main: amber[600],      // MUI amber[600]
-    light: amber[400],
-    dark: amber[800],
+    main: '#F59E0B',      // Amber - attention
+    light: '#FBBF24',     // Lighter amber
+    dark: '#D97706',      // Darker amber
     contrastText: '#000000',
   },
-  
-  // Error: Red (disputed/error)
+
+  // Error: Rose (Critical/Error/Alert)
   error: {
-    main: red[600],        // MUI red[600]
-    light: red[400],
-    dark: red[800],
+    main: '#F43F5E',      // Rose red - modern error
+    light: '#FB7185',     // Lighter rose
+    dark: '#E11D48',      // Darker rose
     contrastText: '#FFFFFF',
   },
 };
@@ -100,14 +104,23 @@ const darkTheme = {
   palette: {
     mode: 'dark',
     primary: {
-      ...colors.primary,
-      main: '#00E7FF',      // Bright cyan for dark mode
-      light: '#66F0FF',     // Even lighter for dark mode
-      dark: '#00B8CC',
+      main: '#A78BFA',      // Lighter purple for dark mode - better visibility
+      light: '#C4B5FD',     // Even lighter purple
+      dark: '#8B5CF6',      // Standard purple
+      contrastText: '#000000', // Black text on light purple
+    },
+    secondary: {
+      main: '#F472B6',      // Lighter pink for dark mode
+      light: '#F9A8D4',     // Even lighter pink
+      dark: '#EC4899',      // Standard pink
+      contrastText: '#000000', // Black text on light pink
+    },
+    info: {
+      main: '#60A5FA',      // Lighter blue for dark mode
+      light: '#93C5FD',     // Even lighter blue
+      dark: '#3B82F6',      // Standard blue
       contrastText: '#000000',
     },
-    secondary: colors.secondary,
-    info: colors.info,
     success: colors.success,
     warning: colors.warning,
     error: colors.error,
@@ -122,8 +135,8 @@ const darkTheme = {
     },
     divider: grey[700],       // #616161 - Neutral divider
     action: {
-      active: colors.primary.main,
-      hover: grey[800],       // Dark hover state
+      active: '#A78BFA',     // Light purple for active state
+      hover: grey[800],      // Dark hover state
       selected: grey[700],
       disabled: grey[700],
       disabledBackground: grey[800],
@@ -263,7 +276,8 @@ const getThemeConfig = (mode) => ({
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
         },
         colorPrimary: {
-          background: `linear-gradient(135deg, ${colors.primary.main} 0%, ${colors.info.main} 100%)`,
+          // Modern purple-to-pink gradient for AI-powered features
+          background: `linear-gradient(135deg, ${colors.primary.main} 0%, ${colors.secondary.main} 100%)`,
         },
       },
     },

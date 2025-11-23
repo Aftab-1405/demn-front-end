@@ -47,17 +47,24 @@ demn-front-end/
 
 The project uses a **custom MUI theme** (`src/theme/muiTheme.js`) with:
 - **Light & Dark Mode** support with smooth transitions
-- **Modern AI-inspired color palette**: Cyan (#00E7FF) → Blue (#009dff) → Saffron (#FF7A00)
+- **Modern AI + Social Media color palette**: Inspired by Claude, ChatGPT, and modern AI platforms
 - **Responsive typography** with `clamp()` for fluid scaling across all devices
 - **Custom component overrides** for consistent styling (Buttons, Cards, TextFields, etc.)
 - **Theme tokens** for automatic dark mode compatibility
 - **Zero hardcoded colors** - All colors use theme palette references
 
-**Key Features:**
-- Primary: Cyan (#00E7FF) - Tech/AI vibe
-- Secondary: Saffron/Orange (#FF7A00) - Energy/Social
-- Info: Deep Blue (#009dff) - Neural/Tech
+**Modern Color Palette:**
+- **Primary: Deep Purple** (#8B5CF6) - AI/Intelligence/Innovation
+- **Secondary: Vibrant Pink** (#EC4899) - Social/Energy/Engagement
+- **Info: Electric Blue** (#3B82F6) - Tech/Trust/Reliability
+- **Success: Emerald** (#10B981) - Verified/Positive/Growth
+- **Warning: Amber** (#F59E0B) - Pending/Caution/Review
+- **Error: Rose** (#F43F5E) - Critical/Error/Alert
+
+**Styling:**
 - All components styled using MUI's `sx` prop and `styled()` API
+- Purple-to-pink gradients for AI-powered features
+- Dark mode uses lighter shades for better visibility
 - No CSS files - 100% CSS-in-JS implementation
 
 ## 🛠️ Installation
@@ -103,11 +110,18 @@ The project uses a **custom MUI theme** (`src/theme/muiTheme.js`) with:
 
 The theme is configured in `src/theme/muiTheme.js` and provides:
 - Light and dark mode variants with automatic switching
-- Custom AI-inspired color palette (Cyan, Blue, Saffron)
+- Modern AI + Social Media color palette (Purple, Pink, Blue)
 - Responsive typography using `clamp()` for fluid scaling
 - Component style overrides (Button, Card, TextField, etc.)
 - Smooth transitions and animations
 - Custom spacing and border radius scales
+- Purple-to-pink gradients for badges and AI features
+
+**Color Philosophy:**
+- Deep purple (#8B5CF6) represents AI intelligence and innovation
+- Vibrant pink (#EC4899) brings social energy and engagement
+- Electric blue (#3B82F6) conveys tech trust and reliability
+- All colors optimized for both light and dark modes
 
 **Usage in components:**
 ```jsx
