@@ -444,6 +444,8 @@ const AuthForm = ({
                   }}
                   disableScrollLock={true}
                   disableRestoreFocus={true}
+                  disableAutoFocus={true}
+                  disableEnforceFocus={true}
                   sx={{
                     mt: 1,
                     pointerEvents: 'none',
