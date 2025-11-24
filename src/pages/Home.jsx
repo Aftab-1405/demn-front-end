@@ -111,10 +111,10 @@ const floatVisual = keyframes`
 
 const aiGlowPulse = keyframes`
   0%, 100% {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 231, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.2);
   }
   50% {
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 231, 255, 0.4), 0 0 60px rgba(0, 231, 255, 0.1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(139, 92, 246, 0.4), 0 0 60px rgba(236, 72, 153, 0.1);
   }
 `;
 
@@ -499,16 +499,16 @@ const Home = () => {
                   theme.palette.mode === 'dark' 
                     ? 'rgba(66, 66, 66, 0.8)' // grey[800] with 80% opacity
                     : 'rgba(255, 255, 255, 0.9)',
-                border: (theme) => 
+                border: (theme) =>
                   theme.palette.mode === 'dark'
-                    ? '1px solid rgba(0, 231, 255, 0.2)'
-                    : '1px solid rgba(0, 231, 255, 0.3)',
+                    ? `1px solid ${theme.palette.primary.main}33`
+                    : `1px solid ${theme.palette.info.main}4D`,
                 backdropFilter: 'blur(20px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                 boxShadow: (theme) =>
                   theme.palette.mode === 'dark'
-                    ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 231, 255, 0.15)'
-                    : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 16px rgba(0, 231, 255, 0.2)',
+                    ? `0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px ${theme.palette.primary.main}26`
+                    : `0 8px 32px rgba(0, 0, 0, 0.1), 0 0 16px ${theme.palette.info.main}33`,
                 padding: 1.5,
                 position: 'relative',
                 width: 240,
@@ -518,8 +518,8 @@ const Home = () => {
                   transform: 'translateY(-4px)',
                   boxShadow: (theme) =>
                     theme.palette.mode === 'dark'
-                      ? '0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 231, 255, 0.25)'
-                      : '0 15px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(0, 231, 255, 0.3)',
+                      ? `0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px ${theme.palette.primary.main}40`
+                      : `0 15px 50px rgba(0, 0, 0, 0.15), 0 0 30px ${theme.palette.info.main}4D`,
                 },
               }}
             >
@@ -545,10 +545,10 @@ const Home = () => {
                    sx={{
                      width: '100%',
                      height: 80,
-                     bgcolor: (theme) => 
-                       theme.palette.mode === 'dark' 
-                         ? 'rgba(0, 231, 255, 0.1)' 
-                         : 'rgba(0, 231, 255, 0.05)',
+                     bgcolor: (theme) =>
+                       theme.palette.mode === 'dark'
+                         ? `${theme.palette.primary.main}1A`
+                         : `${theme.palette.info.main}0D`,
                      borderRadius: '6px',
                      marginTop: 0.75,
                      display: 'flex',
@@ -593,8 +593,8 @@ const Home = () => {
                 padding: 1.5,
                 boxShadow: (theme) =>
                   theme.palette.mode === 'dark'
-                    ? '0 10px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 231, 255, 0.2)'
-                    : '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 231, 255, 0.3)',
+                    ? `0 10px 40px rgba(0, 0, 0, 0.4), 0 0 20px ${theme.palette.primary.main}33`
+                    : `0 10px 40px rgba(0, 0, 0, 0.1), 0 0 20px ${theme.palette.info.main}4D`,
                 animation: `${aiGlowPulse} 4s ease-in-out infinite`,
               }}
             >
@@ -649,16 +649,16 @@ const Home = () => {
                   theme.palette.mode === 'dark' 
                     ? 'rgba(66, 66, 66, 0.8)' // grey[800] with 80% opacity
                     : 'rgba(255, 255, 255, 0.9)',
-                border: (theme) => 
+                border: (theme) =>
                   theme.palette.mode === 'dark'
-                    ? '1px solid rgba(0, 231, 255, 0.2)'
-                    : '1px solid rgba(0, 231, 255, 0.3)',
+                    ? `1px solid ${theme.palette.primary.main}33`
+                    : `1px solid ${theme.palette.info.main}4D`,
                 backdropFilter: 'blur(20px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                 boxShadow: (theme) =>
                   theme.palette.mode === 'dark'
-                    ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 231, 255, 0.15)'
-                    : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 16px rgba(0, 231, 255, 0.2)',
+                    ? `0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px ${theme.palette.primary.main}26`
+                    : `0 8px 32px rgba(0, 0, 0, 0.1), 0 0 16px ${theme.palette.info.main}33`,
                 padding: 1.5,
                 position: 'relative',
                 width: 240,
@@ -670,8 +670,8 @@ const Home = () => {
                   transform: 'translateX(40px) translateY(-4px)',
                   boxShadow: (theme) =>
                     theme.palette.mode === 'dark'
-                      ? '0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 231, 255, 0.25)'
-                      : '0 15px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(0, 231, 255, 0.3)',
+                      ? `0 15px 50px rgba(0, 0, 0, 0.5), 0 0 30px ${theme.palette.primary.main}40`
+                      : `0 15px 50px rgba(0, 0, 0, 0.15), 0 0 30px ${theme.palette.info.main}4D`,
                 },
               }}
             >

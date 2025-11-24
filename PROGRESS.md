@@ -666,3 +666,107 @@ But we're using it as a **tooltip/hint**, which needs:
 - [ ] Mobile: Touch typing works normally
 
 ---
+
+### 2025-11-24 - Home.jsx Color Palette Fix
+
+**Requirement:** Replace hard-coded cyan colors with theme-based purple-pink-blue palette.
+
+**Problem Statement:**
+- Home.jsx had **14 instances** of hard-coded cyan color (`rgba(0, 231, 255, ...)`)
+- Cyan colors didn't match the established purple-pink-blue brand palette (Req No 01)
+- Inconsistent brand identity across landing page
+- Hard-coded colors can't adapt to theme changes
+
+**Locations Found:**
+1. **aiGlowPulse animation** (Lines 114, 117)
+   - Box-shadow glow effect for AI verification cards
+2. **Post Card 1** (Lines 504-505, 510-511, 521-522, 550-551)
+   - Border, box-shadow, hover effects, content background
+3. **D.E.M.N Analysis Card 1** (Lines 596-597)
+   - Box-shadow glow effect
+4. **Post Card 2** (Lines 654-655, 660-661, 673-674)
+   - Border, box-shadow, hover effects
+
+**Solution Implemented:**
+
+#### 1. **Replaced Cyan with Theme Colors**
+
+| Element | Before (Cyan) | After (Theme Colors) |
+|---------|---------------|----------------------|
+| **aiGlowPulse Animation** | `rgba(0, 231, 255, 0.2/0.4/0.1)` | Purple: `rgba(139, 92, 246, ...)` + Pink: `rgba(236, 72, 153, ...)` |
+| **Card Borders (Dark)** | `rgba(0, 231, 255, 0.2)` | `${theme.palette.primary.main}33` (Purple with 20% opacity) |
+| **Card Borders (Light)** | `rgba(0, 231, 255, 0.3)` | `${theme.palette.info.main}4D` (Blue with 30% opacity) |
+| **Card Shadow (Dark)** | `rgba(0, 231, 255, 0.15/0.26)` | `${theme.palette.primary.main}26` (Purple with 15% opacity) |
+| **Card Shadow (Light)** | `rgba(0, 231, 255, 0.2/0.33)` | `${theme.palette.info.main}33` (Blue with 20% opacity) |
+| **Hover Shadow (Dark)** | `rgba(0, 231, 255, 0.25/0.40)` | `${theme.palette.primary.main}40` (Purple with 25% opacity) |
+| **Hover Shadow (Light)** | `rgba(0, 231, 255, 0.3/0.4D)` | `${theme.palette.info.main}4D` (Blue with 30% opacity) |
+| **Content Background (Dark)** | `rgba(0, 231, 255, 0.1)` | `${theme.palette.primary.main}1A` (Purple with 10% opacity) |
+| **Content Background (Light)** | `rgba(0, 231, 255, 0.05)` | `${theme.palette.info.main}0D` (Blue with 5% opacity) |
+
+#### 2. **Color Strategy**
+
+**Dark Mode:**
+- Uses **Primary (Purple)** for accents and glows
+- Creates mystical, AI-focused atmosphere
+- Matches purple-first brand identity
+
+**Light Mode:**
+- Uses **Info (Blue)** for accents and glows
+- Professional, trustworthy appearance
+- Lighter, more accessible for daytime use
+
+**Animation:**
+- Combines **Purple** and **Pink** for gradient glow
+- Creates dynamic AI-powered effect
+- Matches gradient used throughout app
+
+#### 3. **Technical Implementation**
+
+**Before (Hard-coded):**
+```jsx
+border: '1px solid rgba(0, 231, 255, 0.2)'  // ❌ Cyan hard-coded
+```
+
+**After (Theme-based):**
+```jsx
+border: `1px solid ${theme.palette.primary.main}33`  // ✅ Purple from theme
+```
+
+**Benefits:**
+- ✅ Uses theme system - can adapt if colors change
+- ✅ Consistent with purple-pink-blue palette
+- ✅ Proper dark/light mode support
+- ✅ Maintains visual hierarchy
+- ✅ No hard-coded values
+
+#### Files Modified:
+- ✅ `src/pages/Home.jsx` - Replaced all 14 cyan color instances
+
+#### Visual Changes:
+1. **Landing Page Cards** - Now use purple/blue instead of cyan
+2. **Glow Effects** - Purple glow in dark mode, blue in light mode
+3. **Borders** - Theme-consistent purple/blue borders
+4. **Hover States** - Enhanced with purple/pink gradient feeling
+5. **Overall** - Cohesive purple-pink-blue brand identity
+
+#### Brand Consistency:
+- **Primary (Purple #8B5CF6):** AI/Intelligence/Innovation ✓
+- **Secondary (Pink #EC4899):** Social/Energy/Engagement ✓
+- **Info (Blue #3B82F6):** Tech/Trust/Reliability ✓
+- ~~Cyan (#00E7FF)~~ - **REMOVED** ✓
+
+#### Testing Checklist:
+- [ ] Light mode: Card borders show blue accent
+- [ ] Dark mode: Card borders show purple accent
+- [ ] Hover effects use theme colors
+- [ ] AI verification card glow uses purple-pink gradient
+- [ ] Content area backgrounds use subtle theme colors
+- [ ] All animations work smoothly
+- [ ] No cyan colors visible anywhere
+- [ ] Consistent with auth pages and other components
+
+#### Impact:
+**Before:** Landing page had cyan colors inconsistent with purple-pink-blue brand
+**After:** Complete brand consistency across entire application
+
+---
