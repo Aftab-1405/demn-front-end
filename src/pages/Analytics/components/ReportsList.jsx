@@ -24,13 +24,13 @@ const ReportsList = ({ reports, loading }) => {
 
     const getVerificationLabel = (status) => {
         const labels = {
-            verified: '✓ Verified',
-            disputed: '✗ Disputed',
-            mixed: '◐ Mixed',
-            not_applicable: '○ Personal',
-            pending: '⏳ Pending',
+            verified: 'Verified',
+            disputed: 'Disputed',
+            mixed: 'Mixed',
+            not_applicable: 'Personal',
+            pending: 'Pending',
         };
-        return labels[status] || '? Unverified';
+        return labels[status] || 'Unverified';
     };
 
     return (
@@ -59,7 +59,7 @@ const ReportsList = ({ reports, loading }) => {
                     <ReportIcon sx={{ fontSize: 24, color: 'info.main' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    📋 My Fact-Check Reports
+                    My Fact-Check Reports
                 </Typography>
             </Stack>
 
@@ -135,7 +135,7 @@ const ReportsList = ({ reports, loading }) => {
                                     )}
                                     {report.processing_status === 'pending' && (
                                         <Chip
-                                            label="⏳ Processing..."
+                                            label="Processing..."
                                             size="small"
                                             sx={{
                                                 fontSize: '0.6875rem',

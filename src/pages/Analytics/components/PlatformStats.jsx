@@ -1,5 +1,5 @@
 import { Card, Typography, Box, Grid, Stack } from '@mui/material';
-import { Public as PlatformIcon } from '@mui/icons-material';
+import { Public as PlatformIcon, Search as SearchIcon, Assessment as AssessmentIcon, CheckCircle as CheckIcon } from '@mui/icons-material';
 import useThemeTokens from '../../../hooks/useThemeTokens';
 
 const PlatformStats = ({ factCheckStats }) => {
@@ -9,25 +9,25 @@ const PlatformStats = ({ factCheckStats }) => {
         {
             label: 'Total Fact-Checks',
             value: factCheckStats.total_fact_checks,
-            icon: '🔍',
+            icon: SearchIcon,
             color: 'primary.main',
-            gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            gradient: (theme) => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         },
         {
             label: 'Claims Analyzed',
             value: factCheckStats.total_claims,
-            icon: '📊',
+            icon: AssessmentIcon,
             color: 'secondary.main',
-            gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            gradient: (theme) => `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.secondary.dark} 100%)`,
         },
         {
             label: 'Platform Accuracy',
             value: factCheckStats.accuracy_rate
                 ? `${factCheckStats.accuracy_rate.toFixed(1)}%`
                 : 'N/A',
-            icon: '✓',
+            icon: CheckIcon,
             color: 'success.main',
-            gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            gradient: (theme) => `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.success.dark} 100%)`,
         },
     ];
 
@@ -56,7 +56,7 @@ const PlatformStats = ({ factCheckStats }) => {
                     <PlatformIcon sx={{ fontSize: 24, color: 'primary.main' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    🌐 Platform Fact-Check Insights
+                    Platform Fact-Check Insights
                 </Typography>
             </Stack>
 
@@ -85,11 +85,12 @@ const PlatformStats = ({ factCheckStats }) => {
                         >
                             <Box
                                 sx={{
-                                    fontSize: '48px',
                                     marginBottom: 2,
+                                    display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
-                                {stat.icon}
+                                <stat.icon sx={{ fontSize: 48, color: stat.color }} />
                             </Box>
                             <Typography
                                 sx={{

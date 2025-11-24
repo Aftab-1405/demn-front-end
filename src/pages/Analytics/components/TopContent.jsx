@@ -1,5 +1,5 @@
 import { Card, Typography, Box, Stack, Button } from '@mui/material';
-import { EmojiEvents as TrophyIcon } from '@mui/icons-material';
+import { EmojiEvents as TrophyIcon, Comment, TrendingUp } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const TopContent = ({ topContent }) => {
@@ -136,9 +136,7 @@ const TopContent = ({ topContent }) => {
                                             gap: 0.5,
                                         }}
                                     >
-                                        <Typography sx={{ fontSize: '0.75rem', color: 'text.disabled' }}>
-                                            💬
-                                        </Typography>
+                                        <Comment sx={{ fontSize: '0.75rem', color: 'text.disabled' }} />
                                         <Typography
                                             sx={{ fontSize: '0.75rem', fontWeight: 600, color: 'text.primary' }}
                                         >
@@ -152,9 +150,7 @@ const TopContent = ({ topContent }) => {
                                             gap: 0.5,
                                         }}
                                     >
-                                        <Typography sx={{ fontSize: '0.75rem', color: 'text.disabled' }}>
-                                            📊
-                                        </Typography>
+                                        <TrendingUp sx={{ fontSize: '0.75rem', color: 'text.disabled' }} />
                                         <Typography
                                             sx={{
                                                 fontSize: '0.75rem',

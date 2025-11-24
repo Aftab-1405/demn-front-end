@@ -75,7 +75,7 @@ const VerificationPieChart = ({ userStats }) => {
             <Stack direction="row" alignItems="center" spacing={1.5} sx={{ marginBottom: 3 }}>
                 <Box
                     sx={{
-                        bgcolor: 'success.light',
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? 'success.dark' : 'success.light',
                         borderRadius: 2,
                         padding: 1,
                         display: 'flex',
@@ -86,7 +86,7 @@ const VerificationPieChart = ({ userStats }) => {
                     <VerifiedIcon sx={{ fontSize: 24, color: 'success.main' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    🔍 Verification Status
+                    Verification Status
                 </Typography>
             </Stack>
 

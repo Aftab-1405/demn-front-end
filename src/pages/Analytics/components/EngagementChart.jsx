@@ -10,22 +10,22 @@ const EngagementChart = ({ userStats }) => {
         {
             label: 'Avg Likes',
             value: userStats.engagement_stats.avg_likes_per_post,
-            color: '#667eea',
+            color: themeTokens.primary,
         },
         {
             label: 'Avg Comments',
             value: userStats.engagement_stats.avg_comments_per_post,
-            color: '#764ba2',
+            color: themeTokens.secondary,
         },
         {
             label: 'Total Likes (÷100)',
             value: userStats.engagement_stats.total_likes / 100,
-            color: '#f093fb',
+            color: themeTokens.success,
         },
         {
             label: 'Total Comments (÷10)',
             value: userStats.engagement_stats.total_comments / 10,
-            color: '#f5576c',
+            color: themeTokens.warning,
         },
     ];
 
@@ -55,7 +55,7 @@ const EngagementChart = ({ userStats }) => {
                     <ChartIcon sx={{ fontSize: 24, color: 'primary.main' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    📊 Engagement Breakdown
+                    Engagement Breakdown
                 </Typography>
             </Stack>
 
