@@ -16,13 +16,13 @@ const AnalyticsHeader = ({ timeRange }) => {
         <Card
             sx={{
                 background: (theme) =>
-                    `linear-gradient(135deg, ${theme.palette.secondary.dark} 0%, ${theme.palette.secondary.main} 100%)`,
-                padding: { xs: 3, md: 4 },
+                    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                padding: { xs: 2, sm: 3, md: 4 },
                 borderRadius: 3,
                 color: 'white',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
                 border: '1px solid',
-                borderColor: 'secondary.light',
+                borderColor: 'primary.light',
                 position: 'relative',
                 overflow: 'hidden',
                 marginBottom: 3,
@@ -39,7 +39,12 @@ const AnalyticsHeader = ({ timeRange }) => {
                 },
             }}
         >
-            <Stack direction="row" alignItems="center" spacing={2} sx={{ marginBottom: 2 }}>
+            <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                alignItems={{ xs: 'flex-start', sm: 'center' }}
+                spacing={2}
+                sx={{ marginBottom: 2, textAlign: { xs: 'left', sm: 'left' } }}
+            >
                 <Box
                     sx={{
                         bgcolor: 'rgba(255, 255, 255, 0.2)',
@@ -50,14 +55,14 @@ const AnalyticsHeader = ({ timeRange }) => {
                         justifyContent: 'center',
                     }}
                 >
-                    <AnalyticsIcon sx={{ fontSize: 36 }} />
+                    <AnalyticsIcon sx={{ fontSize: { xs: 28, sm: 36 } }} />
                 </Box>
                 <Box sx={{ flex: 1 }}>
                     <Typography
                         variant="h3"
                         sx={{
                             fontWeight: 800,
-                            fontSize: { xs: '1.75rem', md: '2.25rem' },
+                            fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2.25rem' },
                             marginBottom: 0.5,
                             textShadow: '0 2px 4px rgba(0,0,0,0.1)',
                         }}
@@ -68,7 +73,7 @@ const AnalyticsHeader = ({ timeRange }) => {
                         variant="body1"
                         sx={{
                             opacity: 0.95,
-                            fontSize: { xs: '0.9375rem', md: '1.0625rem' },
+                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1.0625rem' },
                         }}
                     >
                         Comprehensive performance insights and metrics
@@ -93,7 +98,7 @@ const AnalyticsHeader = ({ timeRange }) => {
                         bgcolor: 'rgba(255, 255, 255, 0.2)',
                         color: 'white',
                         fontWeight: 600,
-                        fontSize: '0.875rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
                         '& .MuiChip-icon': { color: 'white' },
                     }}
                 />
@@ -103,7 +108,7 @@ const AnalyticsHeader = ({ timeRange }) => {
                         bgcolor: 'rgba(255, 255, 255, 0.2)',
                         color: 'white',
                         fontWeight: 600,
-                        fontSize: '0.875rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
                     }}
                 />
                 <Chip
@@ -112,7 +117,7 @@ const AnalyticsHeader = ({ timeRange }) => {
                         bgcolor: 'rgba(255, 255, 255, 0.2)',
                         color: 'white',
                         fontWeight: 600,
-                        fontSize: '0.875rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
                         animation: 'pulse 2s infinite',
                         '@keyframes pulse': {
                             '0%, 100%': { opacity: 1 },
