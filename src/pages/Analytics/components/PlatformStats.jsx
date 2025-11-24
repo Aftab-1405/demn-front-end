@@ -37,7 +37,7 @@ const PlatformStats = ({ factCheckStats }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: 3,
+                padding: { xs: 1.5, sm: 2, md: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             }}
@@ -69,7 +69,7 @@ const PlatformStats = ({ factCheckStats }) => {
                     <Grid item xs={12} sm={4} key={index}>
                         <Box
                             sx={{
-                                padding: 3,
+                                padding: { xs: 1.5, sm: 2, md: 3 },
                                 bgcolor: 'background.default',
                                 borderRadius: 2,
                                 border: 2,
@@ -85,16 +85,16 @@ const PlatformStats = ({ factCheckStats }) => {
                         >
                             <Box
                                 sx={{
-                                    marginBottom: 2,
+                                    marginBottom: { xs: 1.5, sm: 2 },
                                     display: 'flex',
                                     justifyContent: 'center',
                                 }}
                             >
-                                <stat.icon sx={{ fontSize: 48, color: stat.color }} />
+                                <stat.icon sx={{ fontSize: { xs: 36, sm: 40, md: 48 }, color: stat.color }} />
                             </Box>
                             <Typography
                                 sx={{
-                                    fontSize: '0.75rem',
+                                    fontSize: { xs: '0.6875rem', sm: '0.75rem' },
                                     color: 'text.secondary',
                                     marginBottom: 1,
                                     textTransform: 'uppercase',
@@ -106,7 +106,7 @@ const PlatformStats = ({ factCheckStats }) => {
                             </Typography>
                             <Typography
                                 sx={{
-                                    fontSize: '2rem',
+                                    fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
                                     fontWeight: 800,
                                     background: stat.gradient,
                                     WebkitBackgroundClip: 'text',

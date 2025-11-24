@@ -66,7 +66,7 @@ const VerificationPieChart = ({ userStats }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: 3,
+                padding: { xs: 1.5, sm: 2, md: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 height: '100%',
@@ -94,7 +94,7 @@ const VerificationPieChart = ({ userStats }) => {
                 Distribution of fact-check verification results
             </Typography>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: { xs: 2, sm: 3 } }}>
                 <PieChart
                     series={[
                         {
@@ -107,8 +107,8 @@ const VerificationPieChart = ({ userStats }) => {
                             },
                         },
                     ]}
-                    width={280}
-                    height={220}
+                    width={typeof window !== 'undefined' && window.innerWidth < 600 ? Math.min(window.innerWidth - 80, 250) : 280}
+                    height={typeof window !== 'undefined' && window.innerWidth < 600 ? 180 : 220}
                     slotProps={{ legend: { hidden: true } }}
                 />
             </Box>
@@ -122,7 +122,7 @@ const VerificationPieChart = ({ userStats }) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding: 1.5,
+                            padding: { xs: 1, sm: 1.5 },
                             borderRadius: 2,
                             bgcolor: statusPalette[item.label.toLowerCase()]?.bg || 'action.selected',
                             border: 1,

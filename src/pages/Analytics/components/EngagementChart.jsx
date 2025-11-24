@@ -35,7 +35,7 @@ const EngagementChart = ({ userStats }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: 3,
+                padding: { xs: 1.5, sm: 2, md: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 height: '100%',
@@ -66,10 +66,11 @@ const EngagementChart = ({ userStats }) => {
             <Box
                 sx={{
                     width: '100%',
-                    minHeight: 300,
+                    minHeight: { xs: 250, sm: 300 },
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    overflow: 'hidden',
                 }}
             >
                 <BarChart
@@ -85,13 +86,24 @@ const EngagementChart = ({ userStats }) => {
                             color: themeTokens.primary,
                         },
                     ]}
-                    width={Math.min(window.innerWidth > 1200 ? 600 : window.innerWidth - 100, 600)}
-                    height={300}
+                    width={
+                        typeof window !== 'undefined'
+                            ? Math.min(
+                                  window.innerWidth > 1200
+                                      ? 600
+                                      : window.innerWidth > 600
+                                        ? window.innerWidth * 0.85
+                                        : window.innerWidth - 80,
+                                  600
+                              )
+                            : 600
+                    }
+                    height={typeof window !== 'undefined' && window.innerWidth < 600 ? 250 : 300}
                     slotProps={{ legend: { hidden: true } }}
                     sx={{
                         '& .MuiChartsAxis-tickLabel': {
                             fill: (theme) => theme.palette.text.secondary,
-                            fontSize: '12px',
+                            fontSize: { xs: '10px', sm: '12px' },
                             fontWeight: 500,
                         },
                         '& .MuiChartsAxis-line': {
@@ -108,13 +120,13 @@ const EngagementChart = ({ userStats }) => {
             {/* Stats Summary */}
             <Box
                 sx={{
-                    marginTop: 3,
-                    padding: 2,
+                    marginTop: { xs: 2, sm: 3 },
+                    padding: { xs: 1.5, sm: 2 },
                     bgcolor: 'action.selected',
                     borderRadius: 2,
                     display: 'grid',
                     gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: 2,
+                    gap: { xs: 1.5, sm: 2 },
                 }}
             >
                 <Box>

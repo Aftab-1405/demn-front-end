@@ -1,5 +1,5 @@
 import { Card, Typography, Box, Stack, Button, Chip } from '@mui/material';
-import { Assignment as ReportIcon } from '@mui/icons-material';
+import { Assignment as ReportIcon, Image as ImageIcon, VideoLibrary as VideoIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { SkeletonReportList } from '../../../components/Skeleton';
 import useThemeTokens from '../../../hooks/useThemeTokens';
@@ -39,7 +39,7 @@ const ReportsList = ({ reports, loading }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: 3,
+                padding: { xs: 1.5, sm: 2, md: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 minHeight: 450,
@@ -79,8 +79,8 @@ const ReportsList = ({ reports, loading }) => {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: 2,
-                                padding: 2,
+                                gap: { xs: 1, sm: 2 },
+                                padding: { xs: 1.5, sm: 2 },
                                 bgcolor: 'background.default',
                                 borderRadius: 2,
                                 border: 1,
@@ -96,16 +96,19 @@ const ReportsList = ({ reports, loading }) => {
                             {/* Icon */}
                             <Box
                                 sx={{
-                                    fontSize: '32px',
                                     bgcolor: 'action.selected',
                                     borderRadius: 2,
-                                    padding: 1,
+                                    padding: { xs: 0.75, sm: 1 },
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}
                             >
-                                {report.type === 'post' ? '📸' : '🎥'}
+                                {report.type === 'post' ? (
+                                    <ImageIcon sx={{ fontSize: { xs: 24, sm: 32 }, color: 'primary.main' }} />
+                                ) : (
+                                    <VideoIcon sx={{ fontSize: { xs: 24, sm: 32 }, color: 'secondary.main' }} />
+                                )}
                             </Box>{/* Content */}
                             <Box sx={{ flex: 1, minWidth: 0 }}>
                                 <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: 0.5 }}>
@@ -181,14 +184,14 @@ const ReportsList = ({ reports, loading }) => {
                                 onClick={() => navigate(`/fact-check/${report.type}/${report.id}`)}
                                 disabled={report.processing_status !== 'complete'}
                                 sx={{
-                                    fontSize: '0.75rem',
-                                    padding: '8px 16px',
+                                    fontSize: { xs: '0.6875rem', sm: '0.75rem' },
+                                    padding: { xs: '6px 12px', sm: '8px 16px' },
                                     fontWeight: 700,
-                                    minWidth: '80px',
+                                    minWidth: { xs: '70px', sm: '80px' },
                                     borderRadius: 2,
                                 }}
                             >
-                                View Report
+                                View{window.innerWidth >= 600 ? ' Report' : ''}
                             </Button>
                         </Box>
                     ))}

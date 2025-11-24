@@ -1,5 +1,5 @@
 import { Card, Typography, Box, Stack, Button } from '@mui/material';
-import { EmojiEvents as TrophyIcon, Comment, TrendingUp } from '@mui/icons-material';
+import { EmojiEvents as TrophyIcon, Comment, TrendingUp, Image as ImageIcon, VideoLibrary as VideoIcon, ThumbUp } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const TopContent = ({ topContent }) => {
@@ -11,7 +11,7 @@ const TopContent = ({ topContent }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: 3,
+                padding: { xs: 1.5, sm: 2, md: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 minHeight: 450,
@@ -31,7 +31,7 @@ const TopContent = ({ topContent }) => {
                     <TrophyIcon sx={{ fontSize: 24, color: 'warning.main' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    🏆 Top Performing Content
+                    Top Performing Content
                 </Typography>
             </Stack>
 
@@ -47,8 +47,8 @@ const TopContent = ({ topContent }) => {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: 2,
-                                padding: 2,
+                                gap: { xs: 1, sm: 2 },
+                                padding: { xs: 1.5, sm: 2 },
                                 bgcolor: 'background.default',
                                 borderRadius: 2,
                                 border: 1,
@@ -64,22 +64,22 @@ const TopContent = ({ topContent }) => {
                             {/* Rank Badge */}
                             <Box
                                 sx={{
-                                    minWidth: '48px',
-                                    height: '48px',
+                                    minWidth: { xs: '36px', sm: '48px' },
+                                    height: { xs: '36px', sm: '48px' },
                                     borderRadius: 2,
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     fontWeight: 800,
-                                    fontSize: '1.25rem',
-                                    background:
+                                    fontSize: { xs: '1rem', sm: '1.25rem' },
+                                    background: (theme) =>
                                         index === 0
-                                            ? 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)'
+                                            ? `linear-gradient(135deg, ${theme.palette.warning.light} 0%, ${theme.palette.warning.main} 100%)`
                                             : index === 1
-                                                ? 'linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%)'
+                                                ? `linear-gradient(135deg, ${theme.palette.grey[400]} 0%, ${theme.palette.grey[600]} 100%)`
                                                 : index === 2
-                                                    ? 'linear-gradient(135deg, #cd7f32 0%, #b8752e 100%)'
-                                                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                    ? `linear-gradient(135deg, ${theme.palette.warning.dark} 0%, ${theme.palette.error.dark} 100%)`
+                                                    : `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                                     color: 'white',
                                     boxShadow: 2,
                                 }}
@@ -89,20 +89,25 @@ const TopContent = ({ topContent }) => {
 
                             {/* Content Details */}
                             <Box sx={{ flex: 1, minWidth: 0 }}>
-                                <Stack direction="row" alignItems="center" spacing={1} sx={{ marginBottom: 0.5 }}>
+                                <Stack direction="row" alignItems="center" spacing={0.5} sx={{ marginBottom: 0.5 }}>
+                                    {content.type === 'post' ? (
+                                        <ImageIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                                    ) : (
+                                        <VideoIcon sx={{ fontSize: 16, color: 'secondary.main' }} />
+                                    )}
                                     <Typography
                                         sx={{
-                                            fontSize: '0.875rem',
+                                            fontSize: { xs: '0.8125rem', sm: '0.875rem' },
                                             fontWeight: 700,
                                             color: 'text.primary',
                                         }}
                                     >
-                                        {content.type === 'post' ? '📸 Post' : '🎥 Reel'}
+                                        {content.type === 'post' ? 'Post' : 'Reel'}
                                     </Typography>
                                 </Stack>
                                 <Typography
                                     sx={{
-                                        fontSize: '0.8125rem',
+                                        fontSize: { xs: '0.75rem', sm: '0.8125rem' },
                                         color: 'text.secondary',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -112,7 +117,7 @@ const TopContent = ({ topContent }) => {
                                 >
                                     {content.caption ? content.caption.substring(0, 50) + '...' : 'No caption'}
                                 </Typography>
-                                <Stack direction="row" spacing={2}>
+                                <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
                                     <Box
                                         sx={{
                                             display: 'flex',
@@ -120,11 +125,9 @@ const TopContent = ({ topContent }) => {
                                             gap: 0.5,
                                         }}
                                     >
-                                        <Typography sx={{ fontSize: '0.75rem', color: 'text.disabled' }}>
-                                            ❤️
-                                        </Typography>
+                                        <ThumbUp sx={{ fontSize: { xs: 12, sm: 14 }, color: 'text.disabled' }} />
                                         <Typography
-                                            sx={{ fontSize: '0.75rem', fontWeight: 600, color: 'text.primary' }}
+                                            sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' }, fontWeight: 600, color: 'text.primary' }}
                                         >
                                             {content.likes_count}
                                         </Typography>
@@ -136,9 +139,9 @@ const TopContent = ({ topContent }) => {
                                             gap: 0.5,
                                         }}
                                     >
-                                        <Comment sx={{ fontSize: '0.75rem', color: 'text.disabled' }} />
+                                        <Comment sx={{ fontSize: { xs: 12, sm: 14 }, color: 'text.disabled' }} />
                                         <Typography
-                                            sx={{ fontSize: '0.75rem', fontWeight: 600, color: 'text.primary' }}
+                                            sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' }, fontWeight: 600, color: 'text.primary' }}
                                         >
                                             {content.comments_count}
                                         </Typography>
@@ -150,10 +153,10 @@ const TopContent = ({ topContent }) => {
                                             gap: 0.5,
                                         }}
                                     >
-                                        <TrendingUp sx={{ fontSize: '0.75rem', color: 'text.disabled' }} />
+                                        <TrendingUp sx={{ fontSize: { xs: 12, sm: 14 }, color: 'text.disabled' }} />
                                         <Typography
                                             sx={{
-                                                fontSize: '0.75rem',
+                                                fontSize: { xs: '0.6875rem', sm: '0.75rem' },
                                                 fontWeight: 700,
                                                 color: 'warning.main',
                                             }}
@@ -172,10 +175,10 @@ const TopContent = ({ topContent }) => {
                                     navigate(`/${content.type === 'post' ? 'posts' : 'reels'}/${content.id}`)
                                 }
                                 sx={{
-                                    fontSize: '0.75rem',
-                                    padding: '8px 16px',
+                                    fontSize: { xs: '0.6875rem', sm: '0.75rem' },
+                                    padding: { xs: '6px 12px', sm: '8px 16px' },
                                     fontWeight: 700,
-                                    minWidth: '80px',
+                                    minWidth: { xs: '60px', sm: '80px' },
                                     borderRadius: 2,
                                 }}
                             >
