@@ -1,9 +1,10 @@
+//
 // MUI Theme Configuration - AI-Powered Social Media
 // Modern color palette for AI + Social Media (Purple, Pink, Blue)
 // Inspired by modern AI platforms: Claude, ChatGPT, Gemini
 // Uses MUI's color system for industry-standard design
 
-import { createTheme } from '@mui/material/styles';
+import { createTheme, alpha } from '@mui/material/styles';
 import {
   purple,
   pink,
@@ -207,34 +208,50 @@ const getThemeConfig = (mode) => ({
   spacing: 8, // Base spacing unit (matches 0.5rem)
 
   components: {
-    // Button customization
+    // 1. DISABLE DEFAULT RIPPLE GLOBALLY
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+
+    // 2. SCALE + GLOW FOR BUTTONS
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState, theme }) => ({
           borderRadius: 'clamp(0.4rem, 1.6vw, 0.6rem)',
           padding: 'clamp(0.6rem, 1.6vw, 0.8rem) clamp(1.25rem, 3vw, 1.6rem)',
           fontWeight: 600,
-          transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.15s ease-in-out', // Faster transition for snappy feel
           boxShadow: 'none',
-          '&:hover': {
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            transform: 'translateY(-1px)',
-          },
+
+          // SCALE EFFECT (Click)
           '&:active': {
-            transform: 'translateY(0)',
+            transform: 'scale(0.95)',
           },
-        },
-        contained: {
+
+          // GLOW EFFECT (Hover)
           '&:hover': {
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)',
+            transform: 'scale(1.02)', // Slight growth on hover
+            boxShadow: ownerState.variant === 'contained' && ownerState.color !== 'inherit'
+              ? `0 0 15px ${alpha(theme.palette[ownerState.color].main, 0.5)}` // Colored Glow
+              : '0 4px 12px rgba(0, 0, 0, 0.1)',
+          },
+        }),
+        contained: {
+          // Additional glow intensity for contained buttons
+          '&:hover': {
+             // Let root handle the dynamic color, specific overrides here if needed
           },
         },
-        outlined: {
+        outlined: ({ ownerState, theme }) => ({
           borderWidth: '2px',
           '&:hover': {
             borderWidth: '2px',
+            backgroundColor: alpha(theme.palette[ownerState.color].main, 0.08),
+            boxShadow: `0 0 8px ${alpha(theme.palette[ownerState.color].main, 0.3)}`, // Subtle glow for outlined
           },
-        },
+        }),
         sizeSmall: {
           padding: 'clamp(0.4rem, 1.2vw, 0.6rem) clamp(0.8rem, 2vw, 1rem)',
           fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)',
@@ -246,20 +263,25 @@ const getThemeConfig = (mode) => ({
       },
     },
 
-    // IconButton customization
+    // 3. SCALE + GLOW FOR ICON BUTTONS
     MuiIconButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme, ownerState }) => ({
           borderRadius: '50%',
-          transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          
           '&:hover': {
-            transform: 'scale(1.05)',
+            transform: 'scale(1.1)', // Grow larger
             backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.08)',
+            // Add a subtle glow based on color if it's not default
+             boxShadow: ownerState.color !== 'default' && ownerState.color !== 'inherit'
+              ? `0 0 10px ${alpha(theme.palette[ownerState.color].main, 0.4)}`
+              : 'none',
           },
           '&:active': {
-            transform: 'scale(0.95)',
+            transform: 'scale(0.90)', // Shrink significantly for click feel
           },
-        },
+        }),
       },
     },
 
@@ -282,7 +304,7 @@ const getThemeConfig = (mode) => ({
       },
     },
 
-    // Card customization
+    // Card customization (Enhanced with Scale on Click if Actionable)
     MuiCard: {
       styleOverrides: {
         root: {
@@ -300,6 +322,21 @@ const getThemeConfig = (mode) => ({
         },
       },
     },
+    
+    // Action Area (for Cards) - Add Scale effect
+    MuiCardActionArea: {
+      styleOverrides: {
+        root: {
+           transition: 'transform 0.1s ease-in-out',
+           '&:active': {
+             transform: 'scale(0.98)',
+           },
+           '&:hover .MuiCardActionArea-focusHighlight': {
+             opacity: 0, // Disable default overlay since we use scale/shadow
+           },
+        },
+      },
+    },
 
     // TextField customization
     MuiTextField: {
@@ -311,11 +348,13 @@ const getThemeConfig = (mode) => ({
             '&:hover': {
               '& .MuiOutlinedInput-notchedOutline': {
                 borderColor: mode === 'light' ? colors.primary.main : colors.primary.light,
+                boxShadow: `0 0 8px ${alpha(colors.primary.main, 0.2)}`, // Subtle input glow
               },
             },
             '&.Mui-focused': {
               '& .MuiOutlinedInput-notchedOutline': {
                 borderWidth: '2px',
+                boxShadow: `0 0 12px ${alpha(colors.primary.main, 0.3)}`, // Stronger focus glow
               },
             },
           },
@@ -330,6 +369,12 @@ const getThemeConfig = (mode) => ({
           borderRadius: 'clamp(0.8rem, 2.5vw, 1.2rem)',
           fontWeight: 500,
         },
+        clickable: {
+          '&:active': {
+             boxShadow: 'none',
+             transform: 'scale(0.95)', // Scale for clickable chips
+          },
+        }
       },
     },
 

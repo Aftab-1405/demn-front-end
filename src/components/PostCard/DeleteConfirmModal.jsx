@@ -11,9 +11,9 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { 
+import {
   Close as CloseIcon,
-  Delete as DeleteIcon 
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 
 const DeleteConfirmModal = ({ isOpen, onClose, isPost, isDeleting, onConfirm }) => {

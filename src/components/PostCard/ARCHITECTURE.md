@@ -5,22 +5,22 @@
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         PostCard (index.jsx)                     │
-│                                                                   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │               Main Card UI                               │   │
-│  │  • Header (Avatar, Username, Options Button)            │   │
-│  │  • Media (Image/Video + Maximize Button)                │   │
-│  │  • Actions (Like, Comment, Share, Fact-Check, Save)     │   │
-│  │  • Likes Count                                           │   │
-│  │  • Caption                                               │   │
-│  │  • Comments Count                                        │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                   │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐     │
+│  │               Main Card UI                              │     │
+│  │  • Header (Avatar, Username, Options Button)            │     │
+│  │  • Media (Image/Video + Maximize Button)                │     │
+│  │  • Actions (Like, Comment, Share, Fact-Check, Save)     │     │
+│  │  • Likes Count                                          │     │
+│  │  • Caption                                              │     │
+│  │  • Comments Count                                       │     │
+│  └─────────────────────────────────────────────────────────┘     │
+│                                                                  │
 │  State Management:                                               │
 │  • Modal visibility states                                       │
 │  • Like/Delete loading states                                    │
 │  • Optimistic UI (local likes)                                   │
-│                                                                   │
+│                                                                  │
 │  Business Logic:                                                 │
 │  • handleLike (optimistic updates)                               │
 │  • handleDelete                                                  │

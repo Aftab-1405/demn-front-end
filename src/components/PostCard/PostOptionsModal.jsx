@@ -23,14 +23,14 @@ import {
   Report as ReportIcon,
 } from '@mui/icons-material';
 
-const PostOptionsModal = ({ 
-  isOpen, 
-  onClose, 
-  isOwnPost, 
-  isPost, 
-  onDelete, 
-  onViewDetails, 
-  onShare 
+const PostOptionsModal = ({
+  isOpen,
+  onClose,
+  isOwnPost,
+  isPost,
+  onDelete,
+  onViewDetails,
+  onShare
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
