@@ -64,7 +64,7 @@ const PlatformStats = ({ factCheckStats }) => {
                 Global statistics across the entire platform
             </Typography>
 
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1.5, sm: 2 }}>
                 {stats.map((stat, index) => (
                     <Grid item xs={12} sm={4} key={index}>
                         <Box

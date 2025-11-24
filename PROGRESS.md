@@ -832,3 +832,16 @@ border: `1px solid ${theme.palette.primary.main}33`  // ✅ Purple from theme
 **Result:** Fully mobile-optimized, purple-pink theme.
 
 ---
+
+### 2025-11-24 - Fix Horizontal Scroll on Mobile
+
+**Issue:** Horizontal scrollbar on mobile, navbar cut off, content overflow.
+
+**Fixes:**
+- **index.jsx**: Padding xs:2→1.5, added overflowX: hidden
+- **OverviewCards**: Grid spacing 2.5 → responsive (xs:1.5, sm:2, md:2.5)
+- **PlatformStats**: Grid spacing 2 → responsive (xs:1.5, sm:2)
+
+**Result:** No horizontal scroll, proper mobile fit.
+
+---

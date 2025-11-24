@@ -82,12 +82,12 @@ const Analytics = () => {
 
     if (loading) {
         return (
-            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default' }}>
+            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
                 <Box
                     sx={{
                         maxWidth: 1400,
                         margin: '0 auto',
-                        padding: { xs: 2, sm: 3, md: 4 },
+                        padding: { xs: 1.5, sm: 3, md: 4 },
                     }}
                 >
                     <SkeletonAnalyticsDashboard />
@@ -98,12 +98,12 @@ const Analytics = () => {
 
     if (error) {
         return (
-            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default' }}>
+            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
                 <Box
                     sx={{
                         maxWidth: 1400,
                         margin: '0 auto',
-                        padding: { xs: 2, sm: 3, md: 4 },
+                        padding: { xs: 1.5, sm: 3, md: 4 },
                     }}
                 >
                     <Alert
@@ -139,12 +139,12 @@ const Analytics = () => {
     if (!userStats) return null;
 
     return (
-        <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default' }}>
+        <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
             <Box
                 sx={{
                     maxWidth: 1400,
                     margin: '0 auto',
-                    padding: { xs: 2, sm: 3, md: 4 },
+                    padding: { xs: 1.5, sm: 3, md: 4 },
                 }}
             >
                 {/* Header */}
