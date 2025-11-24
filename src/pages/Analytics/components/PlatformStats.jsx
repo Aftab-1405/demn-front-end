@@ -64,7 +64,8 @@ const PlatformStats = ({ factCheckStats }) => {
                 Global statistics across the entire platform
             </Typography>
 
-            <Grid container spacing={{ xs: 1.5, sm: 2 }}>
+            {/* FIXED: Added justifyContent="center" to center items on wide screens */}
+            <Grid container spacing={{ xs: 1.5, sm: 2 }} justifyContent="center">
                 {stats.map((stat, index) => (
                     <Grid item xs={12} sm={4} key={index}>
                         <Box

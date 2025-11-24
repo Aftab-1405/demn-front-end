@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Alert, AlertTitle, Button } from '@mui/material';
+import { Box, Alert, AlertTitle, Button, Container } from '@mui/material';
 import { Error as ErrorIcon } from '@mui/icons-material';
 import { analyticsAPI, factCheckAPI } from '../../services/api';
 import { useNotifications } from '../../context/NotificationContext';
@@ -82,30 +82,34 @@ const Analytics = () => {
 
     if (loading) {
         return (
-            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
-                <Box
-                    sx={{
-                        maxWidth: 1400,
-                        margin: '0 auto',
-                        padding: { xs: 1.5, sm: 3, md: 4 },
-                    }}
-                >
+            <Box
+                sx={{
+                    width: '100%',
+                    minHeight: '100vh',
+                    bgcolor: 'background.default',
+                    paddingX: { xs: 2, sm: 3, md: 4 },
+                    paddingY: { xs: 2, sm: 3, md: 4 },
+                }}
+            >
+                <Container maxWidth="xl" disableGutters>
                     <SkeletonAnalyticsDashboard />
-                </Box>
+                </Container>
             </Box>
         );
     }
 
     if (error) {
         return (
-            <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
-                <Box
-                    sx={{
-                        maxWidth: 1400,
-                        margin: '0 auto',
-                        padding: { xs: 1.5, sm: 3, md: 4 },
-                    }}
-                >
+            <Box
+                sx={{
+                    width: '100%',
+                    minHeight: '100vh',
+                    bgcolor: 'background.default',
+                    paddingX: { xs: 2, sm: 3, md: 4 },
+                    paddingY: { xs: 2, sm: 3, md: 4 },
+                }}
+            >
+                <Container maxWidth="xl" disableGutters>
                     <Alert
                         severity="error"
                         icon={<ErrorIcon />}
@@ -131,7 +135,7 @@ const Analytics = () => {
                             Retry
                         </Button>
                     </Alert>
-                </Box>
+                </Container>
             </Box>
         );
     }
@@ -139,14 +143,17 @@ const Analytics = () => {
     if (!userStats) return null;
 
     return (
-        <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default', overflowX: 'hidden' }}>
-            <Box
-                sx={{
-                    maxWidth: 1400,
-                    margin: '0 auto',
-                    padding: { xs: 1.5, sm: 3, md: 4 },
-                }}
-            >
+        <Box
+            sx={{
+                width: '100%',
+                minHeight: '100vh',
+                bgcolor: 'background.default',
+                paddingX: { xs: 2, sm: 3, md: 4 },
+                paddingY: { xs: 2, sm: 3, md: 4 },
+                boxSizing: 'border-box',
+            }}
+        >
+            <Container maxWidth="xl" disableGutters>
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
@@ -179,25 +186,25 @@ const Analytics = () => {
                     sx={{
                         display: 'grid',
                         gridTemplateColumns: { xs: '1fr', lg: '1.2fr 1fr' },
-                        gap: 3,
-                        marginTop: 3,
-                        marginBottom: 3,
+                        gap: { xs: 2, sm: 3 },
+                        marginTop: { xs: 2, sm: 3 },
+                        marginBottom: { xs: 2, sm: 3 },
                     }}
                 >
-                    {/* Engagement Chart */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
+                        style={{ width: '100%', minWidth: 0 }}
                     >
                         <EngagementChart userStats={userStats} />
                     </motion.div>
 
-                    {/* Verification Pie Chart */}
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
+                        style={{ width: '100%', minWidth: 0 }}
                     >
                         <VerificationPieChart userStats={userStats} />
                     </motion.div>
@@ -208,24 +215,24 @@ const Analytics = () => {
                     sx={{
                         display: 'grid',
                         gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
-                        gap: 3,
-                        marginBottom: 3,
+                        gap: { xs: 2, sm: 3 },
+                        marginBottom: { xs: 2, sm: 3 },
                     }}
                 >
-                    {/* My Reports */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.5 }}
+                        style={{ width: '100%', minWidth: 0 }}
                     >
                         <ReportsList reports={myReports} loading={reportsLoading} />
                     </motion.div>
 
-                    {/* Top Content */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.6 }}
+                        style={{ width: '100%', minWidth: 0 }}
                     >
                         <TopContent topContent={userStats.top_content} />
                     </motion.div>
@@ -237,11 +244,12 @@ const Analytics = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.7 }}
+                        style={{ width: '100%', minWidth: 0 }}
                     >
                         <PlatformStats factCheckStats={factCheckStats} />
                     </motion.div>
                 )}
-            </Box>
+            </Container>
         </Box>
     );
 };

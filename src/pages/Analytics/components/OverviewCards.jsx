@@ -57,7 +57,8 @@ const OverviewCards = ({ userStats }) => {
     ];
 
     return (
-        <Grid container spacing={{ xs: 1.5, sm: 2, md: 2.5 }} sx={{ marginBottom: 4 }}>
+        // FIXED: Added justifyContent="center" to ensure cards are centered
+        <Grid container spacing={{ xs: 1.5, sm: 2, md: 2.5 }} sx={{ marginBottom: 4 }} justifyContent="center">
             {cards.map((card, index) => {
                 const IconComponent = card.icon;
                 return (

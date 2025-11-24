@@ -1,4 +1,4 @@
-import { Card, Typography, Box, Stack, Chip } from '@mui/material';
+import { Card, Typography, Box, Stack, Chip, alpha } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { VerifiedUser as VerifiedIcon } from '@mui/icons-material';
 import { useMemo } from 'react';
@@ -13,19 +13,21 @@ const VerificationPieChart = ({ userStats }) => {
         () => ({
             verified: {
                 color: themeTokens.success,
-                bg: themeTokens.successBg,
+                // FIXED: Use alpha transparency instead of solid light colors
+                // This ensures the background is a subtle tint that looks good in Dark & Light mode
+                bg: alpha(themeTokens.success, 0.15),
             },
             disputed: {
                 color: themeTokens.error,
-                bg: themeTokens.errorBg,
+                bg: alpha(themeTokens.error, 0.15),
             },
             pending: {
                 color: themeTokens.warning,
-                bg: themeTokens.warningBg,
+                bg: alpha(themeTokens.warning, 0.15),
             },
             personal: {
                 color: themeTokens.personal,
-                bg: themeTokens.personalBg,
+                bg: alpha(themeTokens.personal, 0.15),
             },
         }),
         [themeTokens]
@@ -66,10 +68,12 @@ const VerificationPieChart = ({ userStats }) => {
                 bgcolor: 'background.paper',
                 border: 2,
                 borderColor: 'divider',
-                padding: { xs: 1.5, sm: 2, md: 3 },
+                padding: { xs: 2, sm: 3 },
                 borderRadius: 3,
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 height: '100%',
+                width: '100%',
+                boxSizing: 'border-box',
             }}
         >
             <Stack direction="row" alignItems="center" spacing={1.5} sx={{ marginBottom: 3 }}>
@@ -105,6 +109,9 @@ const VerificationPieChart = ({ userStats }) => {
                                 additionalRadius: -30,
                                 color: (theme) => theme.palette.text.disabled,
                             },
+                            // Add rounded corners to pie segments
+                            cornerRadius: 4,
+                            paddingAngle: 2,
                         },
                     ]}
                     width={typeof window !== 'undefined' && window.innerWidth < 600 ? Math.min(window.innerWidth - 80, 250) : 280}
@@ -124,13 +131,16 @@ const VerificationPieChart = ({ userStats }) => {
                             justifyContent: 'space-between',
                             padding: { xs: 1, sm: 1.5 },
                             borderRadius: 2,
+                            // Use the transparency-safe background color
                             bgcolor: statusPalette[item.label.toLowerCase()]?.bg || 'action.selected',
                             border: 1,
-                            borderColor: 'divider',
+                            borderColor: 'divider', // Subtle border for better definition
                             transition: 'all 0.2s ease',
                             '&:hover': {
                                 transform: 'translateX(4px)',
                                 boxShadow: 1,
+                                // Darken slightly on hover
+                                bgcolor: (theme) => alpha(item.color, 0.25),
                             },
                         }}
                     >
@@ -141,7 +151,6 @@ const VerificationPieChart = ({ userStats }) => {
                                     height: 12,
                                     borderRadius: '50%',
                                     bgcolor: item.color,
-                                    // Fixed: Added backticks for template literal
                                     boxShadow: `0 0 8px ${item.color}`,
                                 }}
                             />
@@ -166,12 +175,11 @@ const VerificationPieChart = ({ userStats }) => {
                                 {item.value}
                             </Typography>
                             <Chip
-                                // Fixed: Added backticks and braces for calculation
                                 label={`${calculatePercentage(item.value, totalContent)}%`}
                                 size="small"
                                 sx={{
                                     bgcolor: item.color,
-                                    color: 'white',
+                                    color: 'white', // Ensure text is always white on these solid chips
                                     fontWeight: 700,
                                     fontSize: '0.6875rem',
                                     height: '22px',

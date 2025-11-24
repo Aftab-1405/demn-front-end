@@ -40,10 +40,17 @@ const AnalyticsHeader = ({ timeRange }) => {
             }}
         >
             <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                alignItems={{ xs: 'flex-start', sm: 'center' }}
+                // FIXED: Centered layout configuration
+                direction={{ xs: 'column', md: 'row' }}
+                alignItems="center"
+                justifyContent="center"
                 spacing={2}
-                sx={{ marginBottom: 2, textAlign: { xs: 'left', sm: 'left' } }}
+                sx={{
+                    marginBottom: 2,
+                    textAlign: 'center',
+                    position: 'relative',
+                    zIndex: 1
+                }}
             >
                 <Box
                     sx={{
@@ -53,11 +60,14 @@ const AnalyticsHeader = ({ timeRange }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        // Ensure icon doesn't shrink
+                        flexShrink: 0,
                     }}
                 >
                     <AnalyticsIcon sx={{ fontSize: { xs: 28, sm: 36 } }} />
                 </Box>
-                <Box sx={{ flex: 1 }}>
+                {/* FIXED: Removed flex: 1 so items pack in the center */}
+                <Box>
                     <Typography
                         variant="h3"
                         sx={{
@@ -85,10 +95,14 @@ const AnalyticsHeader = ({ timeRange }) => {
                 sx={{
                     display: 'flex',
                     flexWrap: 'wrap',
+                    // FIXED: Center the chips
+                    justifyContent: 'center',
                     gap: 1.5,
                     marginTop: 2,
                     paddingTop: 2,
                     borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+                    position: 'relative',
+                    zIndex: 1
                 }}
             >
                 <Chip
