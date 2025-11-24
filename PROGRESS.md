@@ -770,3 +770,27 @@ border: `1px solid ${theme.palette.primary.main}33`  // ✅ Purple from theme
 **After:** Complete brand consistency across entire application
 
 ---
+
+### 2025-11-24 - Custom Scrollbar Styling
+
+**Requirement:** Thin, auto-hiding scrollbar with purple-pink theme colors.
+
+**Implementation:**
+- **Width:** 8px (thin)
+- **Track:** Transparent (auto-hides)
+- **Thumb:** Purple-pink gradient
+- **Dark Mode:** `#8B5CF6 → #EC4899`
+- **Light Mode:** `#A78BFA → #F472B6` (lighter)
+- **Hover:** Darker gradient
+- **Firefox:** `scrollbarWidth: thin`
+
+**Features:**
+✅ Thin modern scrollbar
+✅ Purple-pink brand colors
+✅ Transparent track (auto-hides)
+✅ Smooth transitions
+✅ Cross-browser support
+
+**File:** `src/theme/muiTheme.js`
+
+---

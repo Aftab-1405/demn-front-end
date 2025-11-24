@@ -464,6 +464,33 @@ export const createAppTheme = (mode = 'light') => {
               marginLeft: '96px', // 80px sidebar + 16px gap
             },
           },
+          // Custom Scrollbar Styling
+          '*::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+          },
+          '*::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '*::-webkit-scrollbar-thumb': {
+            background: mode === 'dark'
+              ? 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)'
+              : 'linear-gradient(135deg, #A78BFA 0%, #F472B6 100%)',
+            borderRadius: '10px',
+            transition: 'all 0.3s ease',
+          },
+          '*::-webkit-scrollbar-thumb:hover': {
+            background: mode === 'dark'
+              ? 'linear-gradient(135deg, #7C3AED 0%, #DB2777 100%)'
+              : 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+          },
+          // Firefox scrollbar
+          '*': {
+            scrollbarWidth: 'thin',
+            scrollbarColor: mode === 'dark'
+              ? '#8B5CF6 transparent'
+              : '#A78BFA transparent',
+          },
         },
       },
     },
