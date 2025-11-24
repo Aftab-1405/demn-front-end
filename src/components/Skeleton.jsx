@@ -60,117 +60,127 @@ export const SkeletonAnalyticsDashboard = () => {
   return (
     <Box
       sx={{
-        maxWidth: 1400,
-        margin: '0 auto',
-        padding: { xs: '12px', sm: '20px', md: '32px 24px', lg: '40px 32px' },
         width: '100%',
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+        paddingX: { xs: 2, sm: 3, md: 4 },
+        paddingY: { xs: 2, sm: 3, md: 4 },
+        boxSizing: 'border-box',
       }}
     >
-      {/* Header Section - Match actual title + subtitle + buttons */}
-      <Box
-        sx={{
-          textAlign: 'center',
-          mb: { xs: 3, sm: 3.5, md: 4.5, lg: 6 },
-          padding: { xs: '16px 0', sm: '20px 0', md: '24px 0', lg: '32px 0' },
-        }}
-      >
-        <MuiSkeleton variant="text" width="40%" height={42} sx={{ mx: 'auto', mb: 1 }} />
-        <MuiSkeleton variant="text" width="50%" height={18} sx={{ mx: 'auto', mb: 3 }} />
-        <Stack direction="row" spacing={1.5} sx={{ justifyContent: 'center' }}>
-          <MuiSkeleton variant="rectangular" width={{ xs: 100, sm: 120, lg: 160 }} height={{ xs: 36, lg: 48 }} sx={{ borderRadius: { xs: 1, lg: 1.25 } }} />
-          <MuiSkeleton variant="rectangular" width={{ xs: 100, sm: 120, lg: 160 }} height={{ xs: 36, lg: 48 }} sx={{ borderRadius: { xs: 1, lg: 1.25 } }} />
-          <MuiSkeleton variant="rectangular" width={{ xs: 100, sm: 120, lg: 160 }} height={{ xs: 36, lg: 48 }} sx={{ borderRadius: { xs: 1, lg: 1.25 } }} />
-        </Stack>
-      </Box>
+      <Box sx={{ maxWidth: 'xl', margin: '0 auto', width: '100%' }}>
+        {/* Header Card */}
+        <MuiSkeleton
+          variant="rectangular"
+          height={{ xs: 160, sm: 180, md: 200 }}
+          sx={{
+            borderRadius: 3,
+            mb: { xs: 2, sm: 3 },
+          }}
+        />
 
-      {/* 6 Stats Cards - Match Grid xs={6} sm={4} md={2} */}
-      <Box sx={{ mb: 3 }}>
+        {/* Time Range Selector */}
+        <MuiSkeleton
+          variant="rectangular"
+          height={56}
+          sx={{
+            borderRadius: 3,
+            mb: { xs: 2, sm: 3 },
+          }}
+        />
+
+        {/* Overview Cards - 6 cards grid */}
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(6, 1fr)' },
-            gap: 2,
+            gap: { xs: 1.5, sm: 2, md: 2.5 },
+            mb: { xs: 2, sm: 3 },
           }}
         >
-          {[...Array(6)].map((_, i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <MuiSkeleton
               key={i}
               variant="rectangular"
-              height={120}
+              height={{ xs: 100, sm: 120, md: 140 }}
               sx={{
-                borderRadius: 1,
-                border: (theme) => `1px solid ${theme.palette.divider}`,
+                borderRadius: 3,
+                border: 2,
+                borderColor: 'divider',
               }}
             />
           ))}
         </Box>
-      </Box>
 
-      {/* Charts Section - Match Grid lg={7} and lg={5} ratio (7:5 not 50:50!) */}
-      <Box sx={{ mb: 3 }}>
+        {/* Charts Row - EngagementChart (1.2fr) + VerificationPieChart (1fr) */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', lg: '7fr 5fr' },
-            gap: 2,
+            gridTemplateColumns: { xs: '1fr', lg: '1.2fr 1fr' },
+            gap: { xs: 2, sm: 3 },
+            mb: { xs: 2, sm: 3 },
           }}
         >
           <MuiSkeleton
             variant="rectangular"
-            height={350}
+            height={{ xs: 400, md: 450 }}
             sx={{
-              borderRadius: 1,
-              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              border: 2,
+              borderColor: 'divider',
             }}
           />
           <MuiSkeleton
             variant="rectangular"
-            height={350}
+            height={{ xs: 400, md: 450 }}
             sx={{
-              borderRadius: 1,
-              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              border: 2,
+              borderColor: 'divider',
             }}
           />
         </Box>
-      </Box>
 
-      {/* Reports Lists Section */}
-      <Box sx={{ mb: 3 }}>
+        {/* Reports and Top Content Row - 1fr 1fr */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-            gap: 2,
+            gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
+            gap: { xs: 2, sm: 3 },
+            mb: { xs: 2, sm: 3 },
           }}
         >
           <MuiSkeleton
             variant="rectangular"
-            height={400}
+            height={{ xs: 450, md: 500 }}
             sx={{
-              borderRadius: 1,
-              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              border: 2,
+              borderColor: 'divider',
             }}
           />
           <MuiSkeleton
             variant="rectangular"
-            height={400}
+            height={{ xs: 450, md: 500 }}
             sx={{
-              borderRadius: 1,
-              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              border: 2,
+              borderColor: 'divider',
             }}
           />
         </Box>
-      </Box>
 
-      {/* Platform Stats Card */}
-      <MuiSkeleton
-        variant="rectangular"
-        height={180}
-        sx={{
-          borderRadius: 1,
-          border: (theme) => `1px solid ${theme.palette.divider}`,
-        }}
-      />
+        {/* Platform Stats Card */}
+        <MuiSkeleton
+          variant="rectangular"
+          height={{ xs: 200, md: 220 }}
+          sx={{
+            borderRadius: 3,
+            border: 2,
+            borderColor: 'divider',
+          }}
+        />
+      </Box>
     </Box>
   );
 };
@@ -206,97 +216,91 @@ export const SkeletonReportList = ({ items = 4 }) => {
 // Exact Match for FactCheckDashboard.jsx Layout
 export const SkeletonFactCheckDashboard = () => {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', minHeight: '100vh', bgcolor: 'background.default' }}>
       <Box
         sx={{
           maxWidth: 1200,
-          margin: { xs: '12px auto', sm: '18px auto', md: '22px auto' },
-          padding: 0,
+          margin: { xs: '0 auto', sm: '18px auto', md: '22px auto' },
+          padding: { xs: 2, sm: 3, md: 4 },
         }}
       >
-        {/* Title - Match actual h2 */}
+        {/* Report Header */}
         <MuiSkeleton
-          variant="text"
-          width="40%"
-          height={40}
+          variant="rectangular"
+          height={{ xs: 80, sm: 100 }}
           sx={{
-            mx: 'auto',
-            mb: { xs: 1.5, sm: 1.75, md: 2.25 },
+            borderRadius: 2,
+            mb: 3,
           }}
         />
 
-        {/* Grid Layout: Left (Preview) & Right (Analysis) - Match actual grid ratio 1fr 1.75fr */}
+        {/* Executive Summary */}
+        <MuiSkeleton
+          variant="rectangular"
+          height={{ xs: 140, sm: 160 }}
+          sx={{
+            borderRadius: 3,
+            border: 2,
+            borderColor: 'divider',
+            mb: 3,
+          }}
+        />
+
+        {/* Main Content Grid - 400px 1fr on desktop */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr' },
-            gap: { xs: '12px' },
-            marginBottom: { xs: '14px' },
-            '@media (min-width: 900px)': {
-              gridTemplateColumns: '1fr 1.75fr',
-              gap: '18px',
-              marginBottom: '22px',
-            },
+            gridTemplateColumns: { xs: '1fr', md: '400px 1fr' },
+            gap: { xs: 2, md: 3 },
           }}
         >
-          {/* Left Column: Content Preview Card */}
+          {/* Left: Content Preview (Sticky) */}
           <MuiSkeleton
             variant="rectangular"
-            height={450}
+            height={{ xs: 500, md: 600 }}
             sx={{
-              borderRadius: { xs: '6px', md: '8px' },
-              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              border: 2,
+              borderColor: 'divider',
             }}
           />
 
-          {/* Right Column: Analysis Cards Stack */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: { xs: '10px', '@media (min-width: 900px)': '15px' },
-            }}
-          >
-            {/* Overall Status Card */}
+          {/* Right: Analysis & Actions */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            {/* Verification Report */}
             <MuiSkeleton
               variant="rectangular"
-              height={120}
+              height={{ xs: 300, md: 350 }}
               sx={{
-                borderRadius: { xs: '6px', md: '8px' },
-                border: (theme) => `1px solid ${theme.palette.divider}`,
+                borderRadius: 3,
+                border: 2,
+                borderColor: 'divider',
               }}
             />
-            {/* Verification Report Card */}
+
+            {/* Edit Suggestions */}
             <MuiSkeleton
               variant="rectangular"
-              height={300}
+              height={{ xs: 200, md: 250 }}
               sx={{
-                borderRadius: { xs: '6px', md: '8px' },
-                border: (theme) => `1px solid ${theme.palette.divider}`,
+                borderRadius: 3,
+                border: 2,
+                borderColor: 'divider',
               }}
             />
-            {/* AI Edit Suggestions Card */}
+
+            {/* Action Selector */}
             <MuiSkeleton
               variant="rectangular"
-              height={200}
+              height={{ xs: 280, md: 320 }}
               sx={{
-                borderRadius: { xs: '6px', md: '8px' },
-                border: (theme) => `1px solid ${theme.palette.divider}`,
+                borderRadius: 3,
+                border: 2,
+                borderColor: 'divider',
               }}
             />
           </Box>
         </Box>
-
-        {/* Bottom Actions Card */}
-        <MuiSkeleton
-          variant="rectangular"
-          height={300}
-          sx={{
-            borderRadius: { xs: '6px', md: '8px' },
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-            marginTop: { xs: 1.5, sm: 1.75, md: 2.25 },
-          }}
-        />
       </Box>
     </Box>
   );
@@ -311,6 +315,25 @@ export const SkeletonFeed = () => {
         p: { xs: 2, md: 3, lg: 3 },
       }}
     >
+      {/* Processing Tracker - Mobile (floating) */}
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1400,
+          display: { xs: 'block', lg: 'none' },
+          mb: 2,
+        }}
+      >
+        <MuiSkeleton
+          variant="rectangular"
+          height={60}
+          sx={{
+            borderRadius: 2,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+          }}
+        />
+      </Box>
+
       <Box
         sx={{
           width: '100%',
@@ -355,7 +378,7 @@ export const SkeletonFeed = () => {
             pt: 3,
           }}
         >
-          {/* Processing Tracker Skeleton */}
+          {/* Processing Tracker - Desktop */}
           <MuiSkeleton
             variant="rectangular"
             height={60}
@@ -377,7 +400,7 @@ export const SkeletonFeed = () => {
           {/* Footer Links */}
           <Box sx={{ mt: 2 }}>
             <MuiSkeleton variant="text" width="60%" height={12} sx={{ mb: 1 }} />
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
               <MuiSkeleton variant="text" width={40} height={12} />
               <MuiSkeleton variant="text" width={40} height={12} />
               <MuiSkeleton variant="text" width={50} height={12} />
@@ -434,7 +457,7 @@ export const SkeletonExplore = () => {
           margin: { lg: '0 auto' },
         }}
       >
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: 8 }).map((_, index) => (
           <SkeletonPostCard key={index} />
         ))}
       </Box>
@@ -482,17 +505,21 @@ export const SkeletonProfile = () => {
           textAlign: { xs: 'center', md: 'left' },
         }}
       >
-        {/* Avatar */}
+        {/* Avatar - Exact size match */}
         <MuiSkeleton
           variant="circular"
           width={{ xs: 80, sm: 90 }}
           height={{ xs: 80, sm: 90 }}
+          sx={{
+            border: 2,
+            borderColor: 'primary.main',
+          }}
         />
 
         {/* Profile Info */}
-        <Box sx={{ minWidth: 256, flex: 1 }}>
+        <Box sx={{ flex: 1, width: '100%' }}>
           {/* Username */}
-          <MuiSkeleton variant="text" width="50%" height={32} sx={{ mb: 1 }} />
+          <MuiSkeleton variant="text" width="40%" height={32} sx={{ mb: 1, mx: { xs: 'auto', md: 0 } }} />
 
           {/* Stats Row */}
           <Stack direction="row" spacing={2} sx={{ mb: 1.5, justifyContent: { xs: 'center', md: 'flex-start' } }}>
@@ -502,11 +529,11 @@ export const SkeletonProfile = () => {
           </Stack>
 
           {/* Full name */}
-          <MuiSkeleton variant="text" width="35%" height={18} sx={{ mb: 0.5 }} />
+          <MuiSkeleton variant="text" width="30%" height={18} sx={{ mb: 0.5, mx: { xs: 'auto', md: 0 } }} />
 
           {/* Bio */}
-          <MuiSkeleton variant="text" width="90%" height={16} sx={{ mb: 0.5 }} />
-          <MuiSkeleton variant="text" width="70%" height={16} sx={{ mb: 2 }} />
+          <MuiSkeleton variant="text" width="90%" height={16} sx={{ mb: 0.5, mx: { xs: 'auto', md: 0 } }} />
+          <MuiSkeleton variant="text" width="70%" height={16} sx={{ mb: 2, mx: { xs: 'auto', md: 0 } }} />
 
           {/* Action Buttons */}
           <Stack direction="row" spacing={1.5} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
@@ -517,23 +544,28 @@ export const SkeletonProfile = () => {
       </Box>
 
       {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3, mt: 2 }}>
         <Stack direction="row" spacing={0}>
-          <MuiSkeleton variant="rectangular" width={80} height={48} />
+          <MuiSkeleton variant="rectangular" width={80} height={48} sx={{ borderBottom: 2, borderColor: 'primary.main' }} />
           <MuiSkeleton variant="rectangular" width={80} height={48} />
         </Stack>
       </Box>
 
-      {/* Content Grid */}
+      {/* AI Search Bar Skeleton - Own Profile */}
+      <Box sx={{ mb: 3, display: { xs: 'block', sm: 'flex' }, gap: 1.5, alignItems: 'center' }}>
+        <MuiSkeleton variant="rectangular" height={56} sx={{ flex: 1, borderRadius: 2 }} />
+        <MuiSkeleton variant="rectangular" width={{ xs: '100%', sm: 120 }} height={56} sx={{ borderRadius: 2, mt: { xs: 1.5, sm: 0 } }} />
+      </Box>
+
+      {/* Content Grid - Exact match: xs: '1fr', sm: 'repeat(auto-fill, minmax(220px, 1fr))' */}
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: 'repeat(auto-fill, minmax(220px, 1fr))' },
           gap: { xs: 2, sm: 3 },
-          marginTop: 3.75,
         }}
       >
-        {Array.from({ length: 12 }).map((_, index) => (
+        {Array.from({ length: 9 }).map((_, index) => (
           <SkeletonPostCard key={index} />
         ))}
       </Box>
