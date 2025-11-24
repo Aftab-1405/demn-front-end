@@ -11,6 +11,7 @@ import {
   Alert,
   LinearProgress,
   styled,
+  keyframes,
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import {
@@ -19,24 +20,57 @@ import {
   CloudUpload as CloudUploadIcon,
   Image as ImageIcon,
   VideoLibrary as VideoIcon,
+  Send as SendIcon,
 } from '@mui/icons-material';
 import Spinner from './Spinner';
 import ContentModerationError from './ContentModerationError';
+
+// ==================== ANIMATIONS ====================
+
+const pulseGlow = keyframes`
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(236, 72, 153, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(236, 72, 153, 0.3);
+  }
+`;
+
+const float = keyframes`
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+`;
+
+const shimmer = keyframes`
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+`;
 
 // ==================== STYLED COMPONENTS ====================
 
 const StyledPageContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: '100%',
-  padding: theme.spacing(2),
+  padding: theme.spacing(3),
   background: theme.palette.background.default,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
+  },
 }));
 
 const StyledWrapper = styled(Box)({
-  maxWidth: 900,
+  maxWidth: 1000,
   margin: '0 auto',
   width: '100%',
 });
@@ -44,37 +78,64 @@ const StyledWrapper = styled(Box)({
 const StyledFormCard = styled(Card)(({ theme }) => ({
   width: '100%',
   background: theme.palette.background.paper,
-  borderRadius: theme.spacing(1.5),
-  border: `1px solid ${theme.palette.divider}`,
-  boxShadow: theme.shadows[2],
+  borderRadius: theme.spacing(3),
+  border: `2px solid ${theme.palette.divider}`,
+  boxShadow: `0 8px 32px ${alpha(theme.palette.primary.main, 0.08)}`,
   overflow: 'hidden',
+  transition: 'all 0.3s ease',
 }));
 
 const StyledHeader = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2, 2.5),
-  borderBottom: `1px solid ${theme.palette.divider}`,
-  background: theme.palette.background.default,
+  padding: theme.spacing(3, 3),
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: `linear-gradient(90deg,
+      transparent,
+      ${alpha(theme.palette.common.white, 0.1)},
+      transparent
+    )`,
+    backgroundSize: '1000px 100%',
+    animation: `${shimmer} 3s infinite`,
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2.5, 2),
+  },
 }));
 
 const StyledIconBox = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
+  width: 48,
+  height: 48,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: alpha(theme.palette.primary.main, 0.1),
-  borderRadius: theme.spacing(1),
-  color: theme.palette.primary.main,
-  '& svg': {
-    width: 20,
-    height: 20,
+  background: alpha(theme.palette.common.white, 0.2),
+  borderRadius: theme.spacing(1.5),
+  color: theme.palette.common.white,
+  backdropFilter: 'blur(10px)',
+  border: `1px solid ${alpha(theme.palette.common.white, 0.3)}`,
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  [theme.breakpoints.down('sm')]: {
+    width: 40,
+    height: 40,
   },
 }));
 
 const StyledTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '1.25rem',
-  fontWeight: 600,
-  color: theme.palette.text.primary,
+  fontSize: '1.5rem',
+  fontWeight: 700,
+  color: theme.palette.common.white,
+  textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.25rem',
+  },
 }));
 
 const StyledMediaPreview = styled(Box, {
@@ -85,103 +146,193 @@ const StyledMediaPreview = styled(Box, {
   alignItems: 'center',
   justifyContent: 'center',
   background: theme.palette.background.default,
-  border: isDragging
-    ? `2px solid ${theme.palette.primary.main}`
-    : `2px dashed ${theme.palette.divider}`,
-  borderRadius: theme.spacing(1.5),
+  borderRadius: theme.spacing(2),
   overflow: 'hidden',
   position: 'relative',
-  transition: 'all 0.2s',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   ...(hasMedia
     ? {
         aspectRatio: '16 / 9',
-        maxHeight: 400,
+        maxHeight: 450,
+        border: `2px solid ${theme.palette.divider}`,
       }
     : {
-        minHeight: 200,
+        minHeight: 280,
         cursor: 'pointer',
+        border: isDragging
+          ? `3px solid ${theme.palette.primary.main}`
+          : `3px dashed ${theme.palette.divider}`,
         '&:hover': {
           borderColor: theme.palette.primary.main,
-          background: alpha(theme.palette.primary.main, 0.05),
+          background: `linear-gradient(135deg,
+            ${alpha(theme.palette.primary.main, 0.05)} 0%,
+            ${alpha(theme.palette.secondary.main, 0.05)} 100%
+          )`,
+          transform: 'translateY(-2px)',
+          boxShadow: `0 8px 24px ${alpha(theme.palette.primary.main, 0.15)}`,
         },
       }),
   ...(isDragging && {
     borderColor: theme.palette.primary.main,
-    background: alpha(theme.palette.primary.main, 0.1),
+    background: `linear-gradient(135deg,
+      ${alpha(theme.palette.primary.main, 0.1)} 0%,
+      ${alpha(theme.palette.secondary.main, 0.1)} 100%
+    )`,
+    animation: `${pulseGlow} 2s ease-in-out infinite`,
   }),
 }));
 
 const StyledRemoveButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
-  top: theme.spacing(1),
-  right: theme.spacing(1),
-  width: 36,
-  height: 36,
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(8px)',
+  top: theme.spacing(1.5),
+  right: theme.spacing(1.5),
+  width: 40,
+  height: 40,
+  background: alpha(theme.palette.background.paper, 0.95),
+  backdropFilter: 'blur(10px)',
   color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  transition: 'all 0.2s ease',
   '&:hover': {
     background: theme.palette.error.main,
     color: theme.palette.error.contrastText,
+    transform: 'scale(1.1) rotate(90deg)',
+    boxShadow: '0 6px 16px rgba(244, 63, 94, 0.3)',
   },
 }));
 
-const StyledEmptyStateIcon = styled(Box)(({ theme }) => ({
-  width: 64,
-  height: 64,
+const StyledEmptyStateIcon = styled(Box)(({ theme, isDragging }) => ({
+  width: 80,
+  height: 80,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: alpha(theme.palette.primary.main, 0.1),
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
   borderRadius: '50%',
-  color: theme.palette.primary.main,
+  color: theme.palette.common.white,
   marginBottom: theme.spacing(2),
-  '& svg': {
-    width: 32,
-    height: 32,
-  },
+  boxShadow: `0 8px 24px ${alpha(theme.palette.primary.main, 0.3)}`,
+  animation: isDragging ? `${float} 2s ease-in-out infinite` : 'none',
+  transition: 'transform 0.3s ease',
 }));
 
 const StyledContentArea = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2.5),
+  padding: theme.spacing(3),
   display: 'flex',
   flexDirection: 'column',
-  gap: theme.spacing(2.5),
+  gap: theme.spacing(3),
   [theme.breakpoints.up('md')]: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: theme.spacing(2.5),
+    gap: theme.spacing(3),
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
+    gap: theme.spacing(2),
   },
 }));
 
 const StyledCaptionField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     background: theme.palette.background.default,
+    borderRadius: theme.spacing(2),
+    transition: 'all 0.3s ease',
     '& textarea': {
-      minHeight: 120,
+      minHeight: 140,
+    },
+    '&:hover': {
+      '& fieldset': {
+        borderColor: theme.palette.primary.main,
+      },
+    },
+    '&.Mui-focused': {
+      boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+      '& fieldset': {
+        borderColor: theme.palette.primary.main,
+        borderWidth: 2,
+      },
     },
   },
 }));
 
 const StyledFooter = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2, 2.5),
-  borderTop: `1px solid ${theme.palette.divider}`,
-  background: theme.palette.background.default,
+  padding: theme.spacing(2.5, 3),
+  borderTop: `2px solid ${theme.palette.divider}`,
+  background: alpha(theme.palette.background.default, 0.6),
+  backdropFilter: 'blur(10px)',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   gap: theme.spacing(2),
   flexWrap: 'wrap',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
+  },
 }));
 
 const StyledFileInfo = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(1.5),
-  padding: theme.spacing(1, 1.5),
-  background: alpha(theme.palette.primary.main, 0.08),
-  borderRadius: theme.spacing(1),
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+  padding: theme.spacing(1.25, 1.75),
+  background: `linear-gradient(135deg,
+    ${alpha(theme.palette.primary.main, 0.08)} 0%,
+    ${alpha(theme.palette.secondary.main, 0.08)} 100%
+  )`,
+  borderRadius: theme.spacing(1.5),
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
+  flex: 1,
+  minWidth: 0,
+}));
+
+const StyledSubmitButton = styled(Button)(({ theme }) => ({
+  minWidth: 140,
+  height: 48,
+  borderRadius: theme.spacing(1.5),
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+  color: theme.palette.common.white,
+  fontWeight: 700,
+  fontSize: '1rem',
+  boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
+    transform: 'translateY(-2px)',
+    boxShadow: `0 8px 20px ${alpha(theme.palette.primary.main, 0.4)}`,
+  },
+  '&:active': {
+    transform: 'translateY(0px)',
+  },
+  '&:disabled': {
+    background: theme.palette.action.disabledBackground,
+    color: theme.palette.action.disabled,
+    boxShadow: 'none',
+  },
+  [theme.breakpoints.down('sm')]: {
+    minWidth: 120,
+    height: 44,
+    fontSize: '0.9375rem',
+  },
+}));
+
+const StyledSectionLabel = styled(Typography)(({ theme }) => ({
+  fontWeight: 700,
+  color: theme.palette.text.primary,
+  textTransform: 'uppercase',
+  fontSize: '0.8125rem',
+  letterSpacing: '0.5px',
+  marginBottom: theme.spacing(1.5),
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  '&::before': {
+    content: '""',
+    width: 4,
+    height: 16,
+    borderRadius: 2,
+    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+  },
 }));
 
 // ==================== UTILITY FUNCTIONS ====================
@@ -271,7 +422,7 @@ const CreateContentForm = ({
         <StyledFormCard>
           {/* Header */}
           <StyledHeader>
-            <Stack direction="row" spacing={1.5} alignItems="center">
+            <Stack direction="row" spacing={2} alignItems="center">
               <StyledIconBox>{icon}</StyledIconBox>
               <StyledTitle>{title}</StyledTitle>
             </Stack>
@@ -282,19 +433,9 @@ const CreateContentForm = ({
             <StyledContentArea>
               {/* Media Preview */}
               <Box sx={{ order: { xs: 1, md: 1 } }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    mb: 1.5,
-                    fontWeight: 600,
-                    color: 'text.secondary',
-                    textTransform: 'uppercase',
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.5px',
-                  }}
-                >
+                <StyledSectionLabel>
                   {isPost ? 'Image' : 'Video'}
-                </Typography>
+                </StyledSectionLabel>
                 <StyledMediaPreview
                   hasMedia={!!preview}
                   isDragging={isDragging}
@@ -347,13 +488,13 @@ const CreateContentForm = ({
                         size="small"
                         aria-label={`Remove ${contentType}`}
                       >
-                        <CloseIcon sx={{ fontSize: 20 }} />
+                        <CloseIcon />
                       </StyledRemoveButton>
                     </>
                   ) : (
-                    <Stack spacing={2} alignItems="center" sx={{ p: 3 }}>
-                      <StyledEmptyStateIcon>
-                        {isDragging ? <CloudUploadIcon /> : emptyStateIcon}
+                    <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
+                      <StyledEmptyStateIcon isDragging={isDragging}>
+                        {isDragging ? <CloudUploadIcon sx={{ fontSize: 40 }} /> : emptyStateIcon}
                       </StyledEmptyStateIcon>
                       <Box
                         sx={{
@@ -362,7 +503,8 @@ const CreateContentForm = ({
                           '& strong': {
                             display: 'block',
                             color: 'text.primary',
-                            fontWeight: 600,
+                            fontWeight: 700,
+                            fontSize: '1.125rem',
                             mb: 0.5,
                           },
                         }}
@@ -373,6 +515,15 @@ const CreateContentForm = ({
                           emptyStateText
                         )}
                       </Box>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: 'text.disabled',
+                          fontSize: '0.75rem',
+                        }}
+                      >
+                        or click to browse
+                      </Typography>
                     </Stack>
                   )}
                   <input
@@ -387,22 +538,9 @@ const CreateContentForm = ({
 
               {/* Caption Input */}
               <Box sx={{ order: { xs: 2, md: 2 } }}>
-                <Typography
-                  component="label"
-                  htmlFor="caption"
-                  variant="subtitle2"
-                  sx={{
-                    mb: 1.5,
-                    display: 'block',
-                    fontWeight: 600,
-                    color: 'text.secondary',
-                    textTransform: 'uppercase',
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.5px',
-                  }}
-                >
+                <StyledSectionLabel>
                   Caption (Optional)
-                </Typography>
+                </StyledSectionLabel>
                 <StyledCaptionField
                   id="caption"
                   multiline
@@ -418,17 +556,27 @@ const CreateContentForm = ({
                   <Alert
                     severity="info"
                     icon={<Spinner size="sm" />}
-                    sx={{ mt: 2 }}
+                    sx={{
+                      mt: 2,
+                      borderRadius: 2,
+                      border: 1,
+                      borderColor: 'info.main',
+                    }}
                   >
                     {preProcessStatus || placeholder}
-                    <LinearProgress sx={{ mt: 1 }} />
+                    <LinearProgress sx={{ mt: 1.5, borderRadius: 1 }} />
                   </Alert>
                 )}
                 {preProcessComplete && !isPreProcessing && !preProcessFailed && (
                   <Alert
                     severity="success"
                     icon={<CheckIcon />}
-                    sx={{ mt: 2 }}
+                    sx={{
+                      mt: 2,
+                      borderRadius: 2,
+                      border: 1,
+                      borderColor: 'success.main',
+                    }}
                   >
                     {preProcessStatus}
                   </Alert>
@@ -438,7 +586,16 @@ const CreateContentForm = ({
               {/* Error Alert */}
               {error && (
                 <Box sx={{ gridColumn: { md: '1 / -1' }, order: 3 }}>
-                  <Alert severity="error">{error}</Alert>
+                  <Alert
+                    severity="error"
+                    sx={{
+                      borderRadius: 2,
+                      border: 2,
+                      borderColor: 'error.main',
+                    }}
+                  >
+                    {error}
+                  </Alert>
                 </Box>
               )}
             </StyledContentArea>
@@ -448,50 +605,54 @@ const CreateContentForm = ({
               {file && (
                 <StyledFileInfo>
                   {isPost ? (
-                    <ImageIcon sx={{ fontSize: 20, color: 'primary.main' }} />
+                    <ImageIcon sx={{ fontSize: 24, color: 'primary.main', flexShrink: 0 }} />
                   ) : (
-                    <VideoIcon sx={{ fontSize: 20, color: 'primary.main' }} />
+                    <VideoIcon sx={{ fontSize: 24, color: 'secondary.main', flexShrink: 0 }} />
                   )}
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography
                       variant="body2"
                       sx={{
                         fontWeight: 600,
-                        fontSize: '0.875rem',
+                        fontSize: '0.9375rem',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
+                        color: 'text.primary',
                       }}
                     >
                       {file.name}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: 'text.secondary',
+                        fontWeight: 500,
+                      }}
+                    >
                       {formatFileSize(file.size)}
                     </Typography>
                   </Box>
                 </StyledFileInfo>
               )}
 
-              <IconButton
+              <StyledSubmitButton
                 type="submit"
-                color="primary"
                 disabled={loading || !file || isPreProcessing || preProcessFailed}
-                sx={{
-                  ml: 'auto',
-                  bgcolor: 'primary.main',
-                  color: 'white',
-                  '&:hover': {
-                    bgcolor: 'primary.dark',
-                  },
-                  '&:disabled': {
-                    bgcolor: 'action.disabledBackground',
-                    color: 'action.disabled',
-                  },
-                }}
+                endIcon={loading ? null : <SendIcon />}
                 aria-label={loading ? 'Publishing...' : `Publish ${isPost ? 'Post' : 'Reel'}`}
               >
-                {loading ? <Spinner size="sm" color="white" /> : <CheckIcon />}
-              </IconButton>
+                {loading ? (
+                  <>
+                    <Spinner size="sm" color="white" />
+                    <Box component="span" sx={{ ml: 1.5 }}>
+                      Publishing...
+                    </Box>
+                  </>
+                ) : (
+                  'Publish'
+                )}
+              </StyledSubmitButton>
             </StyledFooter>
           </Box>
         </StyledFormCard>
