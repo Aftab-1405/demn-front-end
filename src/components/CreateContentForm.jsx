@@ -67,106 +67,42 @@ const StyledPageContainer = styled(Box)(({ theme }) => ({
 }));
 
 const StyledSidePanel = styled(Box)(({ theme }) => ({
-  flex: '0 0 380px',
-  padding: theme.spacing(4),
+  flex: '0 0 50%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  padding: theme.spacing(4),
   background: theme.palette.background.paper,
   borderRight: `1px solid ${theme.palette.divider}`,
   [theme.breakpoints.down('md')]: {
     flex: '0 0 auto',
-    padding: theme.spacing(3, 2),
+    minHeight: '400px',
+    padding: theme.spacing(3),
     borderRight: 'none',
     borderBottom: `1px solid ${theme.palette.divider}`,
   },
 }));
 
-const StyledWrapper = styled(Box)(({ theme }) => ({
-  flex: 1,
+const StyledRightPanel = styled(Box)(({ theme }) => ({
+  flex: '0 0 50%',
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: theme.spacing(3),
+  flexDirection: 'column',
+  padding: theme.spacing(4),
+  background: theme.palette.background.default,
   overflowY: 'auto',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
+  [theme.breakpoints.down('md')]: {
+    flex: 1,
+    padding: theme.spacing(3),
   },
 }));
 
-const StyledFormContainer = styled(Box)({
-  maxWidth: 900,
-  width: '100%',
-});
-
-const StyledFormCard = styled(Card)(({ theme }) => ({
-  width: '100%',
-  background: theme.palette.background.paper,
-  borderRadius: theme.spacing(3),
-  border: `2px solid ${theme.palette.divider}`,
-  boxShadow: `0 8px 32px ${alpha(theme.palette.primary.main, 0.08)}`,
-  overflow: 'hidden',
-  transition: 'all 0.3s ease',
-}));
-
-const StyledHeader = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3, 3),
-  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-  position: 'relative',
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: `linear-gradient(90deg,
-      transparent,
-      ${alpha(theme.palette.common.white, 0.1)},
-      transparent
-    )`,
-    backgroundSize: '1000px 100%',
-    animation: `${shimmer} 3s infinite`,
-  },
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2.5, 2),
-  },
-}));
-
-const StyledIconBox = styled(Box)(({ theme }) => ({
-  width: 48,
-  height: 48,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  background: alpha(theme.palette.common.white, 0.2),
-  borderRadius: theme.spacing(1.5),
-  color: theme.palette.common.white,
-  backdropFilter: 'blur(10px)',
-  border: `1px solid ${alpha(theme.palette.common.white, 0.3)}`,
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-  [theme.breakpoints.down('sm')]: {
-    width: 40,
-    height: 40,
-  },
-}));
-
-const StyledTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '1.5rem',
-  fontWeight: 700,
-  color: theme.palette.common.white,
-  textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '1.25rem',
-  },
-}));
 
 const StyledMediaPreview = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'hasMedia' && prop !== 'isDragging',
 })(({ theme, hasMedia, isDragging }) => ({
   width: '100%',
+  maxWidth: 600,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -178,11 +114,11 @@ const StyledMediaPreview = styled(Box, {
   ...(hasMedia
     ? {
         aspectRatio: '16 / 9',
-        maxHeight: 450,
+        maxHeight: 500,
         border: `2px solid ${theme.palette.divider}`,
       }
     : {
-        minHeight: 280,
+        minHeight: 400,
         cursor: 'pointer',
         border: isDragging
           ? `3px solid ${theme.palette.primary.main}`
@@ -242,21 +178,6 @@ const StyledEmptyStateIcon = styled(Box)(({ theme, isDragging }) => ({
   transition: 'transform 0.3s ease',
 }));
 
-const StyledContentArea = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(3),
-  [theme.breakpoints.up('md')]: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: theme.spacing(3),
-  },
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
-    gap: theme.spacing(2),
-  },
-}));
 
 const StyledCaptionField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -281,20 +202,6 @@ const StyledCaptionField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const StyledFooter = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2.5, 3),
-  borderTop: `2px solid ${theme.palette.divider}`,
-  background: alpha(theme.palette.background.default, 0.6),
-  backdropFilter: 'blur(10px)',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  flexWrap: 'wrap',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
-  },
-}));
 
 const StyledFileInfo = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -311,14 +218,11 @@ const StyledFileInfo = styled(Box)(({ theme }) => ({
   minWidth: 0,
 }));
 
-const StyledSubmitButton = styled(Button)(({ theme }) => ({
-  minWidth: 140,
-  height: 48,
-  borderRadius: theme.spacing(1.5),
+const StyledPublishButton = styled(IconButton)(({ theme }) => ({
+  width: 56,
+  height: 56,
   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
   color: theme.palette.common.white,
-  fontWeight: 700,
-  fontSize: '1rem',
   boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
   transition: 'all 0.3s ease',
   '&:hover': {
@@ -333,11 +237,6 @@ const StyledSubmitButton = styled(Button)(({ theme }) => ({
     background: theme.palette.action.disabledBackground,
     color: theme.palette.action.disabled,
     boxShadow: 'none',
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: 120,
-    height: 44,
-    fontSize: '0.9375rem',
   },
 }));
 
@@ -443,38 +342,170 @@ const CreateContentForm = ({
 
   return (
     <StyledPageContainer>
-      {/* Side Panel - Preview/Info */}
+      {/* Left Panel - Media Upload */}
       <StyledSidePanel>
-        <Box sx={{ textAlign: 'center', maxWidth: 320 }}>
-          <Box
-            sx={{
-              width: 80,
-              height: 80,
-              mx: 'auto',
-              mb: 3,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              background: (theme) => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-              color: 'common.white',
-            }}
-          >
-            {icon}
+        <Box sx={{ width: '100%', maxWidth: 600 }}>
+          <Box sx={{ mb: 3, textAlign: 'center' }}>
+            <Typography variant="h5" fontWeight={700} gutterBottom>
+              {title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Upload your {isPost ? 'image' : 'video'}
+            </Typography>
           </Box>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Share your {isPost ? 'images' : 'videos'} with the community
-          </Typography>
 
-          {/* Preview Tips */}
-          <Box sx={{ textAlign: 'left', mt: 4 }}>
-            <Typography variant="caption" fontWeight={600} color="text.secondary" sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          <StyledMediaPreview
+            hasMedia={!!preview}
+            isDragging={isDragging}
+            onClick={() => !preview && fileInputRef.current?.click()}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            role={!preview ? "button" : undefined}
+            tabIndex={!preview ? 0 : undefined}
+            onKeyDown={(e) => {
+              if (!preview && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
+            aria-label={`Upload ${contentType} preview area`}
+          >
+            {preview ? (
+              <>
+                {isPost ? (
+                  <Box
+                    component="img"
+                    src={preview}
+                    alt="Preview"
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                    }}
+                  />
+                ) : (
+                  <Box
+                    component="video"
+                    src={preview}
+                    controls
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+                <StyledRemoveButton
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveMedia();
+                  }}
+                  size="small"
+                  aria-label={`Remove ${contentType}`}
+                >
+                  <CloseIcon />
+                </StyledRemoveButton>
+              </>
+            ) : (
+              <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
+                <StyledEmptyStateIcon isDragging={isDragging}>
+                  {isDragging ? <CloudUploadIcon sx={{ fontSize: 40 }} /> : emptyStateIcon}
+                </StyledEmptyStateIcon>
+                <Box
+                  sx={{
+                    textAlign: 'center',
+                    color: 'text.secondary',
+                    '& strong': {
+                      display: 'block',
+                      color: 'text.primary',
+                      fontWeight: 700,
+                      fontSize: '1.125rem',
+                      mb: 0.5,
+                    },
+                  }}
+                >
+                  {isDragging ? (
+                    <strong>Drop your file here!</strong>
+                  ) : (
+                    emptyStateText
+                  )}
+                </Box>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.disabled',
+                    fontSize: '0.75rem',
+                  }}
+                >
+                  or click to browse
+                </Typography>
+              </Stack>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={isPost ? "image/*" : "video/*"}
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+          </StyledMediaPreview>
+        </Box>
+      </StyledSidePanel>
+
+      {/* Right Panel - Form Controls */}
+      <StyledRightPanel>
+        <Box component="form" onSubmit={handleSubmit} sx={{ height: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+          {/* Header with icon */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, pb: 2, borderBottom: 1, borderColor: 'divider' }}>
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+                background: (theme) => `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                color: 'common.white',
+              }}
+            >
+              {icon}
+            </Box>
+            <Box>
+              <Typography variant="h6" fontWeight={700}>
+                {title}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Fill in the details below
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Caption Field */}
+          <Box sx={{ flex: 1 }}>
+            <StyledSectionLabel>
+              Caption (Optional)
+            </StyledSectionLabel>
+            <StyledCaptionField
+              id="caption"
+              multiline
+              fullWidth
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              placeholder={captionPlaceholder}
+              variant="outlined"
+            />
+          </Box>
+
+          {/* Quick Tips */}
+          <Box>
+            <Typography variant="caption" fontWeight={600} color="text.secondary" sx={{ textTransform: 'uppercase', letterSpacing: 0.5, mb: 1.5, display: 'block' }}>
               Quick Tips
             </Typography>
-            <Stack spacing={1.5} sx={{ mt: 1.5 }}>
+            <Stack spacing={1.5}>
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                 <CheckIcon sx={{ fontSize: 16, color: 'success.main', mt: 0.2 }} />
                 <Typography variant="body2" color="text.secondary">
@@ -495,251 +526,101 @@ const CreateContentForm = ({
               </Box>
             </Stack>
           </Box>
-        </Box>
-      </StyledSidePanel>
 
-      {/* Main Form Area */}
-      <StyledWrapper>
-        <StyledFormContainer>
-          <StyledFormCard>
-          {/* Header */}
-          <StyledHeader>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <StyledIconBox>{icon}</StyledIconBox>
-              <StyledTitle>{title}</StyledTitle>
-            </Stack>
-          </StyledHeader>
-
-          {/* Content Area */}
-          <Box component="form" onSubmit={handleSubmit}>
-            <StyledContentArea>
-              {/* Media Preview */}
-              <Box sx={{ order: { xs: 1, md: 1 } }}>
-                <StyledSectionLabel>
-                  {isPost ? 'Image' : 'Video'}
-                </StyledSectionLabel>
-                <StyledMediaPreview
-                  hasMedia={!!preview}
-                  isDragging={isDragging}
-                  onClick={() => !preview && fileInputRef.current?.click()}
-                  onDragEnter={handleDragEnter}
-                  onDragLeave={handleDragLeave}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  role={!preview ? "button" : undefined}
-                  tabIndex={!preview ? 0 : undefined}
-                  onKeyDown={(e) => {
-                    if (!preview && (e.key === 'Enter' || e.key === ' ')) {
-                      e.preventDefault();
-                      fileInputRef.current?.click();
-                    }
+          {/* File Info Display */}
+          {file && (
+            <StyledFileInfo>
+              {isPost ? (
+                <ImageIcon sx={{ fontSize: 24, color: 'primary.main', flexShrink: 0 }} />
+              ) : (
+                <VideoIcon sx={{ fontSize: 24, color: 'secondary.main', flexShrink: 0 }} />
+              )}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '0.9375rem',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    color: 'text.primary',
                   }}
-                  aria-label={`Upload ${contentType} preview area`}
                 >
-                  {preview ? (
-                    <>
-                      {isPost ? (
-                        <Box
-                          component="img"
-                          src={preview}
-                          alt="Preview"
-                          sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                          }}
-                        />
-                      ) : (
-                        <Box
-                          component="video"
-                          src={preview}
-                          controls
-                          sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                          }}
-                        />
-                      )}
-                      <StyledRemoveButton
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveMedia();
-                        }}
-                        size="small"
-                        aria-label={`Remove ${contentType}`}
-                      >
-                        <CloseIcon />
-                      </StyledRemoveButton>
-                    </>
-                  ) : (
-                    <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
-                      <StyledEmptyStateIcon isDragging={isDragging}>
-                        {isDragging ? <CloudUploadIcon sx={{ fontSize: 40 }} /> : emptyStateIcon}
-                      </StyledEmptyStateIcon>
-                      <Box
-                        sx={{
-                          textAlign: 'center',
-                          color: 'text.secondary',
-                          '& strong': {
-                            display: 'block',
-                            color: 'text.primary',
-                            fontWeight: 700,
-                            fontSize: '1.125rem',
-                            mb: 0.5,
-                          },
-                        }}
-                      >
-                        {isDragging ? (
-                          <strong>Drop your file here!</strong>
-                        ) : (
-                          emptyStateText
-                        )}
-                      </Box>
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: 'text.disabled',
-                          fontSize: '0.75rem',
-                        }}
-                      >
-                        or click to browse
-                      </Typography>
-                    </Stack>
-                  )}
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept={isPost ? "image/*" : "video/*"}
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                  />
-                </StyledMediaPreview>
+                  {file.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.secondary',
+                    fontWeight: 500,
+                  }}
+                >
+                  {formatFileSize(file.size)}
+                </Typography>
               </Box>
+            </StyledFileInfo>
+          )}
 
-              {/* Caption Input */}
-              <Box sx={{ order: { xs: 2, md: 2 } }}>
-                <StyledSectionLabel>
-                  Caption (Optional)
-                </StyledSectionLabel>
-                <StyledCaptionField
-                  id="caption"
-                  multiline
-                  fullWidth
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  placeholder={captionPlaceholder}
-                  variant="outlined"
-                />
+          {/* Processing Status / Analysis Modal */}
+          {isPreProcessing && (
+            <Alert
+              severity="info"
+              icon={<Spinner size="sm" />}
+              sx={{
+                borderRadius: 2,
+                border: 1,
+                borderColor: 'info.main',
+              }}
+            >
+              {preProcessStatus || placeholder}
+              <LinearProgress sx={{ mt: 1.5, borderRadius: 1 }} />
+            </Alert>
+          )}
+          {preProcessComplete && !isPreProcessing && !preProcessFailed && (
+            <Alert
+              severity="success"
+              icon={<CheckIcon />}
+              sx={{
+                borderRadius: 2,
+                border: 1,
+                borderColor: 'success.main',
+              }}
+            >
+              {preProcessStatus}
+            </Alert>
+          )}
 
-                {/* Processing Status */}
-                {isPreProcessing && (
-                  <Alert
-                    severity="info"
-                    icon={<Spinner size="sm" />}
-                    sx={{
-                      mt: 2,
-                      borderRadius: 2,
-                      border: 1,
-                      borderColor: 'info.main',
-                    }}
-                  >
-                    {preProcessStatus || placeholder}
-                    <LinearProgress sx={{ mt: 1.5, borderRadius: 1 }} />
-                  </Alert>
-                )}
-                {preProcessComplete && !isPreProcessing && !preProcessFailed && (
-                  <Alert
-                    severity="success"
-                    icon={<CheckIcon />}
-                    sx={{
-                      mt: 2,
-                      borderRadius: 2,
-                      border: 1,
-                      borderColor: 'success.main',
-                    }}
-                  >
-                    {preProcessStatus}
-                  </Alert>
-                )}
-              </Box>
+          {/* Error Alert */}
+          {error && (
+            <Alert
+              severity="error"
+              sx={{
+                borderRadius: 2,
+                border: 2,
+                borderColor: 'error.main',
+              }}
+            >
+              {error}
+            </Alert>
+          )}
 
-              {/* Error Alert */}
-              {error && (
-                <Box sx={{ gridColumn: { md: '1 / -1' }, order: 3 }}>
-                  <Alert
-                    severity="error"
-                    sx={{
-                      borderRadius: 2,
-                      border: 2,
-                      borderColor: 'error.main',
-                    }}
-                  >
-                    {error}
-                  </Alert>
-                </Box>
+          {/* Publish Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 2, borderTop: 1, borderColor: 'divider' }}>
+            <StyledPublishButton
+              type="submit"
+              disabled={loading || !file || isPreProcessing || preProcessFailed}
+              aria-label={loading ? 'Publishing...' : `Publish ${isPost ? 'Post' : 'Reel'}`}
+            >
+              {loading ? (
+                <Spinner size="sm" color="white" />
+              ) : (
+                <SendIcon />
               )}
-            </StyledContentArea>
-
-            {/* Footer */}
-            <StyledFooter>
-              {file && (
-                <StyledFileInfo>
-                  {isPost ? (
-                    <ImageIcon sx={{ fontSize: 24, color: 'primary.main', flexShrink: 0 }} />
-                  ) : (
-                    <VideoIcon sx={{ fontSize: 24, color: 'secondary.main', flexShrink: 0 }} />
-                  )}
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: '0.9375rem',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                        color: 'text.primary',
-                      }}
-                    >
-                      {file.name}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: 'text.secondary',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {formatFileSize(file.size)}
-                    </Typography>
-                  </Box>
-                </StyledFileInfo>
-              )}
-
-              <StyledSubmitButton
-                type="submit"
-                disabled={loading || !file || isPreProcessing || preProcessFailed}
-                endIcon={loading ? null : <SendIcon />}
-                aria-label={loading ? 'Publishing...' : `Publish ${isPost ? 'Post' : 'Reel'}`}
-              >
-                {loading ? (
-                  <>
-                    <Spinner size="sm" color="white" />
-                    <Box component="span" sx={{ ml: 1.5 }}>
-                      Publishing...
-                    </Box>
-                  </>
-                ) : (
-                  'Publish'
-                )}
-              </StyledSubmitButton>
-            </StyledFooter>
+            </StyledPublishButton>
           </Box>
-          </StyledFormCard>
-        </StyledFormContainer>
-      </StyledWrapper>
+        </Box>
+      </StyledRightPanel>
 
       <ContentModerationError
         isOpen={showModerationError}
