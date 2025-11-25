@@ -1,6 +1,7 @@
 import { Skeleton as MuiSkeleton, Box, Stack, Card, CardContent } from '@mui/material';
 
-export const SkeletonPostCard = () => {
+// Internal component for use by page-level skeletons
+const SkeletonPostCard = () => {
   return (
     <Card
       sx={{
@@ -465,31 +466,6 @@ export const SkeletonExplore = () => {
   );
 };
 
-// Kept for backward compatibility
-export const SkeletonAnalyticsGrid = ({ count = 4 }) => {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
-        gap: 2,
-      }}
-    >
-      {Array.from({ length: count }, (_, index) => index).map((index) => (
-        <MuiSkeleton
-          key={`analytics-skeleton-${index}`}
-          variant="rectangular"
-          height={120}
-          sx={{
-            borderRadius: 1.5,
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-          }}
-        />
-      ))}
-    </Box>
-  );
-};
-
 // Exact Match for Profile.jsx Layout
 export const SkeletonProfile = () => {
   return (
@@ -600,28 +576,3 @@ export const SkeletonText = ({ variant = 'medium', className = '' }) => {
     />
   );
 };
-
-// Grid skeleton for loading more content in Explore/Feed
-export const SkeletonPostGrid = ({ count = 12 }) => {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gap: 2,
-        gridTemplateColumns: {
-          xs: 'minmax(0, 1fr)',
-          md: 'repeat(auto-fill, minmax(240px, 1fr))',
-          lg: 'repeat(4, minmax(0, 1fr))',
-        },
-        maxWidth: { lg: 1200 },
-        margin: { lg: '0 auto' },
-      }}
-    >
-      {Array.from({ length: count }).map((_, index) => (
-        <SkeletonPostCard key={index} />
-      ))}
-    </Box>
-  );
-};
-
-// Default export removed - use named exports instead

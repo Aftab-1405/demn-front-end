@@ -14,7 +14,7 @@ import {
 import { socialAPI } from '../services/api';
 import { useInfiniteContent } from '../hooks/useInfiniteContent';
 import PostCard from '../components/PostCard';
-import { SkeletonExplore, SkeletonPostGrid } from '../components/Skeleton';
+import { SkeletonExplore } from '../components/Skeleton';
 import EmptyState from '../components/EmptyState';
 
 const Explore = () => {
@@ -298,9 +298,7 @@ const Explore = () => {
             padding: '2rem 0',
             textAlign: 'center',
           }}
-        >
-          {isFetchingNextPage && <SkeletonPostGrid count={12} />}
-        </Box>
+        />
       )}
     </Box>
   );
