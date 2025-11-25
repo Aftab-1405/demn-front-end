@@ -15,6 +15,7 @@ import {
 import { socialAPI, postsAPI, reelsAPI } from '../services/api';
 import { useNotifications } from '../context/NotificationContext';
 import { useInfiniteContent } from '../hooks/useInfiniteContent';
+import useLocalStorage from '../hooks/useLocalStorage';
 import PostCard from '../components/PostCard';
 import { SkeletonFeed } from '../components/Skeleton';
 import EmptyState from '../components/EmptyState';
@@ -25,6 +26,8 @@ const Feed = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { showSnackbar } = useNotifications();
+  const [aiConsentGiven, setAiConsentGiven] = useLocalStorage('ai_consent_given', false);
+  const [aiConsentDate, setAiConsentDate] = useLocalStorage('ai_consent_date', null);
   const [showConsentModal, setShowConsentModal] = useState(false);
 
   // Use infinite content hook
@@ -51,15 +54,14 @@ const Feed = () => {
 
   // Check if user has consented to AI usage
   useEffect(() => {
-    const hasConsented = localStorage.getItem('ai_consent_given');
-    if (!hasConsented) {
+    if (!aiConsentGiven) {
       setShowConsentModal(true);
     }
-  }, []);
+  }, [aiConsentGiven]);
 
   const handleConsentAccept = () => {
-    localStorage.setItem('ai_consent_given', 'true');
-    localStorage.setItem('ai_consent_date', new Date().toISOString());
+    setAiConsentGiven(true);
+    setAiConsentDate(new Date().toISOString());
     setShowConsentModal(false);
     showSnackbar('Thank you! You can now enjoy all AI-powered features.', 'success');
   };

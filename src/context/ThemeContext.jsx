@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createAppTheme } from '../theme/muiTheme';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const ThemeContext = createContext();
 
@@ -14,11 +15,9 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    // Default to dark mode if no preference is saved
-    return saved ? saved === 'dark' : true;
-  });
+  // Use custom hook for theme persistence (defaults to 'dark')
+  const [theme, setTheme] = useLocalStorage('theme', 'dark');
+  const isDarkMode = theme === 'dark';
 
   // State to track if theme is transitioning
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -29,7 +28,6 @@ export const ThemeProvider = ({ children }) => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 
     // Add transitioning class for smooth theme switch
     document.documentElement.classList.add('theme-transitioning');
@@ -48,7 +46,7 @@ export const ThemeProvider = ({ children }) => {
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   // Memoize context value to prevent unnecessary re-renders

@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 import { authAPI } from '../services/api';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const AuthContext = createContext();
 
@@ -13,16 +14,14 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  // [FIX] Initialize loading based on token presence. 
-  // If token exists, start loading (true). If not, start ready (false).
-  const [loading, setLoading] = useState(!!localStorage.getItem('token'));
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken, removeToken] = useLocalStorage('token', null);
+  // Initialize loading based on token presence
+  const [loading, setLoading] = useState(!!token);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('token');
-    setToken(null);
+    removeToken();
     setUser(null);
-  }, []);
+  }, [removeToken]);
 
   const fetchCurrentUser = useCallback(async () => {
     try {
@@ -48,7 +47,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.login(credentials);
       const { access_token, user } = response.data;
-      localStorage.setItem('token', access_token);
       setToken(access_token);
       setUser(user);
       return { success: true };
@@ -58,13 +56,12 @@ export const AuthProvider = ({ children }) => {
         error: error.response?.data?.error || 'Login failed',
       };
     }
-  }, []);
+  }, [setToken]);
 
   const register = useCallback(async (data) => {
     try {
       const response = await authAPI.register(data);
       const { access_token, user } = response.data;
-      localStorage.setItem('token', access_token);
       setToken(access_token);
       setUser(user);
       return { success: true };
@@ -74,7 +71,7 @@ export const AuthProvider = ({ children }) => {
         error: error.response?.data?.error || 'Registration failed',
       };
     }
-  }, []);
+  }, [setToken]);
 
   const updateUser = useCallback((updatedUser) => {
     setUser(updatedUser);

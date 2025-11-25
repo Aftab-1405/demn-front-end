@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon, GetApp as GetAppIcon } from '@mui/icons-material';
 import { canInstallPWA, showInstallPrompt, isPWA } from '../serviceWorkerRegistration';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 // Animations
 const slideUp = keyframes`
@@ -42,6 +43,8 @@ const InstallPWA = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [, setIsAndroid] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useLocalStorage('pwa-install-banner-dismissed', false);
+  const [dismissedTime, setDismissedTime] = useLocalStorage('pwa-install-banner-dismissed-time', null);
 
   useEffect(() => {
     // Detect device type
@@ -65,11 +68,8 @@ const InstallPWA = () => {
 
         // Show banner after a delay (don't be intrusive immediately)
         setTimeout(() => {
-          const hasSeenBanner = localStorage.getItem('pwa-install-banner-dismissed');
-          const dismissedTime = localStorage.getItem('pwa-install-banner-dismissed-time');
-
           // Show again after 7 days
-          if (!hasSeenBanner || (dismissedTime && (Date.now() - parseInt(dismissedTime)) > 7 * 24 * 60 * 60 * 1000)) {
+          if (!bannerDismissed || (dismissedTime && (Date.now() - dismissedTime) > 7 * 24 * 60 * 60 * 1000)) {
             setShowBanner(true);
           }
         }, 3000);
@@ -79,8 +79,7 @@ const InstallPWA = () => {
     // For iOS users, show manual install instructions
     if (iOS && !isPWA()) {
       setTimeout(() => {
-        const hasSeenBanner = localStorage.getItem('pwa-install-banner-dismissed');
-        if (!hasSeenBanner) {
+        if (!bannerDismissed) {
           setShowBanner(true);
           setCanInstall(true); // Show banner even without prompt
         }
@@ -88,7 +87,7 @@ const InstallPWA = () => {
     }
 
     return () => clearInterval(checkInstallability);
-  }, []);
+  }, [bannerDismissed, dismissedTime]);
 
   const handleInstall = () => {
     showInstallPrompt();
@@ -98,8 +97,8 @@ const InstallPWA = () => {
 
   const handleDismiss = () => {
     setShowBanner(false);
-    localStorage.setItem('pwa-install-banner-dismissed', 'true');
-    localStorage.setItem('pwa-install-banner-dismissed-time', Date.now().toString());
+    setBannerDismissed(true);
+    setDismissedTime(Date.now());
   };
 
   if (!canInstall || !showBanner) {
