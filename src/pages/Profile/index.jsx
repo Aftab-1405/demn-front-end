@@ -37,16 +37,17 @@ import {
   Upload as UploadIcon,
 } from '@mui/icons-material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { usersAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useNotifications } from '../context/NotificationContext';
-import PostCard from '../components/PostCard';
-import ProfileHeader from '../components/ProfileHeader';
-import TypeWriter from '../components/TypeWriter';
-import EmptyState from '../components/EmptyState';
-import { SkeletonProfile } from '../components/Skeleton';
-import { compressProfilePicture } from '../utils/imageCompression';
+import { usersAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { useNotifications } from '../../context/NotificationContext';
+import PostCard from '../../components/PostCard';
+import ProfileHeader from './components/ProfileHeader';
+import ProfileSettings from './components/ProfileSettings';
+import TypeWriter from '../../components/TypeWriter';
+import EmptyState from '../../components/EmptyState';
+import { SkeletonProfile } from '../../components/Skeleton';
+import { compressProfilePicture } from '../../utils/imageCompression';
 
 const Profile = () => {
   const { username } = useParams();
@@ -694,60 +695,13 @@ const Profile = () => {
       </Box>
 
       {/* Settings Drawer - Mobile Only */}
-      <Drawer
-        anchor="right"
-        open={isSettingsOpen}
+      <ProfileSettings
+        isOpen={isSettingsOpen}
         onClose={handleSettingsClose}
-        PaperProps={{
-          sx: {
-            width: 300,
-            borderRadius: '16px 0 0 16px',
-          },
-        }}
-      >
-        <Box sx={{ p: 3 }}>
-          <Typography variant="h6" fontWeight={700} mb={2}>
-            Quick Actions
-          </Typography>
-          <List>
-            <ListItem
-              button
-              onClick={handleThemeToggle}
-              sx={{
-                borderRadius: 2,
-                mb: 1,
-                '&:hover': {
-                  bgcolor: 'action.hover',
-                },
-              }}
-            >
-              <ListItemIcon>
-                {isDarkMode ? <LightModeIcon color="primary" /> : <DarkModeIcon color="primary" />}
-              </ListItemIcon>
-              <ListItemText primary="Toggle Theme" />
-            </ListItem>
-            <Divider sx={{ my: 1 }} />
-            <ListItem
-              button
-              onClick={handleLogout}
-              sx={{
-                borderRadius: 2,
-                '&:hover': {
-                  bgcolor: 'error.light',
-                  '& .MuiListItemIcon-root': {
-                    color: 'error.main',
-                  },
-                },
-              }}
-            >
-              <ListItemIcon>
-                <LogoutIcon color="error" />
-              </ListItemIcon>
-              <ListItemText primary="Logout" primaryTypographyProps={{ color: 'error' }} />
-            </ListItem>
-          </List>
-        </Box>
-      </Drawer>
+        isDarkMode={isDarkMode}
+        onThemeToggle={handleThemeToggle}
+        onLogout={handleLogout}
+      />
     </Box>
   );
 };

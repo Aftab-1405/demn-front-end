@@ -10,8 +10,8 @@ import {
   Settings as SettingsIcon,
   Upload as UploadIcon,
 } from '@mui/icons-material';
-import FollowButton from './FollowButton';
 import { keyframes } from '@mui/material';
+import FollowButton from '../../../components/FollowButton';
 
 const fadeInUp = keyframes`
   from {
