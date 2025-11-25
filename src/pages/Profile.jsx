@@ -907,23 +907,14 @@ const Profile = () => {
         {isLoadingContent ? (
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: 'repeat(auto-fill, minmax(220px, 1fr))' },
-              gap: { xs: 2, sm: 3 },
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '400px',
               gridColumn: '1 / -1',
             }}
           >
-            {[1, 2, 3].map((i) => (
-              <Box
-                key={i}
-                sx={{
-                  aspectRatio: '1',
-                  bgcolor: 'action.disabledBackground',
-                  borderRadius: 2,
-                  animation: 'pulse 1.5s ease-in-out infinite',
-                }}
-              />
-            ))}
+            <CircularProgress size={48} thickness={4} />
           </Box>
         ) : content.length === 0 ? (
           <Box sx={{ gridColumn: '1 / -1' }}>

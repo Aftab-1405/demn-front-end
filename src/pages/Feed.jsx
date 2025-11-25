@@ -10,6 +10,7 @@ import {
   Avatar,
   Stack,
   Link,
+  CircularProgress,
 } from '@mui/material';
 import { socialAPI, postsAPI, reelsAPI } from '../services/api';
 import { useNotifications } from '../context/NotificationContext';
@@ -358,10 +359,8 @@ const Feed = () => {
                 }}
               >
                 {isFetchingNextPage && (
-                  <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 2 }}>
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <Box key={i} sx={{ height: 400, bgcolor: 'action.disabledBackground', borderRadius: 1.25, animation: 'pulse 1.5s ease-in-out infinite' }} />
-                    ))}
+                  <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                    <CircularProgress size={48} thickness={4} />
                   </Box>
                 )}
               </Box>

@@ -1,4 +1,4 @@
-import { Skeleton as MuiSkeleton, Box, Stack, Card } from '@mui/material';
+import { Skeleton as MuiSkeleton, Box, CircularProgress } from '@mui/material';
 
 // Exact Match for Analytics.jsx Layout
 export const SkeletonAnalyticsDashboard = () => {
@@ -302,51 +302,14 @@ export const SkeletonFeed = () => {
         >
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'minmax(0, 1fr)' },
-              gap: 2,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '400px',
+              py: 8,
             }}
           >
-            {Array.from({ length: 3 }).map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  bgcolor: 'background.paper',
-                  border: (theme) => `1px solid ${theme.palette.divider}`,
-                  borderRadius: 1.25,
-                  overflow: 'hidden',
-                  mb: 1.25,
-                  boxShadow: 'none',
-                }}
-              >
-                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
-                  <MuiSkeleton variant="circular" width={32} height={32} />
-                  <Stack spacing={0.5} sx={{ flex: 1 }}>
-                    <MuiSkeleton variant="text" width="40%" height={16} />
-                  </Stack>
-                  <MuiSkeleton variant="circular" width={24} height={24} />
-                </Stack>
-                <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
-                <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
-                  <Stack direction="row" spacing={1.5}>
-                    <MuiSkeleton variant="circular" width={32} height={32} />
-                    <MuiSkeleton variant="circular" width={32} height={32} />
-                    <MuiSkeleton variant="circular" width={32} height={32} />
-                  </Stack>
-                  <MuiSkeleton variant="circular" width={32} height={32} />
-                </Stack>
-                <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
-                  <MuiSkeleton variant="text" width="30%" height={18} />
-                </Box>
-                <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
-                  <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
-                  <MuiSkeleton variant="text" width="75%" height={16} />
-                </Box>
-                <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
-                  <MuiSkeleton variant="text" width="40%" height={16} />
-                </Box>
-              </Card>
-            ))}
+            <CircularProgress size={48} thickness={4} />
           </Box>
         </Box>
 
@@ -425,60 +388,17 @@ export const SkeletonExplore = () => {
         </Box>
       </Box>
 
-      {/* Content Grid - Match actual Explore grid layout */}
+      {/* Content Loading */}
       <Box
         sx={{
-          display: 'grid',
-          gap: 2,
-          gridTemplateColumns: {
-            xs: 'minmax(0, 1fr)',
-            md: 'repeat(auto-fill, minmax(240px, 1fr))',
-            lg: 'repeat(4, minmax(0, 1fr))',
-          },
-          maxWidth: { lg: 1200 },
-          margin: { lg: '0 auto' },
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '400px',
+          py: 8,
         }}
       >
-        {Array.from({ length: 8 }).map((_, index) => (
-          <Card
-            key={index}
-            sx={{
-              bgcolor: 'background.paper',
-              border: (theme) => `1px solid ${theme.palette.divider}`,
-              borderRadius: 1.25,
-              overflow: 'hidden',
-              mb: 1.25,
-              boxShadow: 'none',
-            }}
-          >
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
-              <MuiSkeleton variant="circular" width={32} height={32} />
-              <Stack spacing={0.5} sx={{ flex: 1 }}>
-                <MuiSkeleton variant="text" width="40%" height={16} />
-              </Stack>
-              <MuiSkeleton variant="circular" width={24} height={24} />
-            </Stack>
-            <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
-            <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
-              <Stack direction="row" spacing={1.5}>
-                <MuiSkeleton variant="circular" width={32} height={32} />
-                <MuiSkeleton variant="circular" width={32} height={32} />
-                <MuiSkeleton variant="circular" width={32} height={32} />
-              </Stack>
-              <MuiSkeleton variant="circular" width={32} height={32} />
-            </Stack>
-            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
-              <MuiSkeleton variant="text" width="30%" height={18} />
-            </Box>
-            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
-              <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
-              <MuiSkeleton variant="text" width="75%" height={16} />
-            </Box>
-            <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
-              <MuiSkeleton variant="text" width="40%" height={16} />
-            </Box>
-          </Card>
-        ))}
+        <CircularProgress size={48} thickness={4} />
       </Box>
     </Box>
   );
@@ -551,54 +471,17 @@ export const SkeletonProfile = () => {
         <MuiSkeleton variant="rectangular" width={{ xs: '100%', sm: 120 }} height={56} sx={{ borderRadius: 2, mt: { xs: 1.5, sm: 0 } }} />
       </Box>
 
-      {/* Content Grid - Exact match: xs: '1fr', sm: 'repeat(auto-fill, minmax(220px, 1fr))' */}
+      {/* Content Loading */}
       <Box
         sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(auto-fill, minmax(220px, 1fr))' },
-          gap: { xs: 2, sm: 3 },
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '400px',
+          py: 8,
         }}
       >
-        {Array.from({ length: 9 }).map((_, index) => (
-          <Card
-            key={index}
-            sx={{
-              bgcolor: 'background.paper',
-              border: (theme) => `1px solid ${theme.palette.divider}`,
-              borderRadius: 1.25,
-              overflow: 'hidden',
-              mb: 1.25,
-              boxShadow: 'none',
-            }}
-          >
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
-              <MuiSkeleton variant="circular" width={32} height={32} />
-              <Stack spacing={0.5} sx={{ flex: 1 }}>
-                <MuiSkeleton variant="text" width="40%" height={16} />
-              </Stack>
-              <MuiSkeleton variant="circular" width={24} height={24} />
-            </Stack>
-            <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
-            <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
-              <Stack direction="row" spacing={1.5}>
-                <MuiSkeleton variant="circular" width={32} height={32} />
-                <MuiSkeleton variant="circular" width={32} height={32} />
-                <MuiSkeleton variant="circular" width={32} height={32} />
-              </Stack>
-              <MuiSkeleton variant="circular" width={32} height={32} />
-            </Stack>
-            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
-              <MuiSkeleton variant="text" width="30%" height={18} />
-            </Box>
-            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
-              <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
-              <MuiSkeleton variant="text" width="75%" height={16} />
-            </Box>
-            <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
-              <MuiSkeleton variant="text" width="40%" height={16} />
-            </Box>
-          </Card>
-        ))}
+        <CircularProgress size={48} thickness={4} />
       </Box>
     </Box>
   );
