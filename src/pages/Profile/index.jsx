@@ -47,6 +47,7 @@ import ProfileTabs from './components/ProfileTabs';
 import AISearchSection from './components/AISearchSection';
 import ContentGrid from './components/ContentGrid';
 import { SkeletonProfile } from '../../components/Skeleton';
+import EditProfileModal from '../../components/EditProfileModal';
 import { compressProfilePicture } from '../../utils/imageCompression';
 
 const Profile = () => {
@@ -70,6 +71,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('posts');
   const [uploadingPicture, setUploadingPicture] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const fileInputRef = useRef(null);
 
   // AI Search state
@@ -319,6 +321,11 @@ const Profile = () => {
   // Settings handlers
   const handleSettingsOpen = useCallback(() => setIsSettingsOpen(true), []);
   const handleSettingsClose = useCallback(() => setIsSettingsOpen(false), []);
+  const handleEditProfileOpen = useCallback(() => {
+    setIsEditProfileOpen(true);
+    setIsSettingsOpen(false);
+  }, []);
+  const handleEditProfileClose = useCallback(() => setIsEditProfileOpen(false), []);
   const handleLogout = useCallback(() => {
     logout();
     setIsSettingsOpen(false);
@@ -450,8 +457,19 @@ const Profile = () => {
         onClose={handleSettingsClose}
         isDarkMode={isDarkMode}
         onThemeToggle={handleThemeToggle}
+        onEditProfile={handleEditProfileOpen}
         onLogout={handleLogout}
       />
+
+      {/* Edit Profile Modal */}
+      {isOwnProfile && user && (
+        <EditProfileModal
+          isOpen={isEditProfileOpen}
+          onClose={handleEditProfileClose}
+          user={user}
+          onProfileUpdated={handleProfileUpdated}
+        />
+      )}
     </Box>
   );
 };

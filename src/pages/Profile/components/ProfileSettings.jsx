@@ -13,6 +13,7 @@ import {
   LightMode as LightModeIcon,
   DarkMode as DarkModeIcon,
   Logout as LogoutIcon,
+  Edit as EditIcon,
 } from '@mui/icons-material';
 
 const ProfileSettings = ({
@@ -20,6 +21,7 @@ const ProfileSettings = ({
   onClose,
   isDarkMode,
   onThemeToggle,
+  onEditProfile,
   onLogout,
 }) => {
   return (
@@ -39,6 +41,23 @@ const ProfileSettings = ({
           Quick Actions
         </Typography>
         <List>
+          <ListItem
+            button
+            onClick={onEditProfile}
+            sx={{
+              borderRadius: 2,
+              mb: 1,
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
+            }}
+          >
+            <ListItemIcon>
+              <EditIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Edit Profile" />
+          </ListItem>
+          <Divider sx={{ my: 1 }} />
           <ListItem
             button
             onClick={onThemeToggle}
@@ -85,6 +104,7 @@ ProfileSettings.propTypes = {
   onClose: PropTypes.func.isRequired,
   isDarkMode: PropTypes.bool.isRequired,
   onThemeToggle: PropTypes.func.isRequired,
+  onEditProfile: PropTypes.func.isRequired,
   onLogout: PropTypes.func.isRequired,
 };
 

@@ -649,15 +649,6 @@ const Navbar = () => {
               <Avatar sx={{ width: 28, height: 28 }}>?</Avatar>
             </IconButton>
           )}
-
-          <IconButton
-            onClick={logout}
-            sx={{
-              color: 'error.main',
-            }}
-          >
-            <LogoutIcon />
-          </IconButton>
         </StyledMobileNav>
       )}
     </>
