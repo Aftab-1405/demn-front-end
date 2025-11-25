@@ -1,4 +1,4 @@
-import { Skeleton as MuiSkeleton, Box, CircularProgress } from '@mui/material';
+import { Skeleton as MuiSkeleton, Box, Stack, CircularProgress } from '@mui/material';
 
 // Exact Match for Analytics.jsx Layout
 export const SkeletonAnalyticsDashboard = () => {
