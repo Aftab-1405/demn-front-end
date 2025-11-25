@@ -5,6 +5,7 @@ import {
   Typography,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Divider,
@@ -41,57 +42,58 @@ const ProfileSettings = ({
           Quick Actions
         </Typography>
         <List>
-          <ListItem
-            button
-            onClick={onEditProfile}
-            sx={{
-              borderRadius: 2,
-              mb: 1,
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
-            }}
-          >
-            <ListItemIcon>
-              <EditIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Edit Profile" />
-          </ListItem>
-          <Divider sx={{ my: 1 }} />
-          <ListItem
-            button
-            onClick={onThemeToggle}
-            sx={{
-              borderRadius: 2,
-              mb: 1,
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
-            }}
-          >
-            <ListItemIcon>
-              {isDarkMode ? <LightModeIcon color="primary" /> : <DarkModeIcon color="primary" />}
-            </ListItemIcon>
-            <ListItemText primary="Toggle Theme" />
-          </ListItem>
-          <Divider sx={{ my: 1 }} />
-          <ListItem
-            button
-            onClick={onLogout}
-            sx={{
-              borderRadius: 2,
-              '&:hover': {
-                bgcolor: 'error.light',
-                '& .MuiListItemIcon-root': {
-                  color: 'error.main',
+          <ListItem disablePadding sx={{ mb: 1 }}>
+            <ListItemButton
+              onClick={onEditProfile}
+              sx={{
+                borderRadius: 2,
+                '&:hover': {
+                  bgcolor: 'action.hover',
                 },
-              },
-            }}
-          >
-            <ListItemIcon>
-              <LogoutIcon color="error" />
-            </ListItemIcon>
-            <ListItemText primary="Logout" primaryTypographyProps={{ color: 'error' }} />
+              }}
+            >
+              <ListItemIcon>
+                <EditIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Edit Profile" />
+            </ListItemButton>
+          </ListItem>
+          <Divider sx={{ my: 1 }} />
+          <ListItem disablePadding sx={{ mb: 1 }}>
+            <ListItemButton
+              onClick={onThemeToggle}
+              sx={{
+                borderRadius: 2,
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                },
+              }}
+            >
+              <ListItemIcon>
+                {isDarkMode ? <LightModeIcon color="primary" /> : <DarkModeIcon color="primary" />}
+              </ListItemIcon>
+              <ListItemText primary="Toggle Theme" />
+            </ListItemButton>
+          </ListItem>
+          <Divider sx={{ my: 1 }} />
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={onLogout}
+              sx={{
+                borderRadius: 2,
+                '&:hover': {
+                  bgcolor: 'error.light',
+                  '& .MuiListItemIcon-root': {
+                    color: 'error.main',
+                  },
+                },
+              }}
+            >
+              <ListItemIcon>
+                <LogoutIcon color="error" />
+              </ListItemIcon>
+              <ListItemText primary="Logout" primaryTypographyProps={{ color: 'error' }} />
+            </ListItemButton>
           </ListItem>
         </List>
       </Box>
