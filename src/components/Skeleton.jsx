@@ -1,60 +1,4 @@
-import { Skeleton as MuiSkeleton, Box, Stack, Card, CardContent } from '@mui/material';
-
-// Internal component for use by page-level skeletons
-const SkeletonPostCard = () => {
-  return (
-    <Card
-      sx={{
-        bgcolor: 'background.paper',
-        border: (theme) => `1px solid ${theme.palette.divider}`,
-        borderRadius: 1.25,
-        overflow: 'hidden',
-        mb: 1.25,
-        boxShadow: 'none',
-      }}
-    >
-      {/* Header */}
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
-        <MuiSkeleton variant="circular" width={32} height={32} />
-        <Stack spacing={0.5} sx={{ flex: 1 }}>
-          <MuiSkeleton variant="text" width="40%" height={16} />
-        </Stack>
-        <MuiSkeleton variant="circular" width={24} height={24} />
-      </Stack>
-      {/* Media */}
-      <MuiSkeleton
-        variant="rectangular"
-        sx={{
-          aspectRatio: '1 / 1',
-          width: '100%',
-          maxHeight: 450,
-        }}
-      />
-      {/* Actions */}
-      <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
-        <Stack direction="row" spacing={1.5}>
-          <MuiSkeleton variant="circular" width={32} height={32} />
-          <MuiSkeleton variant="circular" width={32} height={32} />
-          <MuiSkeleton variant="circular" width={32} height={32} />
-        </Stack>
-        <MuiSkeleton variant="circular" width={32} height={32} />
-      </Stack>
-      {/* Likes */}
-      <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
-        <MuiSkeleton variant="text" width="30%" height={18} />
-      </Box>
-      {/* Caption */}
-      <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
-        <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
-        <MuiSkeleton variant="text" width="75%" height={16} />
-      </Box>
-      {/* Comments */}
-      <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
-        <MuiSkeleton variant="text" width="40%" height={16} />
-      </Box>
-    </Card>
-  );
-};
+import { Skeleton as MuiSkeleton, Box, Stack, Card } from '@mui/material';
 
 // Exact Match for Analytics.jsx Layout
 export const SkeletonAnalyticsDashboard = () => {
@@ -364,7 +308,44 @@ export const SkeletonFeed = () => {
             }}
           >
             {Array.from({ length: 3 }).map((_, index) => (
-              <SkeletonPostCard key={index} />
+              <Card
+                key={index}
+                sx={{
+                  bgcolor: 'background.paper',
+                  border: (theme) => `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1.25,
+                  overflow: 'hidden',
+                  mb: 1.25,
+                  boxShadow: 'none',
+                }}
+              >
+                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
+                  <MuiSkeleton variant="circular" width={32} height={32} />
+                  <Stack spacing={0.5} sx={{ flex: 1 }}>
+                    <MuiSkeleton variant="text" width="40%" height={16} />
+                  </Stack>
+                  <MuiSkeleton variant="circular" width={24} height={24} />
+                </Stack>
+                <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
+                <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
+                  <Stack direction="row" spacing={1.5}>
+                    <MuiSkeleton variant="circular" width={32} height={32} />
+                    <MuiSkeleton variant="circular" width={32} height={32} />
+                    <MuiSkeleton variant="circular" width={32} height={32} />
+                  </Stack>
+                  <MuiSkeleton variant="circular" width={32} height={32} />
+                </Stack>
+                <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
+                  <MuiSkeleton variant="text" width="30%" height={18} />
+                </Box>
+                <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
+                  <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
+                  <MuiSkeleton variant="text" width="75%" height={16} />
+                </Box>
+                <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
+                  <MuiSkeleton variant="text" width="40%" height={16} />
+                </Box>
+              </Card>
             ))}
           </Box>
         </Box>
@@ -459,7 +440,44 @@ export const SkeletonExplore = () => {
         }}
       >
         {Array.from({ length: 8 }).map((_, index) => (
-          <SkeletonPostCard key={index} />
+          <Card
+            key={index}
+            sx={{
+              bgcolor: 'background.paper',
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 1.25,
+              overflow: 'hidden',
+              mb: 1.25,
+              boxShadow: 'none',
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
+              <MuiSkeleton variant="circular" width={32} height={32} />
+              <Stack spacing={0.5} sx={{ flex: 1 }}>
+                <MuiSkeleton variant="text" width="40%" height={16} />
+              </Stack>
+              <MuiSkeleton variant="circular" width={24} height={24} />
+            </Stack>
+            <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
+            <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
+              <Stack direction="row" spacing={1.5}>
+                <MuiSkeleton variant="circular" width={32} height={32} />
+                <MuiSkeleton variant="circular" width={32} height={32} />
+                <MuiSkeleton variant="circular" width={32} height={32} />
+              </Stack>
+              <MuiSkeleton variant="circular" width={32} height={32} />
+            </Stack>
+            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
+              <MuiSkeleton variant="text" width="30%" height={18} />
+            </Box>
+            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
+              <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
+              <MuiSkeleton variant="text" width="75%" height={16} />
+            </Box>
+            <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
+              <MuiSkeleton variant="text" width="40%" height={16} />
+            </Box>
+          </Card>
         ))}
       </Box>
     </Box>
@@ -542,7 +560,44 @@ export const SkeletonProfile = () => {
         }}
       >
         {Array.from({ length: 9 }).map((_, index) => (
-          <SkeletonPostCard key={index} />
+          <Card
+            key={index}
+            sx={{
+              bgcolor: 'background.paper',
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 1.25,
+              overflow: 'hidden',
+              mb: 1.25,
+              boxShadow: 'none',
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: 1.25, px: 1.5, minHeight: 56 }}>
+              <MuiSkeleton variant="circular" width={32} height={32} />
+              <Stack spacing={0.5} sx={{ flex: 1 }}>
+                <MuiSkeleton variant="text" width="40%" height={16} />
+              </Stack>
+              <MuiSkeleton variant="circular" width={24} height={24} />
+            </Stack>
+            <MuiSkeleton variant="rectangular" sx={{ aspectRatio: '1 / 1', width: '100%', maxHeight: 450 }} />
+            <Stack direction="row" spacing={1.5} sx={{ p: 1, px: 1.5, justifyContent: 'space-between', minHeight: 52 }}>
+              <Stack direction="row" spacing={1.5}>
+                <MuiSkeleton variant="circular" width={32} height={32} />
+                <MuiSkeleton variant="circular" width={32} height={32} />
+                <MuiSkeleton variant="circular" width={32} height={32} />
+              </Stack>
+              <MuiSkeleton variant="circular" width={32} height={32} />
+            </Stack>
+            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 28 }}>
+              <MuiSkeleton variant="text" width="30%" height={18} />
+            </Box>
+            <Box sx={{ px: 1.5, pb: 0.75, minHeight: 44 }}>
+              <MuiSkeleton variant="text" width="100%" height={16} sx={{ mb: 0.5 }} />
+              <MuiSkeleton variant="text" width="75%" height={16} />
+            </Box>
+            <Box sx={{ px: 1.5, pb: 1.5, minHeight: 32 }}>
+              <MuiSkeleton variant="text" width="40%" height={16} />
+            </Box>
+          </Card>
         ))}
       </Box>
     </Box>
