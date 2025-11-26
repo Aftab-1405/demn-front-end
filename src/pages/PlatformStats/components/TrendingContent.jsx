@@ -252,7 +252,14 @@ const TrendingContent = () => {
     );
   }
 
-  const trendingItems = trendingData || [];
+  // Handle different API response formats
+  const trendingItems = Array.isArray(trendingData)
+    ? trendingData
+    : Array.isArray(trendingData?.data)
+    ? trendingData.data
+    : Array.isArray(trendingData?.trending)
+    ? trendingData.trending
+    : [];
 
   return (
     <Box>
