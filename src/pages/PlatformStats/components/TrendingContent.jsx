@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Box,
@@ -25,8 +25,13 @@ import {
   TrendingUp as TrendingUpIcon,
   Article as ArticleIcon,
   VideoLibrary as VideoIcon,
+  PlayArrow as PlayArrowIcon,
+  Pause as PauseIcon,
 } from '@mui/icons-material';
 import { publicAnalyticsAPI } from '../../../services/publicAnalytics';
+
+const MEDIA_HEIGHT = 220;
+const CARD_HEIGHT = 460;
 
 /**
  * TrendingContent - Display trending posts and reels in a grid
@@ -47,7 +52,7 @@ const TrendingContent = () => {
         type: contentType === 'all' ? undefined : contentType,
         limit: 12,
       }),
-    staleTime: 60 * 1000, // 60s
+    staleTime: 60 * 1000,
     gcTime: 5 * 60 * 1000,
     retry: (failureCount, error) => {
       if (error?.isRateLimited) return false;
@@ -55,43 +60,162 @@ const TrendingContent = () => {
     },
   });
 
-  /**
-   * Handle content type change
-   */
   const handleTypeChange = (event, newValue) => {
     setContentType(newValue);
   };
 
   /**
-   * TrendingCard - Display single trending item
-   * API Response: { type, video_url, image_url, thumbnail_url, caption, author, engagement, ... }
+   * TrendingCard - single card
+   * Reels: real video player with hover preview, but fixed-size container and visible poster/gradient.
    */
   const TrendingCard = ({ item }) => {
     const isReel = item.type === 'reel';
-    // Get media URL based on content type (reels have thumbnail_url or video_url, posts have image_url)
-    const mediaUrl = isReel ? (item.thumbnail_url || item.video_url) : item.image_url;
+    const mediaUrl = isReel ? item.thumbnail_url || item.video_url : item.image_url;
     const contentText = item.caption;
+    const videoRef = useRef(null);
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMediaMouseEnter = () => {
+      setIsHovered(true);
+      if (isReel && item.video_url && videoRef.current) {
+        videoRef.current.play().catch(() => {});
+      }
+    };
+
+    const handleMediaMouseLeave = () => {
+      setIsHovered(false);
+      if (isReel && item.video_url && videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    };
 
     return (
       <Card
-        elevation={3}
+        elevation={2}
         sx={{
-          height: '100%',
+          height: CARD_HEIGHT,
+          minHeight: CARD_HEIGHT,
+          maxHeight: CARD_HEIGHT,
           display: 'flex',
           flexDirection: 'column',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          overflow: 'hidden',
+          transition: 'box-shadow 0.22s ease, border-color 0.22s ease',
+          borderRadius: 3,
+          border: (theme) => `1px solid ${alpha(theme.palette.divider, 0.7)}`,
           '&:hover': {
-            transform: 'translateY(-8px)',
-            boxShadow: (theme) => `0 16px 32px ${alpha(theme.palette.primary.main, 0.2)}`,
+            boxShadow: (theme) => `0 10px 26px ${alpha(theme.palette.primary.main, 0.18)}`,
+            borderColor: (theme) => alpha(theme.palette.primary.main, 0.7),
           },
         }}
       >
-        {/* Media Thumbnail */}
-        {mediaUrl && (
-          <Box sx={{ position: 'relative' }}>
+        {/* Media section: fixed height to avoid jumping */}
+        {isReel ? (
+          <Box
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: '16px 16px 0 0',
+              height: MEDIA_HEIGHT,
+              background: (theme) =>
+                mediaUrl
+                  ? 'transparent'
+                  : `linear-gradient(135deg, ${alpha(theme.palette.info.main, 0.3)} 0%, ${alpha(
+                      theme.palette.secondary.main,
+                      0.3
+                    )} 100%)`,
+            }}
+            onMouseEnter={handleMediaMouseEnter}
+            onMouseLeave={handleMediaMouseLeave}
+          >
+            {item.video_url ? (
+              <Box
+                component="video"
+                ref={videoRef}
+                src={item.video_url}
+                muted
+                loop
+                playsInline
+                poster={mediaUrl || undefined}
+                style={{
+                  width: '100%',
+                  height: MEDIA_HEIGHT,
+                  objectFit: 'cover',
+                  display: 'block',
+                  backgroundColor: '#000',
+                }}
+              />
+            ) : (
+              // Fallback if video_url is missing
+              <Box
+                sx={{
+                  height: MEDIA_HEIGHT,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'common.white',
+                }}
+              >
+                <VideoIcon sx={{ fontSize: 40 }} />
+              </Box>
+            )}
+
+            {/* Dark gradient overlay for readability */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.0) 60%)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Play/Pause overlay (does not change size) */}
+            <IconButton
+              size="large"
+              sx={{
+                position: 'absolute',
+                bottom: 12,
+                left: 12,
+                bgcolor: (theme) => alpha(theme.palette.common.black, 0.6),
+                color: 'common.white',
+                '&:hover': {
+                  bgcolor: (theme) => alpha(theme.palette.common.black, 0.8),
+                },
+              }}
+            >
+              {isHovered ? <PauseIcon /> : <PlayArrowIcon />}
+            </IconButton>
+
+            {/* Type Badge */}
+            <Chip
+              icon={<VideoIcon />}
+              label="Reel"
+              size="small"
+              color="info"
+              sx={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                fontWeight: 700,
+                backdropFilter: 'blur(10px)',
+                bgcolor: (theme) => alpha(theme.palette.info.main, 0.9),
+              }}
+            />
+          </Box>
+        ) : mediaUrl ? (
+          <Box
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: '16px 16px 0 0',
+              minHeight: MEDIA_HEIGHT,
+            }}
+          >
             <CardMedia
               component="img"
-              height="200"
+              height={MEDIA_HEIGHT}
               image={mediaUrl}
               alt={contentText?.slice(0, 50)}
               sx={{
@@ -99,25 +223,43 @@ const TrendingContent = () => {
                 bgcolor: 'grey.200',
               }}
             />
-            {/* Type Badge */}
             <Chip
-              icon={isReel ? <VideoIcon /> : <ArticleIcon />}
-              label={isReel ? 'Reel' : 'Post'}
+              icon={<ArticleIcon />}
+              label="Post"
               size="small"
-              color={isReel ? 'info' : 'secondary'}
+              color="secondary"
               sx={{
                 position: 'absolute',
                 top: 12,
                 right: 12,
                 fontWeight: 700,
                 backdropFilter: 'blur(10px)',
-                bgcolor: (theme) =>
-                  alpha(isReel ? theme.palette.info.main : theme.palette.secondary.main, 0.9),
+                bgcolor: (theme) => alpha(theme.palette.secondary.main, 0.9),
               }}
             />
           </Box>
+        ) : (
+          // Fallback for posts without image
+          <Box
+            sx={{
+              height: MEDIA_HEIGHT,
+              borderRadius: '16px 16px 0 0',
+              background: (theme) =>
+                `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.18)} 0%, ${alpha(
+                  theme.palette.secondary.main,
+                  0.18
+                )} 100%)`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'common.white',
+            }}
+          >
+            <ArticleIcon sx={{ fontSize: 40 }} />
+          </Box>
         )}
 
+        {/* Text / meta */}
         <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           {/* Author Info */}
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
@@ -126,7 +268,7 @@ const TrendingContent = () => {
               alt={item.author?.full_name}
               sx={{ width: 40, height: 40 }}
             >
-              {item.author?.full_name?.charAt(0).toUpperCase()}
+              {item.author?.full_name?.charAt(0)?.toUpperCase()}
             </Avatar>
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               <Stack direction="row" spacing={0.5} alignItems="center">
@@ -164,10 +306,10 @@ const TrendingContent = () => {
             {contentText || 'No description'}
           </Typography>
 
-          {/* Engagement Metrics */}
+          {/* Engagement / actions */}
           <Stack
             direction="row"
-            spacing={2}
+            spacing={1.5}
             alignItems="center"
             sx={{
               pt: 2,
@@ -187,6 +329,15 @@ const TrendingContent = () => {
               </Typography>
             </Stack>
             <Box sx={{ flexGrow: 1 }} />
+            <IconButton
+              size="small"
+              sx={{
+                color: 'text.secondary',
+                '&:hover': { color: 'primary.main' },
+              }}
+            >
+              <ShareIcon sx={{ fontSize: 18 }} />
+            </IconButton>
             <Chip
               icon={<TrendingUpIcon />}
               label={item.engagement?.toFixed(1) ?? 'N/A'}
@@ -200,9 +351,7 @@ const TrendingContent = () => {
     );
   };
 
-  /**
-   * Render loading state
-   */
+  // Loading state
   if (isLoading) {
     return (
       <Box>
@@ -224,9 +373,7 @@ const TrendingContent = () => {
     );
   }
 
-  /**
-   * Render error state
-   */
+  // Error state
   if (isError) {
     const isRateLimited = error?.isRateLimited;
     return (
@@ -248,7 +395,7 @@ const TrendingContent = () => {
     );
   }
 
-  // Handle different API response formats
+  // Normalize API response
   const trendingItems = Array.isArray(trendingData)
     ? trendingData
     : Array.isArray(trendingData?.data)
@@ -270,7 +417,7 @@ const TrendingContent = () => {
         <Stack direction="row" alignItems="center" spacing={1}>
           <TrendingUpIcon color="warning" />
           <Typography variant="h5" fontWeight={700}>
-            Trending Content
+            Trending on D.E.M.N
           </Typography>
           <Chip
             label={`${trendingItems.length} items`}
@@ -295,11 +442,11 @@ const TrendingContent = () => {
         >
           <Tab label="All" value="all" />
           <Tab label="Posts" value="post" icon={<ArticleIcon />} iconPosition="start" />
-          <Tab label="Reels" value="reel" icon={<VideoIcon />} iconPosition="start" />
+          <Tab label="Reels (Video)" value="reel" icon={<VideoIcon />} iconPosition="start" />
         </Tabs>
       </Stack>
 
-      {/* Trending Grid */}
+      {/* Grid */}
       {trendingItems.length === 0 ? (
         <Alert severity="info">
           <Typography variant="body2">

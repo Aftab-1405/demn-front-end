@@ -18,7 +18,6 @@ import {
   AppBar,
   Toolbar,
   keyframes,
-  IconButton,
 } from '@mui/material';
 import {
   People as PeopleIcon,
@@ -30,8 +29,6 @@ import {
   Home as HomeIcon,
   Login as LoginIcon,
   PersonAdd as PersonAddIcon,
-  PlayArrow as PlayArrowIcon,
-  Pause as PauseIcon,
 } from '@mui/icons-material';
 import { publicAnalyticsAPI } from '../../services/publicAnalytics';
 import TrendingContent from './components/TrendingContent';
@@ -56,6 +53,12 @@ const pulse = keyframes`
 const shimmer = keyframes`
   0% { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
+`;
+
+const orbit = keyframes`
+  0% { transform: translate3d(-40px, -20px, 0) scale(1); opacity: 0.6; }
+  50% { transform: translate3d(40px, 20px, 0) scale(1.1); opacity: 1; }
+  100% { transform: translate3d(-40px, -20px, 0) scale(1); opacity: 0.6; }
 `;
 
 /**
@@ -111,8 +114,15 @@ const PlatformStats = () => {
   /**
    * Animated Stat Card with count-up
    */
-  const AnimatedStatCard = ({ icon: Icon, label, value, color = 'primary', subtitle, delay = 0 }) => {
-    const animatedValue = useCountUp(value, 2000);
+  const AnimatedStatCard = ({
+    icon: Icon,
+    label,
+    value,
+    color = 'primary',
+    subtitle,
+    delay = 0,
+  }) => {
+    const animatedValue = useCountUp(value || 0, 2000);
 
     return (
       <Card
@@ -149,7 +159,9 @@ const PlatformStats = () => {
       >
         <CardContent sx={{ p: 4 }}>
           <Stack spacing={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            >
               <Box
                 sx={{
                   width: 70,
@@ -199,6 +211,26 @@ const PlatformStats = () => {
   };
 
   /**
+   * Small animated delta chip for 24h snapshot
+   */
+  const AnimatedDelta = ({ value, color }) => {
+    const animated = useCountUp(value || 0, 1600);
+
+    return (
+      <Typography
+        variant="h3"
+        fontWeight={900}
+        sx={{
+          color,
+          textShadow: (theme) => `0 2px 10px ${alpha(theme.palette.success.main, 0.35)}`,
+        }}
+      >
+        +{animated.toLocaleString()}
+      </Typography>
+    );
+  };
+
+  /**
    * Public Navigation AppBar
    */
   const PublicNavBar = () => (
@@ -215,7 +247,7 @@ const PlatformStats = () => {
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ py: 1 }}>
+        <Toolbar disableGutters sx={{ py: 1.2 }}>
           <Typography
             variant="h5"
             component={Link}
@@ -235,7 +267,7 @@ const PlatformStats = () => {
           >
             D.E.M.N
           </Typography>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1.5}>
             <Button
               component={Link}
               to="/"
@@ -252,11 +284,14 @@ const PlatformStats = () => {
             <Button
               component={Link}
               to="/login"
-              variant="outlined"
+              variant="text"
+              startIcon={<LoginIcon />}
               sx={{
                 textTransform: 'none',
                 fontWeight: 600,
                 borderRadius: 2,
+                color: 'text.secondary',
+                '&:hover': { bgcolor: 'action.hover' },
               }}
             >
               Login
@@ -265,15 +300,16 @@ const PlatformStats = () => {
               component={Link}
               to="/register"
               variant="contained"
+              startIcon={<PersonAddIcon />}
               sx={{
                 textTransform: 'none',
                 fontWeight: 700,
-                borderRadius: 2,
+                borderRadius: 2.5,
                 boxShadow: (theme) =>
-                  `0 4px 14px ${alpha(theme.palette.primary.main, 0.4)}`,
+                  `0 4px 16px ${alpha(theme.palette.primary.main, 0.45)}`,
                 '&:hover': {
                   boxShadow: (theme) =>
-                    `0 6px 20px ${alpha(theme.palette.primary.main, 0.5)}`,
+                    `0 8px 24px ${alpha(theme.palette.primary.main, 0.6)}`,
                 },
               }}
             >
@@ -293,7 +329,14 @@ const PlatformStats = () => {
       <>
         <PublicNavBar />
         <Container maxWidth="xl" sx={{ py: 8 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '70vh',
+            }}
+          >
             <Stack spacing={3} alignItems="center">
               <CircularProgress size={70} thickness={4} />
               <Typography variant="h5" color="text.secondary" fontWeight={600}>
@@ -343,22 +386,66 @@ const PlatformStats = () => {
     <>
       <PublicNavBar />
 
-      {/* Hero Section with Gradient Background */}
+      {/* Hero Section with Animated Gradient Background */}
       <Box
         sx={{
           background: (theme) =>
-            `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(
-              theme.palette.background.default,
-              1
-            )} 100%)`,
-          pt: 8,
-          pb: 12,
+            `radial-gradient(circle at top, ${alpha(theme.palette.primary.main, 0.25)} 0, transparent 55%),
+             radial-gradient(circle at bottom, ${alpha(theme.palette.secondary.main, 0.2)} 0, transparent 60%),
+             linear-gradient(180deg, ${alpha(theme.palette.background.default, 1)} 0%, ${
+              theme.palette.background.default
+            } 100%)`,
+          pt: { xs: 6, md: 7 },
+          pb: { xs: 7, md: 8 },
           position: 'relative',
           overflow: 'hidden',
         }}
       >
+        {/* Floating Orbs for subtle motion */}
+        <Box
+          sx={{
+            position: 'absolute',
+            width: 260,
+            height: 260,
+            borderRadius: '50%',
+            top: -40,
+            right: -60,
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.info.main, 0.35)} 0%, transparent 60%)`,
+            filter: 'blur(4px)',
+            opacity: 0.7,
+            animation: `${orbit} 18s ease-in-out infinite`,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            width: 220,
+            height: 220,
+            borderRadius: '50%',
+            bottom: -40,
+            left: -60,
+            background: (theme) =>
+              `radial-gradient(circle, ${alpha(theme.palette.secondary.main, 0.3)} 0%, transparent 60%)`,
+            filter: 'blur(6px)',
+            opacity: 0.75,
+            animation: `${orbit} 22s ease-in-out infinite reverse`,
+          }}
+        />
+
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 8, animation: `${fadeIn} 0.8s ease-out` }}>
+          {/* Centered Hero */}
+          <Box
+            sx={{
+              minHeight: { xs: 'auto', md: '70vh' },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              mb: 8,
+              animation: `${fadeIn} 0.8s ease-out`,
+            }}
+          >
             <Chip
               label="LIVE PLATFORM ANALYTICS"
               color="primary"
@@ -366,65 +453,116 @@ const PlatformStats = () => {
                 mb: 3,
                 fontWeight: 800,
                 fontSize: '0.875rem',
-                px: 2,
+                px: 2.2,
                 animation: `${pulse} 2s ease-in-out infinite`,
+                boxShadow: (theme) =>
+                  `0 0 0 1px ${alpha(theme.palette.primary.main, 0.25)}`,
               }}
             />
             <Typography
               variant="h1"
               fontWeight={900}
               sx={{
-                mb: 3,
-                fontSize: { xs: '2.5rem', md: '4rem' },
+                mb: 2.5,
+                fontSize: { xs: '2.6rem', md: '4.2rem' },
                 background: (theme) =>
                   `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 50%, ${theme.palette.info.main} 100%)`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                lineHeight: 1.2,
+                lineHeight: 1.1,
               }}
             >
-              Real-Time Truth Analytics
+              Turn Every Post Into
+              <Box component="span" sx={{ display: 'block' }}>
+                Real-Time Proof of Truth
+              </Box>
             </Typography>
             <Typography
               variant="h5"
               color="text.secondary"
               sx={{
-                maxWidth: 800,
+                maxWidth: 780,
                 mx: 'auto',
                 mb: 4,
                 fontWeight: 500,
-                lineHeight: 1.6,
+                lineHeight: 1.7,
               }}
             >
-              See the power of AI-driven fact-checking in action. Join thousands of users
-              sharing verified content every day.
+              D.E.M.N transforms raw content into verified stories with AI-powered fact‑checking,
+              real-time analytics, and community trust signals that attract new audiences.
             </Typography>
-            <Stack direction="row" spacing={2} justifyContent="center">
+
+            {/* Hero CTA Row */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              justifyContent="center"
+              sx={{ mb: 4 }}
+            >
               <Button
                 component={Link}
                 to="/register"
                 variant="contained"
-                size="large"
+                size="medium"
                 sx={{
-                  px: 5,
-                  py: 2,
-                  fontSize: '1.1rem',
-                  fontWeight: 700,
-                  borderRadius: 3,
+                  px: 4,
+                  py: 1.4,
+                  fontSize: '0.98rem',
+                  fontWeight: 800,
+                  borderRadius: 2.5,
                   textTransform: 'none',
                   boxShadow: (theme) =>
-                    `0 8px 24px ${alpha(theme.palette.primary.main, 0.4)}`,
+                    `0 10px 30px ${alpha(theme.palette.primary.main, 0.5)}`,
                   '&:hover': {
-                    transform: 'translateY(-2px)',
+                    transform: 'translateY(-1px)',
                     boxShadow: (theme) =>
-                      `0 12px 32px ${alpha(theme.palette.primary.main, 0.5)}`,
+                      `0 16px 40px ${alpha(theme.palette.primary.main, 0.65)}`,
                   },
-                  transition: 'all 0.3s',
+                  transition: 'all 0.25s',
                 }}
               >
                 Start Sharing Truth
               </Button>
+              <Button
+                component={Link}
+                to="/feed"
+                variant="outlined"
+                size="medium"
+                sx={{
+                  px: 3.2,
+                  py: 1.3,
+                  fontSize: '0.96rem',
+                  fontWeight: 700,
+                  borderRadius: 2.5,
+                  textTransform: 'none',
+                }}
+              >
+                Explore Live Feed
+              </Button>
+            </Stack>
+
+            {/* Hero mini trust row */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Stack direction="row" spacing={1} alignItems="center">
+                <VerifiedIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                <Typography variant="body2" color="text.secondary">
+                  AI + human-in-the-loop fact‑checking
+                </Typography>
+              </Stack>
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ display: { xs: 'none', sm: 'block' }, mx: 1 }}
+              />
+              <Typography variant="body2" color="text.secondary">
+                No credit card required · Get started in under 60 seconds
+              </Typography>
             </Stack>
           </Box>
 
@@ -482,7 +620,7 @@ const PlatformStats = () => {
                 label="Accuracy Rate"
                 value={Math.round(verification_stats?.verification_rate || 0)}
                 color="warning"
-                subtitle={`${verification_stats?.verification_rate?.toFixed(1)}%`}
+                subtitle={`${verification_stats?.verification_rate?.toFixed(1) ?? 0}%`}
                 delay={0.5}
               />
             </Grid>
@@ -503,15 +641,15 @@ const PlatformStats = () => {
               animation: `${fadeIn} 0.8s ease-out 0.6s both`,
             }}
           >
-            <CardContent sx={{ p: 4 }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
               <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                 <TrendingUpIcon sx={{ fontSize: 40, color: 'success.main' }} />
                 <Box>
                   <Typography variant="h5" fontWeight={800}>
-                    Last 24 Hours
+                    In the Last 24 Hours
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Live platform activity
+                    Real people. Real content. Verified in real time.
                   </Typography>
                 </Box>
                 <Box sx={{ flexGrow: 1 }} />
@@ -527,31 +665,40 @@ const PlatformStats = () => {
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={4}>
                   <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" fontWeight={900} color="success.main">
-                      +{snapshot_24h?.new_users || 0}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" fontWeight={600}>
-                      New Users
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" fontWeight={900} color="primary.main">
-                      +{snapshot_24h?.new_posts || 0}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" fontWeight={600}>
-                      New Posts
+                    <AnimatedDelta value={snapshot_24h?.new_users || 0} color="success.main" />
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      fontWeight={600}
+                      sx={{ mt: 0.5 }}
+                    >
+                      New Users Joined
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant="h3" fontWeight={900} color="info.main">
-                      +{snapshot_24h?.new_reels || 0}
+                    <AnimatedDelta value={snapshot_24h?.new_posts || 0} color="primary.main" />
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      fontWeight={600}
+                      sx={{ mt: 0.5 }}
+                    >
+                      Fresh Posts Published
                     </Typography>
-                    <Typography variant="body1" color="text.secondary" fontWeight={600}>
-                      New Reels
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <AnimatedDelta value={snapshot_24h?.new_reels || 0} color="info.main" />
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      fontWeight={600}
+                      sx={{ mt: 0.5 }}
+                    >
+                      New Reels Created
                     </Typography>
                   </Box>
                 </Grid>
@@ -561,12 +708,21 @@ const PlatformStats = () => {
         </Container>
       </Box>
 
-      {/* Trending Content Section */}
-      <Container maxWidth="xl" sx={{ py: 8 }}>
-        <TrendingContent />
-      </Container>
+      {/* Trending Content Section (now feels like a marketing "reels" wall) */}
+      <Box
+        sx={{
+          background: (theme) =>
+            theme.palette.mode === 'dark'
+              ? alpha(theme.palette.background.paper, 0.8)
+              : alpha(theme.palette.background.default, 0.98),
+        }}
+      >
+        <Container maxWidth="xl" sx={{ py: 8 }}>
+          <TrendingContent />
+        </Container>
+      </Box>
 
-      <Divider sx={{ my: 8 }} />
+      <Divider sx={{ my: 0 }} />
 
       {/* Fact-Check Statistics */}
       <Container maxWidth="xl" sx={{ py: 8 }}>
@@ -578,41 +734,52 @@ const PlatformStats = () => {
         sx={{
           background: (theme) =>
             `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-          py: 12,
-          mt: 8,
+          py: { xs: 7, md: 8 },
+          mt: 4,
         }}
       >
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center', color: 'white' }}>
             <Typography variant="h2" fontWeight={900} gutterBottom>
-              Ready to Share Your Truth?
+              Ready to Turn Your Content Into Credible Stories?
             </Typography>
             <Typography variant="h6" sx={{ mb: 4, opacity: 0.95 }}>
-              Join our community and start sharing fact-checked content today
+              Join D.E.M.N today and give your audience analytics‑backed, verified content they can
+              trust.
             </Typography>
-            <Button
-              component={Link}
-              to="/register"
-              variant="contained"
-              size="large"
-              sx={{
-                bgcolor: 'white',
-                color: 'primary.main',
-                px: 6,
-                py: 2.5,
-                fontSize: '1.2rem',
-                fontWeight: 800,
-                borderRadius: 3,
-                textTransform: 'none',
-                '&:hover': {
-                  bgcolor: 'grey.100',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.3s',
-              }}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
             >
-              Get Started - It's Free
-            </Button>
+              <Button
+                component={Link}
+                to="/register"
+                variant="contained"
+                size="medium"
+                sx={{
+                  bgcolor: 'white',
+                  color: 'primary.main',
+                  px: 4,
+                  py: 1.6,
+                  fontSize: '1rem',
+                  fontWeight: 800,
+                  borderRadius: 2.5,
+                  textTransform: 'none',
+                  '&:hover': {
+                    bgcolor: 'grey.100',
+                    transform: 'scale(1.02)',
+                  },
+                  transition: 'all 0.3s',
+                }}
+              >
+                Get Started — It&apos;s Free
+              </Button>
+              <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                No long setup · Built for creators, journalists & communities
+              </Typography>
+            </Stack>
           </Box>
         </Container>
       </Box>
