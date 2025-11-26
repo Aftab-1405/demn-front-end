@@ -64,64 +64,79 @@ const FactCheckCharts = () => {
   /**
    * OutcomeCard - Display single outcome stat
    */
-  const OutcomeCard = ({ icon: Icon, label, count, percentage, color }) => (
-    <Card
-      elevation={2}
-      sx={{
-        height: '100%',
-        background: (theme) =>
-          `linear-gradient(135deg, ${alpha(theme.palette[color].main, 0.1)} 0%, ${alpha(
-            theme.palette[color].dark || theme.palette[color].main,
-            0.05
-          )} 100%)`,
-        border: (theme) => `1px solid ${alpha(theme.palette[color].main, 0.2)}`,
-      }}
-    >
-      <CardContent>
-        <Stack spacing={2}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Box
-              sx={{
-                width: 48,
-                height: 48,
-                borderRadius: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: (theme) => alpha(theme.palette[color].main, 0.15),
-              }}
-            >
-              <Icon sx={{ fontSize: 28, color: `${color}.main` }} />
+  const OutcomeCard = ({ icon: Icon, label, count, percentage, color }) => {
+    // Get the color value, handling special case for grey/text colors
+    const getColor = (theme) => {
+      if (color === 'text') {
+        return theme.palette.text.primary;
+      }
+      return theme.palette[color]?.main || theme.palette.grey[600];
+    };
+
+    return (
+      <Card
+        elevation={2}
+        sx={{
+          height: '100%',
+          background: (theme) =>
+            `linear-gradient(135deg, ${alpha(getColor(theme), 0.1)} 0%, ${alpha(
+              getColor(theme),
+              0.05
+            )} 100%)`,
+          border: (theme) => `1px solid ${alpha(getColor(theme), 0.2)}`,
+        }}
+      >
+        <CardContent>
+          <Stack spacing={2}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: (theme) => alpha(getColor(theme), 0.15),
+                }}
+              >
+                <Icon sx={{ fontSize: 28, color: (theme) => getColor(theme) }} />
+              </Box>
+              <Chip
+                label={`${percentage.toFixed(1)}%`}
+                size="small"
+                sx={{
+                  fontWeight: 700,
+                  bgcolor: (theme) => alpha(getColor(theme), 0.2),
+                  color: (theme) => getColor(theme),
+                }}
+              />
+            </Stack>
+            <Box>
+              <Typography variant="h4" fontWeight={800} sx={{ color: (theme) => getColor(theme) }}>
+                {count.toLocaleString()}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" fontWeight={600}>
+                {label}
+              </Typography>
             </Box>
-            <Chip
-              label={`${percentage.toFixed(1)}%`}
-              size="small"
-              color={color}
-              sx={{ fontWeight: 700 }}
+            <LinearProgress
+              variant="determinate"
+              value={percentage}
+              sx={{
+                height: 8,
+                borderRadius: 4,
+                bgcolor: (theme) => alpha(getColor(theme), 0.1),
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: (theme) => getColor(theme),
+                },
+              }}
             />
           </Stack>
-          <Box>
-            <Typography variant="h4" fontWeight={800} color={`${color}.main`}>
-              {count.toLocaleString()}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" fontWeight={600}>
-              {label}
-            </Typography>
-          </Box>
-          <LinearProgress
-            variant="determinate"
-            value={percentage}
-            color={color}
-            sx={{
-              height: 8,
-              borderRadius: 4,
-              bgcolor: (theme) => alpha(theme.palette[color].main, 0.1),
-            }}
-          />
-        </Stack>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
+  };
 
   /**
    * Render loading state
@@ -301,7 +316,7 @@ const FactCheckCharts = () => {
             label="Unverified"
             count={unverified}
             percentage={unverifiedPct}
-            color="grey"
+            color="text"
           />
         </Grid>
       </Grid>
