@@ -55,8 +55,8 @@ function AppRoutes() {
     return <LoadingScreen />;
   }
 
-  // Define routes where navbar should be hidden
-  const noNavRoutes = ['/', '/login', '/register'];
+  // Define routes where navbar should be hidden (public marketing pages)
+  const noNavRoutes = ['/', '/login', '/register', '/stats'];
   const showNavbar = !noNavRoutes.includes(location.pathname);
 
   return (

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   Box,
@@ -13,6 +14,9 @@ import {
   Chip,
   alpha,
   Divider,
+  Button,
+  AppBar,
+  Toolbar,
 } from '@mui/material';
 import {
   People as PeopleIcon,
@@ -21,6 +25,9 @@ import {
   FactCheck as FactCheckIcon,
   Verified as VerifiedIcon,
   TrendingUp as TrendingUpIcon,
+  Home as HomeIcon,
+  Login as LoginIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
 import { publicAnalyticsAPI } from '../../services/publicAnalytics';
 import TrendingContent from './components/TrendingContent';
@@ -115,20 +122,92 @@ const PlatformStats = () => {
   );
 
   /**
+   * Public Navigation AppBar Component
+   */
+  const PublicNavBar = () => (
+    <AppBar
+      position="sticky"
+      elevation={1}
+      sx={{
+        bgcolor: (theme) =>
+          theme.palette.mode === 'dark'
+            ? alpha(theme.palette.background.paper, 0.8)
+            : alpha(theme.palette.background.paper, 0.9),
+        backdropFilter: 'blur(20px)',
+        borderBottom: (theme) => `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+      }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{
+              flexGrow: 1,
+              fontWeight: 800,
+              background: (theme) =>
+                `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textDecoration: 'none',
+              '&:hover': { opacity: 0.8 },
+            }}
+          >
+            D.E.M.N
+          </Typography>
+          <Stack direction="row" spacing={2}>
+            <Button
+              component={Link}
+              to="/"
+              startIcon={<HomeIcon />}
+              sx={{ color: 'text.primary', textTransform: 'none', fontWeight: 600 }}
+            >
+              Home
+            </Button>
+            <Button
+              component={Link}
+              to="/login"
+              startIcon={<LoginIcon />}
+              variant="outlined"
+              sx={{ textTransform: 'none', fontWeight: 600 }}
+            >
+              Login
+            </Button>
+            <Button
+              component={Link}
+              to="/register"
+              startIcon={<PersonAddIcon />}
+              variant="contained"
+              sx={{ textTransform: 'none', fontWeight: 600 }}
+            >
+              Sign Up
+            </Button>
+          </Stack>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+
+  /**
    * Render loading state
    */
   if (statsLoading) {
     return (
-      <Container maxWidth="xl" sx={{ py: 8 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-          <Stack spacing={2} alignItems="center">
-            <CircularProgress size={60} thickness={4} />
-            <Typography variant="h6" color="text.secondary">
-              Loading platform statistics...
-            </Typography>
-          </Stack>
-        </Box>
-      </Container>
+      <>
+        <PublicNavBar />
+        <Container maxWidth="xl" sx={{ py: 8 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+            <Stack spacing={2} alignItems="center">
+              <CircularProgress size={60} thickness={4} />
+              <Typography variant="h6" color="text.secondary">
+                Loading platform statistics...
+              </Typography>
+            </Stack>
+          </Box>
+        </Container>
+      </>
     );
   }
 
@@ -138,49 +217,57 @@ const PlatformStats = () => {
   if (statsError) {
     const isRateLimited = statsErrorData?.isRateLimited;
     return (
-      <Container maxWidth="xl" sx={{ py: 8 }}>
-        <Alert
-          severity={isRateLimited ? 'warning' : 'error'}
-          sx={{ maxWidth: 600, mx: 'auto' }}
-        >
-          <Typography variant="h6" gutterBottom>
-            {isRateLimited ? 'Rate Limit Exceeded' : 'Data Unavailable'}
-          </Typography>
-          <Typography variant="body2">
-            {isRateLimited
-              ? 'Too many requests. Please try again in 60 seconds.'
-              : 'Unable to load platform statistics. Please try again later.'}
-          </Typography>
-        </Alert>
-      </Container>
+      <>
+        <PublicNavBar />
+        <Container maxWidth="xl" sx={{ py: 8 }}>
+          <Alert
+            severity={isRateLimited ? 'warning' : 'error'}
+            sx={{ maxWidth: 600, mx: 'auto' }}
+          >
+            <Typography variant="h6" gutterBottom>
+              {isRateLimited ? 'Rate Limit Exceeded' : 'Data Unavailable'}
+            </Typography>
+            <Typography variant="body2">
+              {isRateLimited
+                ? 'Too many requests. Please try again in 60 seconds.'
+                : 'Unable to load platform statistics. Please try again later.'}
+            </Typography>
+          </Alert>
+        </Container>
+      </>
     );
   }
 
   const { totals, verification_stats, snapshot_24h } = platformStats || {};
 
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 6 }}>
-      <Container maxWidth="xl">
-        {/* Hero Section */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography
-            variant="h2"
-            fontWeight={900}
-            sx={{
-              mb: 2,
-              background: (theme) =>
-                `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Platform Analytics
-          </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            Real-time insights into our growing community, content, and fact-checking impact
-          </Typography>
-        </Box>
+    <>
+      <PublicNavBar />
+      <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 6 }}>
+        <Container maxWidth="xl">
+          {/* Hero Section */}
+          <Box sx={{ textAlign: 'center', mb: 8 }}>
+            <Typography
+              variant="h2"
+              fontWeight={900}
+              sx={{
+                mb: 2,
+                background: (theme) =>
+                  `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Platform Analytics
+            </Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto', mb: 3 }}>
+              Real-time insights into our growing community, content, and fact-checking impact
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
+              See the power of verified truth. Join thousands of users sharing authentic content with AI-powered fact-checking.
+            </Typography>
+          </Box>
 
         {/* Platform Totals */}
         <Box sx={{ mb: 8 }}>
@@ -317,6 +404,7 @@ const PlatformStats = () => {
         </Box>
       </Container>
     </Box>
+    </>
   );
 };
 
