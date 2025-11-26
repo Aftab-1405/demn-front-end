@@ -70,6 +70,8 @@ export const usersAPI = {
   getUserProfile: (username) => api.get(`/users/${username}`),
   getUserPosts: (username, page = 1) => api.get(`/users/${username}/posts?page=${page}`),
   getUserReels: (username, page = 1) => api.get(`/users/${username}/reels?page=${page}`),
+  // TODO: Not currently used, but will be implemented for user search/discovery features
+  // Backend endpoint exists and is ready to use
   searchUsers: (query) => api.get(`/users/search?q=${query}`),
   aiSearchPosts: (username, query) => api.post(`/users/${username}/ai-search`, { query }),
   uploadProfilePicture: (formData) => {
