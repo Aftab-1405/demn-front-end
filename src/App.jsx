@@ -15,6 +15,7 @@ import CreateReel from './pages/CreateReel';
 import FactCheckDashboard from './pages/FactCheckDashboard';
 import Analytics from './pages/Analytics';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import PlatformStats from './pages/PlatformStats';
 
 // Components
 import Navbar from './components/Navbar';
@@ -82,6 +83,7 @@ function AppRoutes() {
           }
         />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/stats" element={<PlatformStats />} />
 
         {/* Protected Routes */}
         <Route

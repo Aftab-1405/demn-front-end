@@ -15,6 +15,7 @@ import {
   Security as SecurityIcon,
   Verified as VerifiedIcon,
   AutoAwesome as AutoAwesomeIcon,
+  BarChart as BarChartIcon,
 } from '@mui/icons-material';
 
 // Advanced Platform Purpose Animations
@@ -433,6 +434,7 @@ const Home = () => {
               marginTop: { xs: 1.25, md: 1.25 },
               flexWrap: 'wrap',
               justifyContent: { xs: 'center', md: 'flex-start' },
+              gap: 1.25,
             }}
           >
             <Button
@@ -472,6 +474,22 @@ const Home = () => {
               }}
             >
               Login
+            </Button>
+            <Button
+              component={Link}
+              to="/stats"
+              variant="outlined"
+              color="secondary"
+              size="large"
+              startIcon={<BarChartIcon />}
+              sx={{
+                padding: { xs: '10px 20px', sm: '9px 18px', md: '10px 20px' },
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            >
+              Platform Stats
             </Button>
           </Stack>
         </Stack>

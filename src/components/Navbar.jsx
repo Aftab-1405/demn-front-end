@@ -30,6 +30,7 @@ import {
   LightMode as LightModeIcon,
   DarkMode as DarkModeIcon,
   Edit as EditIcon,
+  BarChart as BarChartIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -474,6 +475,37 @@ const Navbar = () => {
             )}
             <ListItem
               button
+              component={Link}
+              to="/stats"
+              onClick={handleDrawerClose}
+              sx={{
+                borderRadius: 2,
+                mb: 1,
+                cursor: 'pointer',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                  transform: 'translateX(4px)',
+                  boxShadow: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? '0 2px 8px rgba(0, 0, 0, 0.3)'
+                      : '0 2px 8px rgba(0, 0, 0, 0.1)',
+                  '& .MuiListItemIcon-root': {
+                    transform: 'scale(1.1)',
+                  },
+                },
+                '&:active': {
+                  transform: 'translateX(2px)',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ transition: 'transform 0.2s ease' }}>
+                <BarChartIcon color="secondary" />
+              </ListItemIcon>
+              <ListItemText primary="Platform Stats" />
+            </ListItem>
+            <ListItem
+              button
               onClick={handleThemeToggle}
               sx={{
                 borderRadius: 2,
@@ -483,9 +515,9 @@ const Navbar = () => {
                 '&:hover': {
                   bgcolor: 'action.hover',
                   transform: 'translateX(4px)',
-                  boxShadow: (theme) => 
-                    theme.palette.mode === 'dark' 
-                      ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
+                  boxShadow: (theme) =>
+                    theme.palette.mode === 'dark'
+                      ? '0 2px 8px rgba(0, 0, 0, 0.3)'
                       : '0 2px 8px rgba(0, 0, 0, 0.1)',
                   '& .MuiListItemIcon-root': {
                     transform: 'scale(1.1)',
