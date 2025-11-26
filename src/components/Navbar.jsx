@@ -477,7 +477,7 @@ const Navbar = () => {
               button
               component={Link}
               to="/stats"
-              onClick={handleDrawerClose}
+              onClick={handleSettingsClose}
               sx={{
                 borderRadius: 2,
                 mb: 1,
