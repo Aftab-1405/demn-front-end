@@ -64,11 +64,13 @@ const TrendingContent = () => {
 
   /**
    * TrendingCard - Display single trending item
+   * API Response: { type, video_url, image_url, thumbnail_url, caption, author, engagement, ... }
    */
   const TrendingCard = ({ item }) => {
     const isReel = item.type === 'reel';
-    const mediaUrl = isReel ? item.media?.thumbnail_url : item.media?.url;
-    const contentText = isReel ? item.description : item.text;
+    // Get media URL based on content type (reels have thumbnail_url or video_url, posts have image_url)
+    const mediaUrl = isReel ? (item.thumbnail_url || item.video_url) : item.image_url;
+    const contentText = item.caption;
 
     return (
       <Card
@@ -120,11 +122,11 @@ const TrendingContent = () => {
           {/* Author Info */}
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
             <Avatar
-              src={item.author?.avatar_url}
-              alt={item.author?.name}
+              src={item.author?.profile_picture}
+              alt={item.author?.full_name}
               sx={{ width: 40, height: 40 }}
             >
-              {item.author?.name?.charAt(0).toUpperCase()}
+              {item.author?.full_name?.charAt(0).toUpperCase()}
             </Avatar>
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               <Stack direction="row" spacing={0.5} alignItems="center">
@@ -134,7 +136,7 @@ const TrendingContent = () => {
                   noWrap
                   sx={{ maxWidth: '100%' }}
                 >
-                  {item.author?.name}
+                  {item.author?.full_name}
                 </Typography>
                 {item.author?.is_verified && (
                   <VerifiedIcon sx={{ fontSize: 16, color: 'info.main' }} />
@@ -175,25 +177,19 @@ const TrendingContent = () => {
             <Stack direction="row" spacing={0.5} alignItems="center">
               <FavoriteIcon sx={{ fontSize: 18, color: 'error.main' }} />
               <Typography variant="caption" fontWeight={600}>
-                {item.engagement?.likes?.toLocaleString() ?? 0}
+                {item.likes?.toLocaleString() ?? 0}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <CommentIcon sx={{ fontSize: 18, color: 'primary.main' }} />
               <Typography variant="caption" fontWeight={600}>
-                {item.engagement?.comments?.toLocaleString() ?? 0}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <ShareIcon sx={{ fontSize: 18, color: 'success.main' }} />
-              <Typography variant="caption" fontWeight={600}>
-                {item.engagement?.shares?.toLocaleString() ?? 0}
+                {item.comments?.toLocaleString() ?? 0}
               </Typography>
             </Stack>
             <Box sx={{ flexGrow: 1 }} />
             <Chip
               icon={<TrendingUpIcon />}
-              label={item.engagement?.score?.toFixed(1) ?? 'N/A'}
+              label={item.engagement?.toFixed(1) ?? 'N/A'}
               size="small"
               color="warning"
               sx={{ fontWeight: 700 }}

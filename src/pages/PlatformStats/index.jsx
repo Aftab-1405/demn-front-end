@@ -238,7 +238,11 @@ const PlatformStats = () => {
     );
   }
 
-  const { totals, verification_stats, snapshot_24h } = platformStats || {};
+  // Extract data from actual API response format
+  const platformData = platformStats?.platform_stats || {};
+  const totals = platformData.totals || {};
+  const verification_stats = platformData.verification || {};
+  const snapshot_24h = platformData.recent_24h || {};
 
   return (
     <>
