@@ -29,6 +29,7 @@ import {
   Home as HomeIcon,
   Login as LoginIcon,
   PersonAdd as PersonAddIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
 } from '@mui/icons-material';
 import { publicAnalyticsAPI } from '../../services/publicAnalytics';
 import TrendingContent from './components/TrendingContent';
@@ -59,6 +60,11 @@ const orbit = keyframes`
   0% { transform: translate3d(-40px, -20px, 0) scale(1); opacity: 0.6; }
   50% { transform: translate3d(40px, 20px, 0) scale(1.1); opacity: 1; }
   100% { transform: translate3d(-40px, -20px, 0) scale(1); opacity: 0.6; }
+`;
+
+const bounce = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
 `;
 
 /**
@@ -129,6 +135,9 @@ const useCountUp = (end, duration = 2000, trigger = true) => {
  * PlatformStats - Public marketing/landing page with analytics
  */
 const PlatformStats = () => {
+  const [currentSection, setCurrentSection] = useState(0);
+  const scrollContainerRef = useRef(null);
+
   // Fetch platform stats
   const {
     data: platformStats,
@@ -145,6 +154,16 @@ const PlatformStats = () => {
       return failureCount < 2;
     },
   });
+
+  // Section navigation
+  const sections = ['Hero', 'Trending', 'Fact-Check', 'Get Started'];
+
+  const scrollToSection = (index) => {
+    if (scrollContainerRef.current) {
+      const section = scrollContainerRef.current.children[index];
+      section?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   /**
    * Animated Stat Card with count-up (scroll-triggered)
@@ -425,19 +444,81 @@ const PlatformStats = () => {
     <>
       <PublicNavBar />
 
-      {/* Hero Section with Animated Gradient Background */}
+      {/* Section Navigation Dots */}
       <Box
-        ref={heroRef}
         sx={{
-          background: (theme) =>
-            `radial-gradient(circle at top, ${alpha(theme.palette.primary.main, 0.15)} 0, transparent 55%),
-             radial-gradient(circle at bottom, ${alpha(theme.palette.secondary.main, 0.1)} 0, transparent 60%)`,
-          pt: { xs: 4, md: 6 },
-          pb: { xs: 5, md: 6 },
-          position: 'relative',
-          overflow: 'hidden',
+          position: 'fixed',
+          right: { xs: 16, md: 32 },
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 1000,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
         }}
       >
+        {sections.map((section, index) => (
+          <Box
+            key={section}
+            onClick={() => scrollToSection(index)}
+            sx={{
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              bgcolor: currentSection === index ? 'primary.main' : 'action.disabled',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.3)',
+                bgcolor: currentSection === index ? 'primary.dark' : 'action.active',
+              },
+            }}
+            title={section}
+          />
+        ))}
+      </Box>
+
+      {/* Main scroll container with snap behavior */}
+      <Box
+        ref={scrollContainerRef}
+        sx={{
+          height: 'calc(100vh - 64px)', // Subtract navbar height
+          overflowY: 'scroll',
+          scrollSnapType: 'y mandatory',
+          scrollBehavior: 'smooth',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            bgcolor: 'background.default',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            bgcolor: 'primary.main',
+            borderRadius: '4px',
+            '&:hover': {
+              bgcolor: 'primary.dark',
+            },
+          },
+        }}
+      >
+        {/* Hero Section with Animated Gradient Background */}
+        <Box
+          ref={heroRef}
+          sx={{
+            minHeight: '100vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            background: (theme) =>
+              `radial-gradient(circle at top, ${alpha(theme.palette.primary.main, 0.15)} 0, transparent 55%),
+               radial-gradient(circle at bottom, ${alpha(theme.palette.secondary.main, 0.1)} 0, transparent 60%)`,
+            pt: { xs: 4, md: 6 },
+            pb: { xs: 5, md: 6 },
+            position: 'relative',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
         <Container maxWidth="lg">
           {/* Centered Hero */}
           <Box
@@ -544,6 +625,31 @@ const PlatformStats = () => {
             <Typography variant="caption" color="text.secondary">
               No credit card required · AI-powered verification
             </Typography>
+          </Box>
+
+          {/* Scroll Down Indicator */}
+          <Box
+            onClick={() => scrollToSection(1)}
+            sx={{
+              position: 'absolute',
+              bottom: 32,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              cursor: 'pointer',
+              animation: `${bounce} 2s ease-in-out infinite`,
+              opacity: 0.7,
+              transition: 'opacity 0.3s ease',
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+          >
+            <Stack alignItems="center" spacing={0.5}>
+              <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                Scroll to explore
+              </Typography>
+              <KeyboardArrowDownIcon sx={{ color: 'primary.main', fontSize: 32 }} />
+            </Stack>
           </Box>
 
           {/* Platform Totals - Centered Grid */}
@@ -705,38 +811,54 @@ const PlatformStats = () => {
             </CardContent>
           </Card>
         </Container>
-      </Box>
+        </Box>
 
-      {/* Trending Content Section (now feels like a marketing "reels" wall) */}
-      <Box
-        sx={{
-          background: (theme) =>
-            theme.palette.mode === 'dark'
-              ? alpha(theme.palette.background.paper, 0.8)
-              : alpha(theme.palette.background.default, 0.98),
-        }}
-      >
-        <Container maxWidth="xl" sx={{ py: 8 }}>
-          <TrendingContent />
-        </Container>
-      </Box>
+        {/* Trending Content Section */}
+        <Box
+          sx={{
+            minHeight: '100vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            background: (theme) =>
+              theme.palette.mode === 'dark'
+                ? alpha(theme.palette.background.paper, 0.8)
+                : alpha(theme.palette.background.default, 0.98),
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Container maxWidth="xl" sx={{ py: 6, width: '100%' }}>
+            <TrendingContent />
+          </Container>
+        </Box>
 
-      <Divider sx={{ my: 0 }} />
+        {/* Fact-Check Statistics Section */}
+        <Box
+          sx={{
+            minHeight: '100vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Container maxWidth="xl" sx={{ py: 6, width: '100%' }}>
+            <FactCheckCharts />
+          </Container>
+        </Box>
 
-      {/* Fact-Check Statistics */}
-      <Container maxWidth="xl" sx={{ py: 8 }}>
-        <FactCheckCharts />
-      </Container>
-
-      {/* CTA Section */}
-      <Box
-        sx={{
-          background: (theme) =>
-            `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-          py: { xs: 5, md: 6 },
-          mt: 4,
-        }}
-      >
+        {/* CTA Section */}
+        <Box
+          sx={{
+            minHeight: '100vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            background: (theme) =>
+              `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center', color: 'white' }}>
             <Typography variant="h4" fontWeight={800} gutterBottom>
@@ -779,6 +901,7 @@ const PlatformStats = () => {
             </Stack>
           </Box>
         </Container>
+        </Box>
       </Box>
     </>
   );
