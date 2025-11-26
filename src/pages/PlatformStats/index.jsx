@@ -155,6 +155,10 @@ const PlatformStats = () => {
     },
   });
 
+  // IMPORTANT: Call ALL hooks before any conditional returns
+  const [heroRef, heroInView] = useIntersectionObserver({ threshold: 0.1 });
+  const [activity24hRef, activity24hInView] = useIntersectionObserver({ threshold: 0.2 });
+
   // Section navigation
   const sections = ['Hero', 'Trending', 'Fact-Check', 'Get Started'];
 
@@ -435,10 +439,6 @@ const PlatformStats = () => {
   const totals = platformData.totals || {};
   const verification_stats = platformData.verification || {};
   const snapshot_24h = platformData.recent_24h || {};
-
-  // Refs for scroll-triggered sections
-  const [heroRef, heroInView] = useIntersectionObserver({ threshold: 0.1 });
-  const [activity24hRef, activity24hInView] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
     <>
