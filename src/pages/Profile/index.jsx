@@ -79,10 +79,7 @@ const Profile = () => {
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
   const [searchError, setSearchError] = useState('');
-  const [aiNarration, setAiNarration] = useState('');
-  const [, setResultDetails] = useState(null);
-  const [typingComplete, setTypingComplete] = useState(false);
-  const [isDismissing, setIsDismissing] = useState(false);
+  const [searchMetadata, setSearchMetadata] = useState(null);
 
   const isOwnProfile = currentUser?.username === username;
 
@@ -205,29 +202,6 @@ const Profile = () => {
     return () => window.removeEventListener('content-processing-complete', handleContentComplete);
   }, [queryClient, username]);
 
-  // Auto-dismiss AI response after 15 seconds of typing completion
-  useEffect(() => {
-    if (typingComplete && aiNarration && searchResults !== null) {
-      const timer = setTimeout(() => {
-        // Show dismiss message
-        showSnackbar('Enjoy your content 🤗', 'success', { duration: 3000 });
-        
-        // Start fade-out animation
-        setIsDismissing(true);
-        
-        // Clear AI response after fade-out animation
-        setTimeout(() => {
-          setAiNarration('');
-          setSearchResults(null);
-          setResultDetails(null);
-          setTypingComplete(false);
-          setIsDismissing(false);
-        }, 500);
-      }, 15000); // 15 seconds after typing completes
-
-      return () => clearTimeout(timer);
-    }
-  }, [typingComplete, aiNarration, searchResults, showSnackbar]);
 
   // --- HANDLERS ---
 
@@ -294,13 +268,22 @@ const Profile = () => {
     setSearching(true);
     setSearchError('');
     setSearchResults(null);
+    setSearchMetadata(null);
 
     try {
       const response = await usersAPI.aiSearchPosts(username, searchQuery);
-      setSearchResults(response.data.results);
-      setAiNarration(response.data.narration || '');
-      setResultDetails(response.data.result_details || null);
-      setTypingComplete(false);
+
+      // New backend response format: structured JSON with real post/reel data
+      // Response includes: results, search_method, structured_filters, semantic_query_used, optimization_stats
+      setSearchResults(response.data.results || []);
+
+      // Store search metadata for optional display
+      setSearchMetadata({
+        search_method: response.data.search_method,
+        structured_filters: response.data.structured_filters,
+        semantic_query_used: response.data.semantic_query_used,
+        optimization_stats: response.data.optimization_stats,
+      });
     } catch (err) {
       console.error('AI Search failed:', err);
       setSearchError(err.response?.data?.error || 'Failed to search.');
@@ -313,9 +296,7 @@ const Profile = () => {
     setSearchQuery('');
     setSearchResults(null);
     setSearchError('');
-    setAiNarration('');
-    setResultDetails(null);
-    setTypingComplete(false);
+    setSearchMetadata(null);
   };
 
   // Settings handlers
@@ -349,11 +330,11 @@ const Profile = () => {
     }
   `;
 
-  // Memoize content to prevent unnecessary re-renders while typing
+  // Memoize content to prevent unnecessary re-renders
   // IMPORTANT: All hooks must be called before any conditional returns
   const showResults = useMemo(() => {
-    return searchResults !== null ? (aiNarration ? typingComplete : true) : false;
-  }, [searchResults, aiNarration, typingComplete]);
+    return searchResults !== null && searchResults.length > 0;
+  }, [searchResults]);
   
   const content = useMemo(() => {
     return showResults ? searchResults : (activeTab === 'posts' ? posts : reels);
@@ -434,12 +415,10 @@ const Profile = () => {
           searching={searching}
           searchError={searchError}
           searchResults={searchResults}
-          aiNarration={aiNarration}
-          isDismissing={isDismissing}
-          typingComplete={typingComplete}
+          searchMetadata={searchMetadata}
           onSearchChange={(e) => setSearchQuery(e.target.value)}
           onSearchSubmit={handleAISearch}
-          onTypingComplete={() => setTypingComplete(true)}
+          onClearSearch={handleClearSearch}
         />
       )}
 

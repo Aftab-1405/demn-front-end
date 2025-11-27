@@ -8,25 +8,65 @@ import {
   Tooltip,
   CircularProgress,
   Alert,
+  Typography,
+  Chip,
+  Stack,
 } from '@mui/material';
 import {
   Search as SearchIcon,
+  Clear as ClearIcon,
+  VerifiedUser as VerifiedIcon,
+  Warning as WarningIcon,
+  Error as ErrorIcon,
+  HelpOutline as UnknownIcon,
 } from '@mui/icons-material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import TypeWriter from '../../../components/TypeWriter';
+
+// Verification status configuration
+const VERIFICATION_STATUS = {
+  verified: {
+    label: 'Verified',
+    icon: VerifiedIcon,
+    color: 'success',
+  },
+  fake: {
+    label: 'Fake',
+    icon: ErrorIcon,
+    color: 'error',
+  },
+  misleading: {
+    label: 'Misleading',
+    icon: WarningIcon,
+    color: 'warning',
+  },
+  unverified: {
+    label: 'Unverified',
+    icon: UnknownIcon,
+    color: 'default',
+  },
+};
 
 const AISearchSection = ({
   searchQuery,
   searching,
   searchError,
   searchResults,
-  aiNarration,
-  isDismissing,
-  typingComplete,
+  searchMetadata,
   onSearchChange,
   onSearchSubmit,
-  onTypingComplete,
+  onClearSearch,
 }) => {
+  // Get verification badge configuration
+  const getVerificationConfig = (status) => {
+    return VERIFICATION_STATUS[status] || VERIFICATION_STATUS.unverified;
+  };
+
+  // Format similarity score as percentage
+  const formatSimilarity = (score) => {
+    if (!score) return 'N/A';
+    return `${Math.round(score * 100)}%`;
+  };
+
   return (
     <Box
       sx={{
@@ -87,59 +127,80 @@ const AISearchSection = ({
                 ),
                 endAdornment: (
                   <InputAdornment position="end" sx={{ marginRight: 0.5 }}>
-                    <Tooltip
-                      title={searching ? 'Searching with AI...' : 'Search with AI'}
-                      arrow
-                      placement="top"
-                    >
-                      <span>
-                        <IconButton
-                          type="submit"
-                          disabled={searching || !searchQuery.trim()}
-                          sx={{
-                            bgcolor: 'primary.main',
-                            color: 'primary.contrastText',
-                            width: 32,
-                            height: 32,
-                            minWidth: 32,
-                            borderRadius: '50%',
-                            boxShadow: (theme) =>
-                              `0 2px 6px ${theme.palette.primary.main}40`,
-                            '&:hover': {
-                              bgcolor: 'primary.dark',
-                              transform: 'scale(1.05)',
+                    <Stack direction="row" spacing={0.5}>
+                      {searchQuery && (
+                        <Tooltip title="Clear search" arrow placement="top">
+                          <IconButton
+                            onClick={onClearSearch}
+                            size="small"
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              color: 'text.secondary',
+                              '&:hover': {
+                                bgcolor: 'error.main',
+                                color: 'error.contrastText',
+                              },
+                            }}
+                          >
+                            <ClearIcon sx={{ fontSize: 16 }} />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      <Tooltip
+                        title={searching ? 'Searching with AI...' : 'Search with AI'}
+                        arrow
+                        placement="top"
+                      >
+                        <span>
+                          <IconButton
+                            type="submit"
+                            disabled={searching || !searchQuery.trim()}
+                            sx={{
+                              bgcolor: 'primary.main',
+                              color: 'primary.contrastText',
+                              width: 32,
+                              height: 32,
+                              minWidth: 32,
+                              borderRadius: '50%',
                               boxShadow: (theme) =>
-                                `0 3px 10px ${theme.palette.primary.main}50`,
-                            },
-                            '&:active': {
-                              transform: 'scale(0.95)',
-                            },
-                            '&:disabled': {
-                              bgcolor: 'action.disabledBackground',
-                              color: 'action.disabled',
-                              boxShadow: 'none',
-                              opacity: 0.6,
-                            },
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                          }}
-                        >
-                          {searching ? (
-                            <CircularProgress
-                              size={14}
-                              sx={{
-                                color: 'inherit',
-                              }}
-                            />
-                          ) : (
-                            <AutoAwesomeIcon
-                              sx={{
-                                fontSize: 16,
-                              }}
-                            />
-                          )}
-                        </IconButton>
-                      </span>
-                    </Tooltip>
+                                `0 2px 6px ${theme.palette.primary.main}40`,
+                              '&:hover': {
+                                bgcolor: 'primary.dark',
+                                transform: 'scale(1.05)',
+                                boxShadow: (theme) =>
+                                  `0 3px 10px ${theme.palette.primary.main}50`,
+                              },
+                              '&:active': {
+                                transform: 'scale(0.95)',
+                              },
+                              '&:disabled': {
+                                bgcolor: 'action.disabledBackground',
+                                color: 'action.disabled',
+                                boxShadow: 'none',
+                                opacity: 0.6,
+                              },
+                              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                            }}
+                          >
+                            {searching ? (
+                              <CircularProgress
+                                size={14}
+                                sx={{
+                                  color: 'inherit',
+                                }}
+                              />
+                            ) : (
+                              <AutoAwesomeIcon
+                                sx={{
+                                  fontSize: 16,
+                                }}
+                              />
+                            )}
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </Stack>
                   </InputAdornment>
                 ),
               }}
@@ -175,46 +236,182 @@ const AISearchSection = ({
           </Alert>
         )}
 
-        {searchResults !== null && aiNarration && (
-          <Card
+        {/* Search Results Summary */}
+        {searchResults && searchResults.length > 0 && (
+          <Box
             sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              gap: { xs: 1, sm: 2 },
-              alignItems: 'flex-start',
+              marginTop: 1.5,
               padding: 1.5,
-              marginTop: 1.25,
               bgcolor: 'background.default',
+              borderRadius: '9px',
               border: 1,
               borderColor: 'divider',
-              borderRadius: '9px',
-              boxShadow: 1,
-              opacity: isDismissing ? 0 : 1,
-              transform: isDismissing ? 'translateY(-10px)' : 'translateY(0)',
-              transition: 'all 0.5s ease-out',
-              pointerEvents: isDismissing ? 'none' : 'auto',
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 1.125,
-                alignItems: 'flex-start',
-                flex: { xs: '1 1 100%', sm: '1 1 auto' },
-              }}
-            >
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ marginBottom: 1.5 }}>
               <AutoAwesomeIcon
                 sx={{
-                  flexShrink: 0,
-                  marginTop: 0.5,
-                  width: 18,
-                  height: 18,
+                  fontSize: 18,
                   color: 'primary.main',
                 }}
               />
-              <TypeWriter text={aiNarration} onComplete={onTypingComplete} />
-            </Box>
-          </Card>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: 'text.primary',
+                }}
+              >
+                Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
+              </Typography>
+            </Stack>
+
+            {/* Search Metadata (optional) */}
+            {searchMetadata && (
+              <Stack direction="row" spacing={1} sx={{ marginBottom: 1.5, flexWrap: 'wrap' }}>
+                {searchMetadata.search_method && (
+                  <Chip
+                    label={`Method: ${searchMetadata.search_method}`}
+                    size="small"
+                    variant="outlined"
+                    sx={{ fontSize: '0.7rem' }}
+                  />
+                )}
+                {searchMetadata.semantic_query_used && (
+                  <Chip
+                    label="Semantic Search"
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    sx={{ fontSize: '0.7rem' }}
+                  />
+                )}
+              </Stack>
+            )}
+
+            {/* Result Cards */}
+            <Stack spacing={1.25}>
+              {searchResults.map((result, index) => {
+                const verificationConfig = getVerificationConfig(result.verification_status);
+                const VerificationIcon = verificationConfig.icon;
+
+                return (
+                  <Card
+                    key={result.id || index}
+                    sx={{
+                      padding: 1.5,
+                      bgcolor: 'background.paper',
+                      border: 1,
+                      borderColor: 'divider',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        borderColor: 'primary.main',
+                        boxShadow: (theme) =>
+                          `0 2px 8px ${theme.palette.primary.main}20`,
+                      },
+                    }}
+                  >
+                    {/* Result Header: Verification Status & Similarity Score */}
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ marginBottom: 1 }}
+                    >
+                      <Chip
+                        icon={<VerificationIcon />}
+                        label={verificationConfig.label}
+                        color={verificationConfig.color}
+                        size="small"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: '0.75rem',
+                        }}
+                      />
+                      {result.similarity_score && (
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: 'text.secondary',
+                            fontWeight: 500,
+                            fontSize: '0.75rem',
+                          }}
+                        >
+                          Match: {formatSimilarity(result.similarity_score)}
+                        </Typography>
+                      )}
+                    </Stack>
+
+                    {/* Caption */}
+                    {result.caption && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: 'text.primary',
+                          marginBottom: 1,
+                          fontSize: '0.875rem',
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {result.caption}
+                      </Typography>
+                    )}
+
+                    {/* Fact-Check Snippet */}
+                    {result.fact_check_snippet && (
+                      <Box
+                        sx={{
+                          padding: 1,
+                          bgcolor: 'action.hover',
+                          borderRadius: '6px',
+                          borderLeft: 3,
+                          borderColor: 'primary.main',
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: 'text.secondary',
+                            fontSize: '0.75rem',
+                            fontStyle: 'italic',
+                            display: 'block',
+                          }}
+                        >
+                          {result.fact_check_snippet}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Card>
+                );
+              })}
+            </Stack>
+          </Box>
+        )}
+
+        {/* No Results */}
+        {searchResults && searchResults.length === 0 && (
+          <Box
+            sx={{
+              marginTop: 1.5,
+              padding: 2,
+              textAlign: 'center',
+              bgcolor: 'background.default',
+              borderRadius: '9px',
+              border: 1,
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
+                fontSize: '0.875rem',
+              }}
+            >
+              No results found for "{searchQuery}"
+            </Typography>
+          </Box>
         )}
       </Card>
     </Box>
@@ -225,13 +422,24 @@ AISearchSection.propTypes = {
   searchQuery: PropTypes.string.isRequired,
   searching: PropTypes.bool.isRequired,
   searchError: PropTypes.string.isRequired,
-  searchResults: PropTypes.any,
-  aiNarration: PropTypes.string.isRequired,
-  isDismissing: PropTypes.bool.isRequired,
-  typingComplete: PropTypes.bool.isRequired,
+  searchResults: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      caption: PropTypes.string,
+      verification_status: PropTypes.string,
+      fact_check_snippet: PropTypes.string,
+      similarity_score: PropTypes.number,
+    })
+  ),
+  searchMetadata: PropTypes.shape({
+    search_method: PropTypes.string,
+    structured_filters: PropTypes.object,
+    semantic_query_used: PropTypes.bool,
+    optimization_stats: PropTypes.object,
+  }),
   onSearchChange: PropTypes.func.isRequired,
   onSearchSubmit: PropTypes.func.isRequired,
-  onTypingComplete: PropTypes.func.isRequired,
+  onClearSearch: PropTypes.func.isRequired,
 };
 
 export default AISearchSection;
