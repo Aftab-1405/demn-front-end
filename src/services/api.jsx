@@ -109,7 +109,6 @@ export const postsAPI = {
   getComments: (postId, page = 1) => api.get(`/posts/${postId}/comments?page=${page}`),
   deleteComment: (commentId) => api.delete(`/posts/comments/${commentId}`),
   getCommentSuggestions: (postId) => api.get(`/posts/${postId}/comment-suggestions`),
-  getProcessingStatus: (postId) => api.get(`/posts/${postId}/processing-status`),
 };
 
 // Reels API
@@ -138,7 +137,6 @@ export const reelsAPI = {
   getComments: (reelId, page = 1) => api.get(`/reels/${reelId}/comments?page=${page}`),
   deleteComment: (commentId) => api.delete(`/reels/comments/${commentId}`),
   getCommentSuggestions: (reelId) => api.get(`/reels/${reelId}/comment-suggestions`),
-  getProcessingStatus: (reelId) => api.get(`/reels/${reelId}/processing-status`),
 };
 
 // Social API

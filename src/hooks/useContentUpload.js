@@ -9,7 +9,7 @@ import { compressImage } from '../utils/imageCompression';
  * Consolidates all pre-processing and upload logic
  * 
  * @param {string} contentType - 'post' or 'reel'
- * @param {object} api - API methods { create, getProcessingStatus }
+ * @param {object} api - API methods { create }
  * @param {object} config - Configuration { maxBytes, allowedExt, contentField, contentType }
  */
 export const useContentUpload = (contentType, api, config) => {
