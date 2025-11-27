@@ -15,36 +15,8 @@ import {
 import {
   Search as SearchIcon,
   Clear as ClearIcon,
-  VerifiedUser as VerifiedIcon,
-  Warning as WarningIcon,
-  Error as ErrorIcon,
-  HelpOutline as UnknownIcon,
 } from '@mui/icons-material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-
-// Verification status configuration
-const VERIFICATION_STATUS = {
-  verified: {
-    label: 'Verified',
-    icon: VerifiedIcon,
-    color: 'success',
-  },
-  fake: {
-    label: 'Fake',
-    icon: ErrorIcon,
-    color: 'error',
-  },
-  misleading: {
-    label: 'Misleading',
-    icon: WarningIcon,
-    color: 'warning',
-  },
-  unverified: {
-    label: 'Unverified',
-    icon: UnknownIcon,
-    color: 'default',
-  },
-};
 
 const AISearchSection = ({
   searchQuery,
@@ -56,17 +28,6 @@ const AISearchSection = ({
   onSearchSubmit,
   onClearSearch,
 }) => {
-  // Get verification badge configuration
-  const getVerificationConfig = (status) => {
-    return VERIFICATION_STATUS[status] || VERIFICATION_STATUS.unverified;
-  };
-
-  // Format similarity score as percentage
-  const formatSimilarity = (score) => {
-    if (!score) return 'N/A';
-    return `${Math.round(score * 100)}%`;
-  };
-
   return (
     <Box
       sx={{
@@ -236,19 +197,20 @@ const AISearchSection = ({
           </Alert>
         )}
 
-        {/* Search Results Summary */}
+        {/* Compact Search Results Summary */}
         {searchResults && searchResults.length > 0 && (
           <Box
             sx={{
               marginTop: 1.5,
-              padding: 1.5,
+              padding: 1.25,
               bgcolor: 'background.default',
               borderRadius: '9px',
               border: 1,
-              borderColor: 'divider',
+              borderColor: 'primary.main',
+              borderLeftWidth: 3,
             }}
           >
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ marginBottom: 1.5 }}>
+            <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap">
               <AutoAwesomeIcon
                 sx={{
                   fontSize: 18,
@@ -260,141 +222,47 @@ const AISearchSection = ({
                 sx={{
                   fontWeight: 600,
                   color: 'text.primary',
+                  fontSize: '0.875rem',
                 }}
               >
                 Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
               </Typography>
-            </Stack>
 
-            {/* Search Metadata (optional) */}
-            {searchMetadata && (
-              <Stack direction="row" spacing={1} sx={{ marginBottom: 1.5, flexWrap: 'wrap' }}>
-                {searchMetadata.search_method && (
-                  <Chip
-                    label={`Method: ${searchMetadata.search_method}`}
-                    size="small"
-                    variant="outlined"
-                    sx={{ fontSize: '0.7rem' }}
-                  />
-                )}
-                {searchMetadata.semantic_query_used && (
-                  <Chip
-                    label="Semantic Search"
-                    size="small"
-                    color="primary"
-                    variant="outlined"
-                    sx={{ fontSize: '0.7rem' }}
-                  />
-                )}
-              </Stack>
-            )}
-
-            {/* Result Cards */}
-            <Stack spacing={1.25}>
-              {searchResults.map((result, index) => {
-                const verificationConfig = getVerificationConfig(result.verification_status);
-                const VerificationIcon = verificationConfig.icon;
-
-                return (
-                  <Card
-                    key={result.id || index}
-                    sx={{
-                      padding: 1.5,
-                      bgcolor: 'background.paper',
-                      border: 1,
-                      borderColor: 'divider',
-                      borderRadius: '8px',
-                      transition: 'all 0.2s ease',
-                      '&:hover': {
-                        borderColor: 'primary.main',
-                        boxShadow: (theme) =>
-                          `0 2px 8px ${theme.palette.primary.main}20`,
-                      },
-                    }}
-                  >
-                    {/* Result Header: Verification Status & Similarity Score */}
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      sx={{ marginBottom: 1 }}
-                    >
-                      <Chip
-                        icon={<VerificationIcon />}
-                        label={verificationConfig.label}
-                        color={verificationConfig.color}
-                        size="small"
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: '0.75rem',
-                        }}
-                      />
-                      {result.similarity_score && (
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: 'text.secondary',
-                            fontWeight: 500,
-                            fontSize: '0.75rem',
-                          }}
-                        >
-                          Match: {formatSimilarity(result.similarity_score)}
-                        </Typography>
-                      )}
-                    </Stack>
-
-                    {/* Caption */}
-                    {result.caption && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: 'text.primary',
-                          marginBottom: 1,
-                          fontSize: '0.875rem',
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        {result.caption}
-                      </Typography>
-                    )}
-
-                    {/* Fact-Check Snippet */}
-                    {result.fact_check_snippet && (
-                      <Box
-                        sx={{
-                          padding: 1,
-                          bgcolor: 'action.hover',
-                          borderRadius: '6px',
-                          borderLeft: 3,
-                          borderColor: 'primary.main',
-                        }}
-                      >
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: 'text.secondary',
-                            fontSize: '0.75rem',
-                            fontStyle: 'italic',
-                            display: 'block',
-                          }}
-                        >
-                          {result.fact_check_snippet}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Card>
-                );
-              })}
+              {/* Search Metadata Chips */}
+              {searchMetadata?.search_method && (
+                <Chip
+                  label={searchMetadata.search_method}
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  sx={{
+                    fontSize: '0.7rem',
+                    height: 22,
+                  }}
+                />
+              )}
+              {searchMetadata?.semantic_query_used && (
+                <Chip
+                  icon={<AutoAwesomeIcon sx={{ fontSize: 12 }} />}
+                  label="Semantic"
+                  size="small"
+                  color="primary"
+                  sx={{
+                    fontSize: '0.7rem',
+                    height: 22,
+                  }}
+                />
+              )}
             </Stack>
           </Box>
         )}
 
-        {/* No Results */}
+        {/* No Results Message */}
         {searchResults && searchResults.length === 0 && (
           <Box
             sx={{
               marginTop: 1.5,
-              padding: 2,
+              padding: 1.5,
               textAlign: 'center',
               bgcolor: 'background.default',
               borderRadius: '9px',
@@ -426,7 +294,7 @@ AISearchSection.propTypes = {
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       caption: PropTypes.string,
-      verification_status: PropTypes.string,
+      verification_status: PropTypes.oneOf(['verified', 'disputed', 'pending', 'unverified']),
       fact_check_snippet: PropTypes.string,
       similarity_score: PropTypes.number,
     })
