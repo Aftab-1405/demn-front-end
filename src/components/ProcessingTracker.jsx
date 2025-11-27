@@ -156,27 +156,6 @@ const TrackerCard = React.memo(({ progress, message, step, processing_status }) 
         )}
       </Box>
 
-      {/* Progress Bar */}
-      <Box
-        sx={{
-          height: 6,
-          bgcolor: 'action.hover',
-          borderRadius: 3,
-          overflow: 'hidden',
-          mb: 2,
-        }}
-      >
-        <Box
-          sx={{
-            height: '100%',
-            width: `${progress}%`,
-            bgcolor: currentStepInfo.color === 'error' ? 'error.main' : 'primary.main',
-            transition: 'width 0.5s ease-out',
-            borderRadius: 3,
-          }}
-        />
-      </Box>
-
       {/* Step Indicators */}
       <Box
         sx={{

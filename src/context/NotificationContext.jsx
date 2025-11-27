@@ -105,6 +105,14 @@ export function NotificationProvider({ children }) {
     const contentId = postId || reelId;
     const token = localStorage.getItem('token');
 
+    console.log(`[NotificationContext] startSSE called:`, {
+      postId,
+      reelId,
+      contentType,
+      contentId,
+      hasToken: !!token
+    });
+
     if (!token) {
       console.error('[NotificationContext] No auth token found');
       return;
@@ -122,8 +130,7 @@ export function NotificationProvider({ children }) {
 
     // Update on progress
     client.on('update', (data) => {
-      console.log('[NotificationContext] SSE Update:', {
-        contentId,
+      console.log(`[NotificationContext] SSE Update for ${contentType} ${contentId}:`, {
         progress: data.progress,
         message: data.message,
         step: data.step,
@@ -131,22 +138,39 @@ export function NotificationProvider({ children }) {
         verificationStatus: data.verification_status
       });
 
-      setNotifications(prev =>
-        prev.map(notif =>
-          notif.id === contentId
-            ? {
+      setNotifications(prev => {
+        const updated = prev.map(notif => {
+          if (notif.id === contentId) {
+            console.log(`[NotificationContext] Updating notification ${contentId}:`, {
+              oldProgress: notif.progress,
+              newProgress: data.progress,
+              oldMessage: notif.message,
+              newMessage: data.message
+            });
+            return {
               ...notif,
-              progress: data.progress || notif.progress || 0,
+              progress: data.progress !== undefined ? data.progress : notif.progress || 0,
               message: data.message || notif.message,
               step: data.step || notif.step,
               processing_status: data.processing_status || notif.processing_status,
               verification_status: data.verification_status || notif.verification_status,
               reason: data.reason || notif.reason,
               violations: data.violations || notif.violations
-            }
-            : notif
-        )
-      );
+            };
+          }
+          return notif;
+        });
+
+        // Check if notification was found and updated
+        const wasUpdated = updated.some(n => n.id === contentId && n.progress === data.progress);
+        if (!wasUpdated) {
+          console.warn(`[NotificationContext] Notification ${contentId} not found in state!`, {
+            availableIds: prev.map(n => n.id)
+          });
+        }
+
+        return updated;
+      });
     });
 
     // Complete

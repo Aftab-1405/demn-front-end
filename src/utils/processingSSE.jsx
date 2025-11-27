@@ -29,7 +29,7 @@ export class ProcessingSSEClient {
     const endpoint = this.contentType === 'post' ? 'posts' : 'reels';
     const url = `${API_URL}/${endpoint}/${this.contentId}/processing-status/stream?token=${this.token}`;
 
-    console.log(`[SSE] Connecting to ${url}`);
+    console.log(`[SSE] Connecting to ${this.contentType} ${this.contentId}:`, url);
 
     this.eventSource = new EventSource(url);
 
@@ -65,9 +65,17 @@ export class ProcessingSSEClient {
     const terminalStatuses = ['complete', 'error', 'rejected'];
     const isTerminal = terminalStatuses.includes(data.processing_status);
 
+    console.log(`[SSE] ${this.contentType} ${this.contentId} - Received message:`, {
+      type: data.type,
+      processing_status: data.processing_status,
+      progress: data.progress,
+      message: data.message,
+      isTerminal
+    });
+
     // 1. Initial connection message
     if (data.type === 'connected') {
-      console.log('[SSE] Initial status:', data);
+      console.log(`[SSE] ${this.contentType} ${this.contentId} - Initial status:`, data);
 
       // [FIX] Check if it's ALREADY complete upon connection
       if (isTerminal) {
