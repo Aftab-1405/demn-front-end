@@ -127,7 +127,8 @@ export function NotificationProvider({ children }) {
         progress: data.progress,
         message: data.message,
         step: data.step,
-        status: data.processing_status
+        status: data.processing_status,
+        verificationStatus: data.verification_status
       });
 
       setNotifications(prev =>
@@ -137,7 +138,11 @@ export function NotificationProvider({ children }) {
               ...notif,
               progress: data.progress || notif.progress || 0,
               message: data.message || notif.message,
-              step: data.step
+              step: data.step || notif.step,
+              processing_status: data.processing_status || notif.processing_status,
+              verification_status: data.verification_status || notif.verification_status,
+              reason: data.reason || notif.reason,
+              violations: data.violations || notif.violations
             }
             : notif
         )
@@ -191,10 +196,17 @@ export function NotificationProvider({ children }) {
           { duration: 5000 }
         );
       } else if (data.processing_status === 'rejected') {
+        // Show rejection reason if available
+        let rejectionMessage = data.message || 'Content was rejected during moderation.';
+        if (data.reason) {
+          rejectionMessage = data.reason;
+        } else if (data.violations && data.violations.length > 0) {
+          rejectionMessage = `Violations: ${data.violations.join(', ')}`;
+        }
         showSnackbar(
-          data.message || 'Content was rejected during moderation.',
+          rejectionMessage,
           'warning',
-          { duration: 5000 }
+          { duration: 8000 }
         );
       }
 

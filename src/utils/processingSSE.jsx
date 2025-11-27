@@ -1,6 +1,6 @@
 /**
  * ProcessingSSEClient - Real-time SSE client for post/reel processing updates
- * * FIXED: Handles immediate completion on connection
+ * Handles all processing states and properly exposes rejection reasons and verification status
  */
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api';
@@ -72,13 +72,13 @@ export class ProcessingSSEClient {
       // [FIX] Check if it's ALREADY complete upon connection
       if (isTerminal) {
         console.log('[SSE] Job already finished upon connection. Triggering complete.');
-        this.emit('update', data); // Update UI one last time (e.g. 100%)
-        this.emit('complete', data); // Trigger completion logic
+        this.emit('update', this.normalizeData(data)); // Update UI one last time (e.g. 100%)
+        this.emit('complete', this.normalizeData(data)); // Trigger completion logic
         this.disconnect();
         return;
       }
 
-      this.emit('update', data);
+      this.emit('update', this.normalizeData(data));
       return;
     }
 
@@ -87,14 +87,38 @@ export class ProcessingSSEClient {
       return;
     }
 
-    // 3. Processing update
-    this.emit('update', data);
+    // 3. Processing update - normalize and emit
+    this.emit('update', this.normalizeData(data));
 
     // 4. Check if processing is complete (Standard flow)
     if (isTerminal) {
-      this.emit('complete', data);
+      this.emit('complete', this.normalizeData(data));
       this.disconnect();
     }
+  }
+
+  /**
+   * Normalize SSE data to ensure all required fields are present
+   */
+  normalizeData(data) {
+    return {
+      // Processing state
+      processing_status: data.processing_status || 'pending',
+      progress: data.progress !== undefined ? data.progress : 0,
+      step: data.step || '',
+      message: data.message || 'Processing...',
+
+      // Verification
+      verification_status: data.verification_status || null,
+
+      // Rejection/Error details
+      reason: data.reason || null,
+      violations: data.violations || null,
+
+      // Metadata
+      type: data.type,
+      timestamp: data.timestamp || new Date().toISOString(),
+    };
   }
 
   /**
@@ -125,7 +149,7 @@ export class ProcessingSSEClient {
       this.eventSource.close();
       this.eventSource = null;
       this.isConnected = false;
-      // console.log('[SSE] Disconnected'); 
+      // console.log('[SSE] Disconnected');
     }
   }
 
