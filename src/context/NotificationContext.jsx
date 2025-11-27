@@ -24,6 +24,7 @@ export function NotificationProvider({ children }) {
    * Show snackbar notification
    */
   const showSnackbar = useCallback((message, severity = 'info', options = {}) => {
+    console.log('[NotificationContext] showSnackbar called:', { message, severity, options });
     const snackbar = {
       id: Date.now(),
       message,
@@ -33,13 +34,19 @@ export function NotificationProvider({ children }) {
       clickable: !!options.onClick,
       ...options
     };
-    setSnackbarQueue(prev => [...prev, snackbar]);
+    console.log('[NotificationContext] Adding to snackbar queue:', snackbar);
+    setSnackbarQueue(prev => {
+      const newQueue = [...prev, snackbar];
+      console.log('[NotificationContext] Snackbar queue updated:', newQueue.length, 'items');
+      return newQueue;
+    });
   }, []);
 
   // Process snackbar queue
   useEffect(() => {
     if (snackbarQueue.length > 0 && !currentSnackbar) {
       const nextSnackbar = snackbarQueue[0];
+      console.log('[NotificationContext] Processing snackbar queue, showing:', nextSnackbar);
       setCurrentSnackbar(nextSnackbar);
       setSnackbarQueue(prev => prev.slice(1));
     }
@@ -175,16 +182,36 @@ export function NotificationProvider({ children }) {
 
     // Complete
     client.on('complete', (data) => {
-      console.log('[NotificationContext] Processing complete for', contentType, contentId);
+      console.log(`[NotificationContext] Processing complete for ${contentType} ${contentId}`, {
+        processing_status: data.processing_status,
+        verification_status: data.verification_status,
+        message: data.message
+      });
 
-      // Remove processing notification from progress bar
+      // Keep notification visible at 100% for a moment before removing
       setNotifications(prev =>
-        prev.filter(notif => notif.id !== contentId)
+        prev.map(notif =>
+          notif.id === contentId
+            ? { ...notif, progress: 100, message: data.message || 'Complete!' }
+            : notif
+        )
       );
+
+      // Remove after a short delay to let user see 100%
+      setTimeout(() => {
+        setNotifications(prev =>
+          prev.filter(notif => notif.id !== contentId)
+        );
+      }, 800);
 
       // Show toast notification based on status
       if (data.processing_status === 'complete') {
         const path = contentType === 'post' ? `/fact-check/post/${contentId}` : `/fact-check/reel/${contentId}`;
+
+        console.log(`[NotificationContext] Showing completion snackbar for ${contentType} ${contentId}`, {
+          path,
+          verification_status: data.verification_status
+        });
 
         // Clean up stored data if this is factual content (not personal)
         // Factual content requires user action in fact-check dashboard
@@ -205,14 +232,19 @@ export function NotificationProvider({ children }) {
         }));
 
         // Show success snackbar notification
+        console.log(`[NotificationContext] Calling showSnackbar for ${contentType} ${contentId}`);
         showSnackbar(
           `Your ${contentType} is ready! Click to view report`,
           'success',
           {
             duration: 8000,
-            onClick: () => navigate(path)
+            onClick: () => {
+              console.log(`[NotificationContext] Snackbar clicked, navigating to ${path}`);
+              navigate(path);
+            }
           }
         );
+        console.log(`[NotificationContext] showSnackbar called successfully for ${contentType} ${contentId}`);
       } else if (data.processing_status === 'error') {
         showSnackbar(
           data.message || 'Processing failed. Please try again.',
